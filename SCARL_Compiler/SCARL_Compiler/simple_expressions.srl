@@ -1,0 +1,6 @@
+
+void main() {
+	if (x) {
+		int x = 2;
+	}
+}

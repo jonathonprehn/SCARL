@@ -1,0 +1,10 @@
+LightActuator led;
+
+void main() {
+	while(true) {
+		led.on(100);
+		wait(1000);
+		led.off();
+		wait(1000);
+	}
+}

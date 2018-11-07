@@ -40,341 +40,377 @@ extern struct ast_node_stack *ident_stack;
 %%
 
 program : statement_list { 
-	NON_TERMINAL_PROGRAM_func(1, NULL);
+	NON_TERMINAL_PROGRAM_func(1, $1); //this pushes the program onto the node stack
 } 
 
 statement_list : statement {
-	NON_TERMINAL_STATEMENT_LIST_func(1, NULL);
+	$$ = NON_TERMINAL_STATEMENT_LIST_func(1, $1);
 }
 				 
 statement_list : statement statement_list {
-	NON_TERMINAL_STATEMENT_LIST_func(2, NULL);
+	//add the statement to the existing statement list
+	$$ = NON_TERMINAL_STATEMENT_LIST_func(2, $2, $1);
 }		 
 
 statement : device_declarator_statement {
-	NON_TERMINAL_STATEMENT_func(1, NULL);
+	$$ = $1; //pass through
 }
 			
 statement :	primitive_definition_statement {
-	NON_TERMINAL_STATEMENT_func(1, NULL);
+	$$ = $1; //pass through
 }
 			
 statement: function_definition_statement {
-	NON_TERMINAL_STATEMENT_func(1, NULL);
+	$$ = $1; //pass through
 }
 
 block_statement : LBRACE statement_list_block_level RBRACE {
-	//block statement with constructed statement list on top of it
-	NON_TERMINAL_BLOCK_STATEMENT_func(1, NULL);
+	printf("Block statement action\n");
+	printf("The type of the node to conver is %s\n", get_node_str($2));
+	
+	$$ = NON_TERMINAL_BLOCK_STATEMENT_func(1, $2); //converts the type to a block statement
 }
 
 statement_list_block_level : statement_block_level {
-	NON_TERMINAL_STATEMENT_LIST_BLOCK_LEVEL_func(1, NULL);
+	//create the statement list node and add the statement to it
+	$$ = NON_TERMINAL_STATEMENT_LIST_BLOCK_LEVEL_func(1, $1);
 }
 						    
 statement_list_block_level : statement_block_level statement_list_block_level {
-	NON_TERMINAL_STATEMENT_LIST_BLOCK_LEVEL_func(2, NULL);
+	//add the statement to the existing statement list
+	$$ = NON_TERMINAL_STATEMENT_LIST_BLOCK_LEVEL_func(2, $2, $1);
 }
 
 statement_block_level : primitive_definition_statement { 
-	NON_TERMINAL_STATEMENT_BLOCK_LEVEL_func(1, NULL);
+	$$ = $1; //pass through
 }
 						
 statement_block_level : block_statement {
-	NON_TERMINAL_STATEMENT_BLOCK_LEVEL_func(1, NULL);
+	$$ = $1; //pass through
 }
 						
 statement_block_level : variable_set_statement {
-	NON_TERMINAL_STATEMENT_BLOCK_LEVEL_func(1, NULL);
+	$$ = $1; //pass through
 }
 						
 statement_block_level : function_invocation_statement {
-	NON_TERMINAL_STATEMENT_BLOCK_LEVEL_func(1, NULL);
+	$$ = $1; //pass through
 }
 						
 statement_block_level : if_block_statement {
-	NON_TERMINAL_STATEMENT_BLOCK_LEVEL_func(1, NULL);
+	$$ = $1; //pass through
 }
 
 statement_block_level : while_block_statement {
-	NON_TERMINAL_STATEMENT_BLOCK_LEVEL_func(1, NULL);
+	$$ = $1; //pass through
 }
 
 device_declarator_statement : device_type IDENTIFIER SEMICOLON {
-	NON_TERMINAL_DEVICE_DECLARATOR_STATEMENT_func(2, NULL);
+	$$ = NON_TERMINAL_DEVICE_DECLARATOR_STATEMENT_func(2, $1, TERMINAL_IDENTIFIER_func(0));
 }
 
 primitive_declarator : primitive_type IDENTIFIER {
-	NON_TERMINAL_PRIMITIVE_DECLARATOR_func(2, NULL);
+	$$ = NON_TERMINAL_PRIMITIVE_DECLARATOR_func(2, $1, TERMINAL_IDENTIFIER_func(0));
 }
 
 primitive_definition_statement : primitive_declarator EQ expression SEMICOLON {
-	NON_TERMINAL_PRIMITIVE_DEFINITION_STATEMENT_func(2, NULL);
+	$$ = NON_TERMINAL_PRIMITIVE_DEFINITION_STATEMENT_func(2, $1, $3);
 }
 
 function_definition_statement : primitive_declarator LPAREN formal_parameter_list RPAREN block_statement {
-	NON_TERMINAL_FUNCTION_DEFINITION_STATEMENT_func(3, NULL);
+	$$ = NON_TERMINAL_FUNCTION_DEFINITION_STATEMENT_func(3, $1, $3, $5);
 }
 
 variable_set_statement : IDENTIFIER EQ expression SEMICOLON {
-	NON_TERMINAL_VARIABLE_SET_STATEMENT_func(2, NULL);
+	$$ = NON_TERMINAL_VARIABLE_SET_STATEMENT_func(2, TERMINAL_IDENTIFIER_func(0), $3);
 }
 
 function_invocation : IDENTIFIER LPAREN parameter_list RPAREN {
-	//ident stack has the identifier to use
-	NON_TERMINAL_FUNCTION_INVOCATION_func(1, NULL);
+	$$ = NON_TERMINAL_FUNCTION_INVOCATION_func(2, TERMINAL_IDENTIFIER_func(0), $3);
 }
 
 function_invocation_statement : function_invocation SEMICOLON {
-	NON_TERMINAL_FUNCTION_INVOCATION_STATEMENT_func(1, NULL);
+	$$ = NON_TERMINAL_FUNCTION_INVOCATION_STATEMENT_func(1, $1);
 }
 
 if_block_statement : IF LPAREN expression RPAREN block_statement {
-	NON_TERMINAL_IF_BLOCK_STATEMENT_func(2, NULL);
+	$$ = NON_TERMINAL_IF_BLOCK_STATEMENT_func(2, $3, $5);
 }
 
 if_block_statement : IF LPAREN expression RPAREN block_statement ELSE block_statement { 
-	NON_TERMINAL_IF_BLOCK_STATEMENT_func(3, NULL);
+	$$ = NON_TERMINAL_IF_BLOCK_STATEMENT_func(3, $3, $5, $7);
 }
 
 while_block_statement : WHILE LPAREN expression RPAREN block_statement { 
-	NON_TERMINAL_WHILE_BLOCK_STATEMENT_func(2, NULL);
+	//expression and block statement
+	$$ = NON_TERMINAL_WHILE_BLOCK_STATEMENT_func(2, $3, $5);
 }
 
 formal_parameter_list :     {
-	NON_TERMINAL_FORMAL_PARAMETER_LIST_func(0, NULL);
+	//empty formal parameter list
+	$$ = NON_TERMINAL_FORMAL_PARAMETER_LIST_func(0);
 }
 						
 formal_parameter_list : primitive_declarator { 
-	NON_TERMINAL_FORMAL_PARAMETER_LIST_func(1, NULL);
+	$$ = NON_TERMINAL_FORMAL_PARAMETER_LIST_func(1, $1);
 } 
 						
 formal_parameter_list : primitive_declarator COMMA formal_parameter_list { 
-	NON_TERMINAL_FORMAL_PARAMETER_LIST_func(2, NULL);
+	$$ = NON_TERMINAL_FORMAL_PARAMETER_LIST_func(2, $3, $1);
 }
 
 parameter_list :      { 
-	NON_TERMINAL_PARAMETER_LIST_func(0, NULL);
+	//empty parameter list
+	$$ = NON_TERMINAL_PARAMETER_LIST_func(0);
 }
 
 parameter_list : expression { 
-	NON_TERMINAL_PARAMETER_LIST_func(1, NULL);
+	$$ = NON_TERMINAL_PARAMETER_LIST_func(1, $1);
 }
 
 parameter_list : expression COMMA parameter_list { 
-	NON_TERMINAL_PARAMETER_LIST_func(2, NULL);
+	$$ = NON_TERMINAL_PARAMETER_LIST_func(2, $3, $1); //add to existing parameter list
 }
 
 expression : logical_expression { 
-	NON_TERMINAL_EXPRESSION_func(1, NULL);
+	$$ = $1;
 }
 
 logical_expression : logical_and_expression { 
-	NON_TERMINAL_LOGICAL_EXPRESSION_func(1, NULL);
+	$$ = $1;
 }
 					 
 logical_expression : logical_expression OR logical_and_expression {
-	TERMINAL_OR_func(0, NULL);
-	NON_TERMINAL_LOGICAL_EXPRESSION_func(3, NULL);
+	//     logical_expression && logical_and_expression
+	//     logical_expression should be on the LEFT
+	//     logical_and_expression should be on the RIGHT
+	//     OR should be the parent node
+	$$ = NON_TERMINAL_LOGICAL_EXPRESSION_func(3, $1, TERMINAL_OR_func(0), $3);
 }
 
 logical_and_expression : equality_expression { 
-	NON_TERMINAL_LOGICAL_AND_EXPRESSION_func(1, NULL);
+	$$ = $1; //pass through
 } 
 
 logical_and_expression : logical_and_expression AND equality_expression { 
-	TERMINAL_AND_func(0, NULL);
-	NON_TERMINAL_LOGICAL_AND_EXPRESSION_func(3, NULL);
+	//     logical_and_expression && equality_expression
+	//     logical_and_expression should be on the LEFT
+	//     equality_expression should be on the RIGHT
+	//     AND should be the parent node
+	$$ = NON_TERMINAL_LOGICAL_AND_EXPRESSION_func(3, $1, TERMINAL_AND_func(0), $3);
+
 } 
 
 equality_expression : relational_expression { 
-	NON_TERMINAL_EQUALITY_EXPRESSION_func(1, NULL);
+	$$ = $1; //pass through
 }
 
 equality_expression : equality_expression DBL_EQ relational_expression { 
-	TERMINAL_DBL_EQ_func(0, NULL);
-	NON_TERMINAL_EQUALITY_EXPRESSION_func(3, NULL);
+	//     equality_expression == relational_expression
+	//     equality_expression should be on the LEFT
+	//     relational_expression should be on the RIGHT
+	//     NOT_EQ should be the parent node
+	$$ = NON_TERMINAL_EQUALITY_EXPRESSION_func(3, $1, TERMINAL_DBL_EQ_func(0), $3);
 }
 					  
 equality_expression : equality_expression NOT_EQ relational_expression { 
-	TERMINAL_NOT_EQ_func(0, NULL);
-	NON_TERMINAL_EQUALITY_EXPRESSION_func(3, NULL);
+	//     equality_expression != relational_expression
+	//     equality_expression should be on the LEFT
+	//     relational_expression should be on the RIGHT
+	//     NOT_EQ should be the parent node
+	$$ = NON_TERMINAL_EQUALITY_EXPRESSION_func(3, $1, TERMINAL_NOT_EQ_func(0), $3);
 }
 
 relational_expression : bool_expression { 
-	NON_TERMINAL_RELATIONAL_EXPRESSION_func(1, NULL);
+	$$ = $1; //pass through
 }
 
 relational_expression : relational_expression GTR bool_expression { 
-	TERMINAL_GTR_func(1, NULL);
-	NON_TERMINAL_RELATIONAL_EXPRESSION_func(3, NULL);
+	//     relational_expression > bool_expression
+	//     relational_expression should be on the LEFT
+	//     bool_expression should be on the RIGHT
+	//     GTR should be the parent node
+	$$ = NON_TERMINAL_RELATIONAL_EXPRESSION_func(3, $1, TERMINAL_GTR_func(0), $3);
 }
 						
 relational_expression : relational_expression LESS bool_expression { 
-	TERMINAL_LESS_func(1, NULL);
-	NON_TERMINAL_RELATIONAL_EXPRESSION_func(3, NULL);
+	//     relational_expression < bool_expression
+	//     relational_expression should be on the LEFT
+	//     bool_expression should be on the RIGHT
+	//     LESS should be the parent node
+	$$ = NON_TERMINAL_RELATIONAL_EXPRESSION_func(3, $1, TERMINAL_LESS_func(0), $3);
 }
 						
 relational_expression : relational_expression GTR_EQ bool_expression { 
-	TERMINAL_GTR_EQ_func(1, NULL);
-	NON_TERMINAL_RELATIONAL_EXPRESSION_func(3, NULL);
+	//     relational_expression >= bool_expression
+	//     relational_expression should be on the LEFT
+	//     bool_expression should be on the RIGHT
+	//     GTR_EQ should be the parent node
+	$$ = NON_TERMINAL_RELATIONAL_EXPRESSION_func(3, $1, TERMINAL_GTR_EQ_func(0), $3);
 }
 						
 relational_expression : relational_expression LESS_EQ bool_expression { 
-	TERMINAL_LESS_EQ_func(1, NULL);
-	NON_TERMINAL_RELATIONAL_EXPRESSION_func(3, NULL);
+	//     relational_expression <= bool_expression
+	//     relational_expression should be on the LEFT
+	//     bool_expression should be on the RIGHT
+	//     LESS_EQ should be the parent node
+	$$ = NON_TERMINAL_RELATIONAL_EXPRESSION_func(3, $1, TERMINAL_LESS_EQ_func(0), $3);
 }
 
 bool_expression : arithmetic_expression { 
-	NON_TERMINAL_BOOL_EXPRESSION_func(1, NULL);
+	$$ = $1; //pass through
 }
 
 bool_expression : BANG arithmetic_expression { 
-	TERMINAL_BANG_func(0, NULL);
-	NON_TERMINAL_BOOL_EXPRESSION_func(2, NULL);
+	$$ = NON_TERMINAL_BOOL_EXPRESSION_func(2, TERMINAL_BANG_func(0), $2);
 }
 
 arithmetic_expression : arithmetic_factor { 
-	NON_TERMINAL_ARITHMETIC_EXPRESSION_func(1, NULL);
+	$$ = $1; //pass through
 }
 
 arithmetic_expression : arithmetic_expression PLUS arithmetic_factor { 
-	TERMINAL_PLUS_func(0, NULL);
-	NON_TERMINAL_ARITHMETIC_EXPRESSION_func(3, NULL);
+	//     arithmetic_expression - arithmetic_factor
+	//     arithmetic_expression should be on the LEFT
+	//     arithmetic_factor should be on the RIGHT
+	//     MINUS should be the parent node
+	$$ = NON_TERMINAL_ARITHMETIC_EXPRESSION_func(3, $1, TERMINAL_PLUS_func(0), $3);
 }
 						
 arithmetic_expression : arithmetic_expression MINUS arithmetic_factor { 
-	TERMINAL_MINUS_func(0, NULL);
-	NON_TERMINAL_ARITHMETIC_EXPRESSION_func(3, NULL);
+	//     arithmetic_expression - arithmetic_factor
+	//     arithmetic_expression should be on the LEFT
+	//     arithmetic_factor should be on the RIGHT
+	//     MINUS should be the parent node
+	$$ = NON_TERMINAL_ARITHMETIC_EXPRESSION_func(3, $1, TERMINAL_MINUS_func(0), $3);
 }
 						
 arithmetic_factor : arithmetic_unary { 
-	//there should be an arithmetic unary on the stack already
-	NON_TERMINAL_ARITHMETIC_FACTOR_func(1, NULL);
+	$$ = $1; //pass through
 }
 					
 arithmetic_factor : arithmetic_factor STAR arithmetic_unary { 
-	//there should be a factor on the stack already
-	TERMINAL_STAR_func(0, NULL);
-	NON_TERMINAL_ARITHMETIC_FACTOR_func(3, NULL);
+	//     arithmetic_factor * arithmetic_unary
+	//     arithmetic_factor should be on the LEFT
+	//     arithmetic_unary should be on the RIGHT
+	//     STAR should be the parent node
+	$$ = NON_TERMINAL_ARITHMETIC_FACTOR_func(3, $1, TERMINAL_STAR_func(0), $3);
 }
 					
 arithmetic_factor : arithmetic_factor SLASH arithmetic_unary { 
-	//there should be a factor on the stack already
-	TERMINAL_SLASH_func(0, NULL);
-	NON_TERMINAL_ARITHMETIC_FACTOR_func(3, NULL);
+	//     arithmetic_factor / arithmetic_unary
+	//     arithmetic_factor should be on the LEFT
+	//     arithmetic_unary should be on the RIGHT
+	//     SLASH should be the parent node
+	$$ = NON_TERMINAL_ARITHMETIC_FACTOR_func(3, $1, TERMINAL_SLASH_func(0), $3);
 }
 					
 arithmetic_unary : unit { 
-	NON_TERMINAL_ARITHMETIC_UNARY_func(1, NULL);
+	$$ = $1; //straight pass
 }
 
 arithmetic_unary : MINUS arithmetic_unary { 
-	NON_TERMINAL_ARITHMETIC_UNARY_func(2, NULL);
+	$$ = NON_TERMINAL_ARITHMETIC_UNARY_func(2, TERMINAL_MINUS_func(0), $2);
 }
 				   
 arithmetic_unary : LPAREN arithmetic_expression RPAREN { 
-	NON_TERMINAL_ARITHMETIC_UNARY_func(1, NULL); //expect an arithmetic expression on the stack
+	$$ = $2; //pass the arithmetic expression as an arithmetic unary
 }
 				    
 unit : IDENTIFIER { 
-	NON_TERMINAL_UNIT_func(2, NULL); //pop current node and add it to a unit node
+	$$ = TERMINAL_IDENTIFIER_func(0); //receives identifier from ident_stack
 }
 
 unit : integer_value { 
-	NON_TERMINAL_UNIT_func(1, NULL); //pop current node and add it to a unit node
+	$$ = $1; //straight pass
 }
 
 unit : bool_value { 
-	NON_TERMINAL_UNIT_func(1, NULL); //pop current node and add it to a unit node
+	$$ = $1; //straight pass
 }
 
 unit : function_invocation { 
-	NON_TERMINAL_UNIT_func(1, NULL); //pop current node and add it to a unit node
+	$$ = $1; //straight pass
 }
 
 integer_value : DECIMAL { 
+	NON_TERMINAL_INTEGER_VALUE_func(0); //for debug printing
+
 	char *str = lastTokenText;
-	TERMINAL_DECIMAL_func(1, &str);
-	NON_TERMINAL_INTEGER_VALUE_func(0, NULL);
+	$$ = TERMINAL_DECIMAL_func(1, str);
 } 
 
 integer_value : OCTAL { 
+	NON_TERMINAL_INTEGER_VALUE_func(0); //for debug printing
+
 	char *str = lastTokenText;
-	TERMINAL_OCTAL_func(1, &str);
-	NON_TERMINAL_INTEGER_VALUE_func(0, NULL);
+	$$ = TERMINAL_OCTAL_func(1, str);
 }
 
 integer_value : HEX { 
+	NON_TERMINAL_INTEGER_VALUE_func(0); //for debug printing
+
 	char *str = lastTokenText;
-	TERMINAL_HEX_func(1, &str);
-	NON_TERMINAL_INTEGER_VALUE_func(0, NULL);
+	$$ = TERMINAL_HEX_func(1, str);
 }
 
 integer_value : BINARY { 
+	NON_TERMINAL_INTEGER_VALUE_func(0); //for debug printing
+
 	char *str = lastTokenText;
-	TERMINAL_BINARY_func(1, &str);
-	NON_TERMINAL_INTEGER_VALUE_func(0, NULL);
+	$$ = TERMINAL_BINARY_func(1, str);
 }
 
 bool_value : TRUE { 
-	NON_TERMINAL_BOOL_VALUE_func(TRUE, NULL);
+	$$ = NON_TERMINAL_BOOL_VALUE_func(1, 1); // 1 being true
 }
 
 bool_value : FALSE { 
-	NON_TERMINAL_BOOL_VALUE_func(FALSE, NULL);
+	$$ = NON_TERMINAL_BOOL_VALUE_func(1, 0); // 0 being false
 }
 
 primitive_type : BOOL {
-	//argc is the primitive type
-	NON_TERMINAL_PRIMITIVE_TYPE_func(BOOL, NULL);
+	$$ = NON_TERMINAL_PRIMITIVE_TYPE_func(1, BOOL);
 }
 
 primitive_type : INT { 
-	//argc is the primitive type
-	NON_TERMINAL_PRIMITIVE_TYPE_func(INT, NULL);
+	$$ = NON_TERMINAL_PRIMITIVE_TYPE_func(1, INT);
 }
 
 primitive_type : CHAR { 
-	//argc is the primitive type
-	NON_TERMINAL_PRIMITIVE_TYPE_func(CHAR, NULL);
+	$$ = NON_TERMINAL_PRIMITIVE_TYPE_func(1, CHAR);
 }
 
 primitive_type : POINTER { 
-	//argc is the primitive type
-	NON_TERMINAL_PRIMITIVE_TYPE_func(POINTER, NULL);
+	$$ = NON_TERMINAL_PRIMITIVE_TYPE_func(1, POINTER);
 }
 
 primitive_type : VOID  { 
-	//argc is the primitive type
-	NON_TERMINAL_PRIMITIVE_TYPE_func(VOID, NULL);
+	$$ = NON_TERMINAL_PRIMITIVE_TYPE_func(1, VOID);
 }
 
 device_type : LIGHT_ACTUATOR { 
-	NON_TERMINAL_DEVICE_TYPE_func(LIGHT_ACTUATOR, NULL);
+	$$ = NON_TERMINAL_DEVICE_TYPE_func(1, LIGHT_ACTUATOR);
 }
 
 device_type : SERVO_ACTUATOR { 
-	NON_TERMINAL_DEVICE_TYPE_func(SERVO_ACTUATOR, NULL);
+	$$ = NON_TERMINAL_DEVICE_TYPE_func(1, SERVO_ACTUATOR);
 }
 
 device_type : SOUND_SENSOR { 
-	NON_TERMINAL_DEVICE_TYPE_func(SOUND_SENSOR, NULL);
+	$$ = NON_TERMINAL_DEVICE_TYPE_func(1, SOUND_SENSOR);
 }
 
 device_type : LIGHT_SENSOR { 
-	//argc is device type for this function
-	NON_TERMINAL_DEVICE_TYPE_func(LIGHT_SENSOR, NULL);
+	$$ = NON_TERMINAL_DEVICE_TYPE_func(1, LIGHT_SENSOR);
 }
 
 device_type : DISTANCE_SENSOR {
-	//argc is device type for this function
-	NON_TERMINAL_DEVICE_TYPE_func(DISTANCE_SENSOR, NULL);
+	$$ = NON_TERMINAL_DEVICE_TYPE_func(1, DISTANCE_SENSOR);
 }
 
 device_type : TEMPERATURE_SENSOR { 
-	//argc is device type for this function
-	NON_TERMINAL_DEVICE_TYPE_func(TEMPERATURE_SENSOR, NULL);
+	$$ = NON_TERMINAL_DEVICE_TYPE_func(1, TEMPERATURE_SENSOR);
 }
 
 %%

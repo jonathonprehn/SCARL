@@ -756,14 +756,19 @@ YY_RULE_SETUP
 	}
 	else
 	{ 
-		TERMINAL_IDENTIFIER_func(1, &yytext);
+		//identifiers get their own stack 
+		//this is the only node creation in this file because
+		//of the need to preserve the identifer text
+		struct ast_node *ident_node = create_node(NULL, IDENTIFIER);
+		ident_node->str_value = _strdup(yytext);
+		ast_node_stack_push(ident_stack, ident_node);
 		return IDENTIFIER;
 	} 
 }
 	YY_BREAK
 case 5:
 YY_RULE_SETUP
-#line 128 "scarl.l"
+#line 133 "scarl.l"
 { 
 	setLastTokenText(yytext);
 	return DECIMAL;  
@@ -771,7 +776,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 6:
 YY_RULE_SETUP
-#line 132 "scarl.l"
+#line 137 "scarl.l"
 {
 	setLastTokenText(yytext);
 	return OCTAL;
@@ -779,7 +784,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 7:
 YY_RULE_SETUP
-#line 136 "scarl.l"
+#line 141 "scarl.l"
 {
 	setLastTokenText(yytext);
 	return HEX;
@@ -787,7 +792,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 8:
 YY_RULE_SETUP
-#line 140 "scarl.l"
+#line 145 "scarl.l"
 {
 	setLastTokenText(yytext);
 	return BINARY;
@@ -795,7 +800,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 9:
 YY_RULE_SETUP
-#line 144 "scarl.l"
+#line 149 "scarl.l"
 {/* Weird "just 0" case */
 	setLastTokenText(yytext); 
 	return DECIMAL; 
@@ -803,7 +808,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 10:
 YY_RULE_SETUP
-#line 148 "scarl.l"
+#line 153 "scarl.l"
 { 
 	setLastTokenText(yytext); 
 	return PLUS; 
@@ -811,7 +816,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 11:
 YY_RULE_SETUP
-#line 152 "scarl.l"
+#line 157 "scarl.l"
 { 
 	setLastTokenText(yytext);
 	return MINUS; 
@@ -819,7 +824,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 12:
 YY_RULE_SETUP
-#line 156 "scarl.l"
+#line 161 "scarl.l"
 { 
 	setLastTokenText(yytext); 
 	return STAR; 
@@ -827,7 +832,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 13:
 YY_RULE_SETUP
-#line 160 "scarl.l"
+#line 165 "scarl.l"
 { 
 	setLastTokenText(yytext); 
 	return SLASH; 
@@ -835,7 +840,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 14:
 YY_RULE_SETUP
-#line 164 "scarl.l"
+#line 169 "scarl.l"
 { 
 	setLastTokenText(yytext);
 	return BANG; 
@@ -843,7 +848,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 15:
 YY_RULE_SETUP
-#line 168 "scarl.l"
+#line 173 "scarl.l"
 { 
 	setLastTokenText(yytext); 
 	return LPAREN; 
@@ -851,7 +856,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 16:
 YY_RULE_SETUP
-#line 172 "scarl.l"
+#line 177 "scarl.l"
 { 
 	setLastTokenText(yytext); 
 	return RPAREN;
@@ -859,7 +864,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 17:
 YY_RULE_SETUP
-#line 176 "scarl.l"
+#line 181 "scarl.l"
 { 
 	setLastTokenText(yytext); 
 	return GTR; 
@@ -867,7 +872,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 18:
 YY_RULE_SETUP
-#line 180 "scarl.l"
+#line 185 "scarl.l"
 { 
 	setLastTokenText(yytext); 
 	return LESS; 
@@ -875,7 +880,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 19:
 YY_RULE_SETUP
-#line 184 "scarl.l"
+#line 189 "scarl.l"
 { 
 	setLastTokenText(yytext); 
 	return GTR_EQ; 
@@ -883,7 +888,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 20:
 YY_RULE_SETUP
-#line 188 "scarl.l"
+#line 193 "scarl.l"
 { 
 	setLastTokenText(yytext); 
 	return LESS_EQ; 
@@ -891,7 +896,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 21:
 YY_RULE_SETUP
-#line 192 "scarl.l"
+#line 197 "scarl.l"
 { 
 	setLastTokenText(yytext); 
 	return DBL_EQ; 
@@ -899,7 +904,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 22:
 YY_RULE_SETUP
-#line 196 "scarl.l"
+#line 201 "scarl.l"
 { 
 	setLastTokenText(yytext); 
 	return EQ; 
@@ -907,7 +912,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 23:
 YY_RULE_SETUP
-#line 200 "scarl.l"
+#line 205 "scarl.l"
 { 
 	setLastTokenText(yytext); 
 	return NOT_EQ; 
@@ -915,7 +920,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 24:
 YY_RULE_SETUP
-#line 204 "scarl.l"
+#line 209 "scarl.l"
 { 
 	setLastTokenText(yytext); 
 	return OR; 
@@ -923,7 +928,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 25:
 YY_RULE_SETUP
-#line 208 "scarl.l"
+#line 213 "scarl.l"
 { 
 	setLastTokenText(yytext); 
 	return AND; 
@@ -931,7 +936,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 26:
 YY_RULE_SETUP
-#line 212 "scarl.l"
+#line 217 "scarl.l"
 { 
 	setLastTokenText(yytext); 
 	return COMMA; 
@@ -939,7 +944,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 27:
 YY_RULE_SETUP
-#line 216 "scarl.l"
+#line 221 "scarl.l"
 { 
 	setLastTokenText(yytext); 
 	return SEMICOLON; 
@@ -947,7 +952,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 28:
 YY_RULE_SETUP
-#line 220 "scarl.l"
+#line 225 "scarl.l"
 { 
 	setLastTokenText(yytext); 
 	return LBRACE; 
@@ -955,7 +960,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 29:
 YY_RULE_SETUP
-#line 224 "scarl.l"
+#line 229 "scarl.l"
 { 
 	setLastTokenText(yytext); 
 	return RBRACE; 
@@ -963,15 +968,15 @@ YY_RULE_SETUP
 	YY_BREAK
 case 30:
 YY_RULE_SETUP
-#line 228 "scarl.l"
+#line 233 "scarl.l"
 { setLastTokenText(yytext); fprintf(stderr, "unrecognized characters: \'%s\'\n", yytext); }
 	YY_BREAK
 case 31:
 YY_RULE_SETUP
-#line 230 "scarl.l"
+#line 235 "scarl.l"
 ECHO;
 	YY_BREAK
-#line 975 "lex.yy.c"
+#line 980 "lex.yy.c"
 case YY_STATE_EOF(INITIAL):
 	yyterminate();
 
@@ -1857,7 +1862,7 @@ int main()
 	return 0;
 	}
 #endif
-#line 230 "scarl.l"
+#line 235 "scarl.l"
 
 
 

@@ -1,0 +1,27 @@
+#line 3 "scarl_tokens.y"
+
+#include <stdio.h>
+
+#include "scarlast.h"
+#include "visitors.h"
+
+int yylex(void);
+void yyerror(char *);
+
+int yydebug = 1;
+
+/*for counting line numbers. Lines are incremented in scarl.l*/
+extern unsigned lineNumber;
+/*handled in scarl.l. for hinting at where error occured*/
+extern char *lastTokenText;
+
+/*for performing actions on the code file*/
+/*for the compiling unit, this is intermediatary code*/
+extern FILE *codeFile;
+
+/*for building the tree that will be used for generating the code later on*/
+extern struct ast_node *syntax_tree;
+
+/*the stack to be used when creating nonterminal sub-ASTs*/
+extern struct ast_node_stack *node_stack;
+extern struct ast_node_stack *ident_stack;

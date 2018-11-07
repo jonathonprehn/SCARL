@@ -235,6 +235,9 @@ void init_visitor_func_table() {
 
 }
 
+/*
+Do not need this function
+
 void call_visitor_func(int type_flag, int argc, char **argv)
 {
 	if (type_flag >= NON_TERMINAL_PROGRAM && type_flag <= NON_TERMINAL_DEVICE_TYPE) {
@@ -245,6 +248,7 @@ void call_visitor_func(int type_flag, int argc, char **argv)
 		(*terminal_visitor_func_table[type_flag - SCARL_TERMINAL_FUNC_TABLE_OFFSET_VAL])(argc, argv);
 	}
 }
+*/
 
 void print_ast_r(int level, struct ast_node *subtree);
 

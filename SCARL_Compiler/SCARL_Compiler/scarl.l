@@ -121,7 +121,12 @@ hex_digit [0-9a-fA-F]
 	}
 	else
 	{ 
-		TERMINAL_IDENTIFIER_func(1, &yytext);
+		//identifiers get their own stack 
+		//this is the only node creation in this file because
+		//of the need to preserve the identifer text
+		struct ast_node *ident_node = create_node(NULL, IDENTIFIER);
+		ident_node->str_value = _strdup(yytext);
+		ast_node_stack_push(ident_stack, ident_node);
 		return IDENTIFIER;
 	} 
 }

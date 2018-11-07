@@ -60,7 +60,7 @@ struct ast_node {
 	char *str_value;
 };
 
-typedef void(*ast_node_visitor_func)(int argc, char **argv);
+typedef struct ast_node*(*ast_node_visitor_func)(int argc, char **argv);
 
 struct ast_node *create_node(struct ast_node *parent, int type_flag);
 
@@ -74,8 +74,6 @@ void add_child(struct ast_node *nod, struct ast_node *child);
 void add_child_front(struct ast_node *nod, struct ast_node *child);
 
 void init_visitor_func_table();
-
-void call_visitor_func(int type_flag, int argc, char **argv);
 
 void print_ast(struct ast_node *tree);
 
