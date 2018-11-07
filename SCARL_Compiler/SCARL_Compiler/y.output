@@ -1,0 +1,1580 @@
+   0  $accept : program $end
+
+   1  program : statement_list
+
+   2  statement_list : statement
+   3                 | statement statement_list
+
+   4  statement : device_declarator_statement
+   5            | primitive_definition_statement
+   6            | function_definition_statement
+
+   7  block_statement : LBRACE statement_list_block_level RBRACE
+
+   8  statement_list_block_level : statement_block_level
+   9                             | statement_block_level statement_list_block_level
+
+  10  statement_block_level : primitive_definition_statement
+  11                        | block_statement
+  12                        | variable_set_statement
+  13                        | function_invocation_statement
+  14                        | if_block_statement
+  15                        | while_block_statement
+
+  16  device_declarator_statement : device_type IDENTIFIER SEMICOLON
+
+  17  primitive_declarator : primitive_type IDENTIFIER
+
+  18  primitive_definition_statement : primitive_declarator EQ expression SEMICOLON
+
+  19  function_definition_statement : primitive_declarator LPAREN formal_parameter_list RPAREN block_statement
+
+  20  variable_set_statement : IDENTIFIER EQ expression SEMICOLON
+
+  21  function_invocation : IDENTIFIER LPAREN parameter_list RPAREN
+
+  22  function_invocation_statement : function_invocation SEMICOLON
+
+  23  if_block_statement : IF LPAREN expression RPAREN block_statement
+  24                     | IF LPAREN expression RPAREN block_statement ELSE block_statement
+
+  25  while_block_statement : WHILE LPAREN expression RPAREN block_statement
+
+  26  formal_parameter_list :
+  27                        | primitive_declarator
+  28                        | primitive_declarator COMMA formal_parameter_list
+
+  29  parameter_list :
+  30                 | expression
+  31                 | expression COMMA parameter_list
+
+  32  expression : logical_expression
+
+  33  logical_expression : logical_and_expression
+  34                     | logical_expression OR logical_and_expression
+
+  35  logical_and_expression : equality_expression
+  36                         | logical_and_expression AND equality_expression
+
+  37  equality_expression : relational_expression
+  38                      | equality_expression DBL_EQ relational_expression
+  39                      | equality_expression NOT_EQ relational_expression
+
+  40  relational_expression : bool_expression
+  41                        | relational_expression GTR bool_expression
+  42                        | relational_expression LESS bool_expression
+  43                        | relational_expression GTR_EQ bool_expression
+  44                        | relational_expression LESS_EQ bool_expression
+
+  45  bool_expression : arithmetic_expression
+  46                  | BANG arithmetic_expression
+
+  47  arithmetic_expression : arithmetic_factor
+  48                        | arithmetic_expression PLUS arithmetic_factor
+  49                        | arithmetic_expression MINUS arithmetic_factor
+
+  50  arithmetic_factor : arithmetic_unary
+  51                    | arithmetic_factor STAR arithmetic_unary
+  52                    | arithmetic_factor SLASH arithmetic_unary
+
+  53  arithmetic_unary : unit
+  54                   | MINUS arithmetic_unary
+  55                   | LPAREN arithmetic_expression RPAREN
+
+  56  unit : IDENTIFIER
+  57       | integer_value
+  58       | bool_value
+  59       | function_invocation
+
+  60  integer_value : DECIMAL
+  61                | OCTAL
+  62                | HEX
+  63                | BINARY
+
+  64  bool_value : TRUE
+  65             | FALSE
+
+  66  primitive_type : BOOL
+  67                 | INT
+  68                 | CHAR
+  69                 | POINTER
+  70                 | VOID
+
+  71  device_type : LIGHT_ACTUATOR
+  72              | SERVO_ACTUATOR
+  73              | SOUND_SENSOR
+  74              | LIGHT_SENSOR
+  75              | DISTANCE_SENSOR
+  76              | TEMPERATURE_SENSOR
+
+state 0
+	$accept : . program $end  (0)
+
+	BOOL  shift 1
+	INT  shift 2
+	CHAR  shift 3
+	POINTER  shift 4
+	VOID  shift 5
+	LIGHT_ACTUATOR  shift 6
+	SERVO_ACTUATOR  shift 7
+	SOUND_SENSOR  shift 8
+	LIGHT_SENSOR  shift 9
+	DISTANCE_SENSOR  shift 10
+	TEMPERATURE_SENSOR  shift 11
+	.  error
+
+	program  goto 12
+	statement_list  goto 13
+	statement  goto 14
+	device_declarator_statement  goto 15
+	primitive_definition_statement  goto 16
+	function_definition_statement  goto 17
+	device_type  goto 18
+	primitive_declarator  goto 19
+	primitive_type  goto 20
+
+
+state 1
+	primitive_type : BOOL .  (66)
+
+	.  reduce 66
+
+
+state 2
+	primitive_type : INT .  (67)
+
+	.  reduce 67
+
+
+state 3
+	primitive_type : CHAR .  (68)
+
+	.  reduce 68
+
+
+state 4
+	primitive_type : POINTER .  (69)
+
+	.  reduce 69
+
+
+state 5
+	primitive_type : VOID .  (70)
+
+	.  reduce 70
+
+
+state 6
+	device_type : LIGHT_ACTUATOR .  (71)
+
+	.  reduce 71
+
+
+state 7
+	device_type : SERVO_ACTUATOR .  (72)
+
+	.  reduce 72
+
+
+state 8
+	device_type : SOUND_SENSOR .  (73)
+
+	.  reduce 73
+
+
+state 9
+	device_type : LIGHT_SENSOR .  (74)
+
+	.  reduce 74
+
+
+state 10
+	device_type : DISTANCE_SENSOR .  (75)
+
+	.  reduce 75
+
+
+state 11
+	device_type : TEMPERATURE_SENSOR .  (76)
+
+	.  reduce 76
+
+
+state 12
+	$accept : program . $end  (0)
+
+	$end  accept
+
+
+state 13
+	program : statement_list .  (1)
+
+	.  reduce 1
+
+
+state 14
+	statement_list : statement .  (2)
+	statement_list : statement . statement_list  (3)
+
+	BOOL  shift 1
+	INT  shift 2
+	CHAR  shift 3
+	POINTER  shift 4
+	VOID  shift 5
+	LIGHT_ACTUATOR  shift 6
+	SERVO_ACTUATOR  shift 7
+	SOUND_SENSOR  shift 8
+	LIGHT_SENSOR  shift 9
+	DISTANCE_SENSOR  shift 10
+	TEMPERATURE_SENSOR  shift 11
+	$end  reduce 2
+
+	statement_list  goto 21
+	statement  goto 14
+	device_declarator_statement  goto 15
+	primitive_definition_statement  goto 16
+	function_definition_statement  goto 17
+	device_type  goto 18
+	primitive_declarator  goto 19
+	primitive_type  goto 20
+
+
+state 15
+	statement : device_declarator_statement .  (4)
+
+	.  reduce 4
+
+
+state 16
+	statement : primitive_definition_statement .  (5)
+
+	.  reduce 5
+
+
+state 17
+	statement : function_definition_statement .  (6)
+
+	.  reduce 6
+
+
+state 18
+	device_declarator_statement : device_type . IDENTIFIER SEMICOLON  (16)
+
+	IDENTIFIER  shift 22
+	.  error
+
+
+state 19
+	primitive_definition_statement : primitive_declarator . EQ expression SEMICOLON  (18)
+	function_definition_statement : primitive_declarator . LPAREN formal_parameter_list RPAREN block_statement  (19)
+
+	LPAREN  shift 23
+	EQ  shift 24
+	.  error
+
+
+state 20
+	primitive_declarator : primitive_type . IDENTIFIER  (17)
+
+	IDENTIFIER  shift 25
+	.  error
+
+
+state 21
+	statement_list : statement statement_list .  (3)
+
+	.  reduce 3
+
+
+state 22
+	device_declarator_statement : device_type IDENTIFIER . SEMICOLON  (16)
+
+	SEMICOLON  shift 26
+	.  error
+
+
+state 23
+	function_definition_statement : primitive_declarator LPAREN . formal_parameter_list RPAREN block_statement  (19)
+	formal_parameter_list : .  (26)
+
+	BOOL  shift 1
+	INT  shift 2
+	CHAR  shift 3
+	POINTER  shift 4
+	VOID  shift 5
+	RPAREN  reduce 26
+
+	primitive_declarator  goto 27
+	primitive_type  goto 20
+	formal_parameter_list  goto 28
+
+
+state 24
+	primitive_definition_statement : primitive_declarator EQ . expression SEMICOLON  (18)
+
+	IDENTIFIER  shift 29
+	MINUS  shift 30
+	BANG  shift 31
+	LPAREN  shift 32
+	DECIMAL  shift 33
+	OCTAL  shift 34
+	HEX  shift 35
+	BINARY  shift 36
+	TRUE  shift 37
+	FALSE  shift 38
+	.  error
+
+	expression  goto 39
+	function_invocation  goto 40
+	logical_expression  goto 41
+	logical_and_expression  goto 42
+	equality_expression  goto 43
+	relational_expression  goto 44
+	bool_expression  goto 45
+	arithmetic_expression  goto 46
+	arithmetic_factor  goto 47
+	arithmetic_unary  goto 48
+	unit  goto 49
+	integer_value  goto 50
+	bool_value  goto 51
+
+
+state 25
+	primitive_declarator : primitive_type IDENTIFIER .  (17)
+
+	.  reduce 17
+
+
+state 26
+	device_declarator_statement : device_type IDENTIFIER SEMICOLON .  (16)
+
+	.  reduce 16
+
+
+state 27
+	formal_parameter_list : primitive_declarator .  (27)
+	formal_parameter_list : primitive_declarator . COMMA formal_parameter_list  (28)
+
+	COMMA  shift 52
+	RPAREN  reduce 27
+
+
+state 28
+	function_definition_statement : primitive_declarator LPAREN formal_parameter_list . RPAREN block_statement  (19)
+
+	RPAREN  shift 53
+	.  error
+
+
+state 29
+	function_invocation : IDENTIFIER . LPAREN parameter_list RPAREN  (21)
+	unit : IDENTIFIER .  (56)
+
+	LPAREN  shift 54
+	PLUS  reduce 56
+	MINUS  reduce 56
+	STAR  reduce 56
+	SLASH  reduce 56
+	RPAREN  reduce 56
+	GTR  reduce 56
+	LESS  reduce 56
+	GTR_EQ  reduce 56
+	LESS_EQ  reduce 56
+	DBL_EQ  reduce 56
+	NOT_EQ  reduce 56
+	OR  reduce 56
+	AND  reduce 56
+	COMMA  reduce 56
+	SEMICOLON  reduce 56
+
+
+state 30
+	arithmetic_unary : MINUS . arithmetic_unary  (54)
+
+	IDENTIFIER  shift 29
+	MINUS  shift 30
+	LPAREN  shift 32
+	DECIMAL  shift 33
+	OCTAL  shift 34
+	HEX  shift 35
+	BINARY  shift 36
+	TRUE  shift 37
+	FALSE  shift 38
+	.  error
+
+	function_invocation  goto 40
+	arithmetic_unary  goto 55
+	unit  goto 49
+	integer_value  goto 50
+	bool_value  goto 51
+
+
+state 31
+	bool_expression : BANG . arithmetic_expression  (46)
+
+	IDENTIFIER  shift 29
+	MINUS  shift 30
+	LPAREN  shift 32
+	DECIMAL  shift 33
+	OCTAL  shift 34
+	HEX  shift 35
+	BINARY  shift 36
+	TRUE  shift 37
+	FALSE  shift 38
+	.  error
+
+	function_invocation  goto 40
+	arithmetic_expression  goto 56
+	arithmetic_factor  goto 47
+	arithmetic_unary  goto 48
+	unit  goto 49
+	integer_value  goto 50
+	bool_value  goto 51
+
+
+state 32
+	arithmetic_unary : LPAREN . arithmetic_expression RPAREN  (55)
+
+	IDENTIFIER  shift 29
+	MINUS  shift 30
+	LPAREN  shift 32
+	DECIMAL  shift 33
+	OCTAL  shift 34
+	HEX  shift 35
+	BINARY  shift 36
+	TRUE  shift 37
+	FALSE  shift 38
+	.  error
+
+	function_invocation  goto 40
+	arithmetic_expression  goto 57
+	arithmetic_factor  goto 47
+	arithmetic_unary  goto 48
+	unit  goto 49
+	integer_value  goto 50
+	bool_value  goto 51
+
+
+state 33
+	integer_value : DECIMAL .  (60)
+
+	.  reduce 60
+
+
+state 34
+	integer_value : OCTAL .  (61)
+
+	.  reduce 61
+
+
+state 35
+	integer_value : HEX .  (62)
+
+	.  reduce 62
+
+
+state 36
+	integer_value : BINARY .  (63)
+
+	.  reduce 63
+
+
+state 37
+	bool_value : TRUE .  (64)
+
+	.  reduce 64
+
+
+state 38
+	bool_value : FALSE .  (65)
+
+	.  reduce 65
+
+
+state 39
+	primitive_definition_statement : primitive_declarator EQ expression . SEMICOLON  (18)
+
+	SEMICOLON  shift 58
+	.  error
+
+
+state 40
+	unit : function_invocation .  (59)
+
+	.  reduce 59
+
+
+state 41
+	expression : logical_expression .  (32)
+	logical_expression : logical_expression . OR logical_and_expression  (34)
+
+	OR  shift 59
+	RPAREN  reduce 32
+	COMMA  reduce 32
+	SEMICOLON  reduce 32
+
+
+state 42
+	logical_expression : logical_and_expression .  (33)
+	logical_and_expression : logical_and_expression . AND equality_expression  (36)
+
+	AND  shift 60
+	RPAREN  reduce 33
+	OR  reduce 33
+	COMMA  reduce 33
+	SEMICOLON  reduce 33
+
+
+state 43
+	logical_and_expression : equality_expression .  (35)
+	equality_expression : equality_expression . DBL_EQ relational_expression  (38)
+	equality_expression : equality_expression . NOT_EQ relational_expression  (39)
+
+	DBL_EQ  shift 61
+	NOT_EQ  shift 62
+	RPAREN  reduce 35
+	OR  reduce 35
+	AND  reduce 35
+	COMMA  reduce 35
+	SEMICOLON  reduce 35
+
+
+state 44
+	equality_expression : relational_expression .  (37)
+	relational_expression : relational_expression . GTR bool_expression  (41)
+	relational_expression : relational_expression . LESS bool_expression  (42)
+	relational_expression : relational_expression . GTR_EQ bool_expression  (43)
+	relational_expression : relational_expression . LESS_EQ bool_expression  (44)
+
+	GTR  shift 63
+	LESS  shift 64
+	GTR_EQ  shift 65
+	LESS_EQ  shift 66
+	RPAREN  reduce 37
+	DBL_EQ  reduce 37
+	NOT_EQ  reduce 37
+	OR  reduce 37
+	AND  reduce 37
+	COMMA  reduce 37
+	SEMICOLON  reduce 37
+
+
+state 45
+	relational_expression : bool_expression .  (40)
+
+	.  reduce 40
+
+
+state 46
+	bool_expression : arithmetic_expression .  (45)
+	arithmetic_expression : arithmetic_expression . PLUS arithmetic_factor  (48)
+	arithmetic_expression : arithmetic_expression . MINUS arithmetic_factor  (49)
+
+	PLUS  shift 67
+	MINUS  shift 68
+	RPAREN  reduce 45
+	GTR  reduce 45
+	LESS  reduce 45
+	GTR_EQ  reduce 45
+	LESS_EQ  reduce 45
+	DBL_EQ  reduce 45
+	NOT_EQ  reduce 45
+	OR  reduce 45
+	AND  reduce 45
+	COMMA  reduce 45
+	SEMICOLON  reduce 45
+
+
+state 47
+	arithmetic_expression : arithmetic_factor .  (47)
+	arithmetic_factor : arithmetic_factor . STAR arithmetic_unary  (51)
+	arithmetic_factor : arithmetic_factor . SLASH arithmetic_unary  (52)
+
+	STAR  shift 69
+	SLASH  shift 70
+	PLUS  reduce 47
+	MINUS  reduce 47
+	RPAREN  reduce 47
+	GTR  reduce 47
+	LESS  reduce 47
+	GTR_EQ  reduce 47
+	LESS_EQ  reduce 47
+	DBL_EQ  reduce 47
+	NOT_EQ  reduce 47
+	OR  reduce 47
+	AND  reduce 47
+	COMMA  reduce 47
+	SEMICOLON  reduce 47
+
+
+state 48
+	arithmetic_factor : arithmetic_unary .  (50)
+
+	.  reduce 50
+
+
+state 49
+	arithmetic_unary : unit .  (53)
+
+	.  reduce 53
+
+
+state 50
+	unit : integer_value .  (57)
+
+	.  reduce 57
+
+
+state 51
+	unit : bool_value .  (58)
+
+	.  reduce 58
+
+
+state 52
+	formal_parameter_list : primitive_declarator COMMA . formal_parameter_list  (28)
+	formal_parameter_list : .  (26)
+
+	BOOL  shift 1
+	INT  shift 2
+	CHAR  shift 3
+	POINTER  shift 4
+	VOID  shift 5
+	RPAREN  reduce 26
+
+	primitive_declarator  goto 27
+	primitive_type  goto 20
+	formal_parameter_list  goto 71
+
+
+state 53
+	function_definition_statement : primitive_declarator LPAREN formal_parameter_list RPAREN . block_statement  (19)
+
+	LBRACE  shift 72
+	.  error
+
+	block_statement  goto 73
+
+
+state 54
+	function_invocation : IDENTIFIER LPAREN . parameter_list RPAREN  (21)
+	parameter_list : .  (29)
+
+	IDENTIFIER  shift 29
+	MINUS  shift 30
+	BANG  shift 31
+	LPAREN  shift 32
+	DECIMAL  shift 33
+	OCTAL  shift 34
+	HEX  shift 35
+	BINARY  shift 36
+	TRUE  shift 37
+	FALSE  shift 38
+	RPAREN  reduce 29
+
+	expression  goto 74
+	function_invocation  goto 40
+	parameter_list  goto 75
+	logical_expression  goto 41
+	logical_and_expression  goto 42
+	equality_expression  goto 43
+	relational_expression  goto 44
+	bool_expression  goto 45
+	arithmetic_expression  goto 46
+	arithmetic_factor  goto 47
+	arithmetic_unary  goto 48
+	unit  goto 49
+	integer_value  goto 50
+	bool_value  goto 51
+
+
+state 55
+	arithmetic_unary : MINUS arithmetic_unary .  (54)
+
+	.  reduce 54
+
+
+state 56
+	bool_expression : BANG arithmetic_expression .  (46)
+	arithmetic_expression : arithmetic_expression . PLUS arithmetic_factor  (48)
+	arithmetic_expression : arithmetic_expression . MINUS arithmetic_factor  (49)
+
+	PLUS  shift 67
+	MINUS  shift 68
+	RPAREN  reduce 46
+	GTR  reduce 46
+	LESS  reduce 46
+	GTR_EQ  reduce 46
+	LESS_EQ  reduce 46
+	DBL_EQ  reduce 46
+	NOT_EQ  reduce 46
+	OR  reduce 46
+	AND  reduce 46
+	COMMA  reduce 46
+	SEMICOLON  reduce 46
+
+
+state 57
+	arithmetic_expression : arithmetic_expression . PLUS arithmetic_factor  (48)
+	arithmetic_expression : arithmetic_expression . MINUS arithmetic_factor  (49)
+	arithmetic_unary : LPAREN arithmetic_expression . RPAREN  (55)
+
+	PLUS  shift 67
+	MINUS  shift 68
+	RPAREN  shift 76
+	.  error
+
+
+state 58
+	primitive_definition_statement : primitive_declarator EQ expression SEMICOLON .  (18)
+
+	.  reduce 18
+
+
+state 59
+	logical_expression : logical_expression OR . logical_and_expression  (34)
+
+	IDENTIFIER  shift 29
+	MINUS  shift 30
+	BANG  shift 31
+	LPAREN  shift 32
+	DECIMAL  shift 33
+	OCTAL  shift 34
+	HEX  shift 35
+	BINARY  shift 36
+	TRUE  shift 37
+	FALSE  shift 38
+	.  error
+
+	function_invocation  goto 40
+	logical_and_expression  goto 77
+	equality_expression  goto 43
+	relational_expression  goto 44
+	bool_expression  goto 45
+	arithmetic_expression  goto 46
+	arithmetic_factor  goto 47
+	arithmetic_unary  goto 48
+	unit  goto 49
+	integer_value  goto 50
+	bool_value  goto 51
+
+
+state 60
+	logical_and_expression : logical_and_expression AND . equality_expression  (36)
+
+	IDENTIFIER  shift 29
+	MINUS  shift 30
+	BANG  shift 31
+	LPAREN  shift 32
+	DECIMAL  shift 33
+	OCTAL  shift 34
+	HEX  shift 35
+	BINARY  shift 36
+	TRUE  shift 37
+	FALSE  shift 38
+	.  error
+
+	function_invocation  goto 40
+	equality_expression  goto 78
+	relational_expression  goto 44
+	bool_expression  goto 45
+	arithmetic_expression  goto 46
+	arithmetic_factor  goto 47
+	arithmetic_unary  goto 48
+	unit  goto 49
+	integer_value  goto 50
+	bool_value  goto 51
+
+
+state 61
+	equality_expression : equality_expression DBL_EQ . relational_expression  (38)
+
+	IDENTIFIER  shift 29
+	MINUS  shift 30
+	BANG  shift 31
+	LPAREN  shift 32
+	DECIMAL  shift 33
+	OCTAL  shift 34
+	HEX  shift 35
+	BINARY  shift 36
+	TRUE  shift 37
+	FALSE  shift 38
+	.  error
+
+	function_invocation  goto 40
+	relational_expression  goto 79
+	bool_expression  goto 45
+	arithmetic_expression  goto 46
+	arithmetic_factor  goto 47
+	arithmetic_unary  goto 48
+	unit  goto 49
+	integer_value  goto 50
+	bool_value  goto 51
+
+
+state 62
+	equality_expression : equality_expression NOT_EQ . relational_expression  (39)
+
+	IDENTIFIER  shift 29
+	MINUS  shift 30
+	BANG  shift 31
+	LPAREN  shift 32
+	DECIMAL  shift 33
+	OCTAL  shift 34
+	HEX  shift 35
+	BINARY  shift 36
+	TRUE  shift 37
+	FALSE  shift 38
+	.  error
+
+	function_invocation  goto 40
+	relational_expression  goto 80
+	bool_expression  goto 45
+	arithmetic_expression  goto 46
+	arithmetic_factor  goto 47
+	arithmetic_unary  goto 48
+	unit  goto 49
+	integer_value  goto 50
+	bool_value  goto 51
+
+
+state 63
+	relational_expression : relational_expression GTR . bool_expression  (41)
+
+	IDENTIFIER  shift 29
+	MINUS  shift 30
+	BANG  shift 31
+	LPAREN  shift 32
+	DECIMAL  shift 33
+	OCTAL  shift 34
+	HEX  shift 35
+	BINARY  shift 36
+	TRUE  shift 37
+	FALSE  shift 38
+	.  error
+
+	function_invocation  goto 40
+	bool_expression  goto 81
+	arithmetic_expression  goto 46
+	arithmetic_factor  goto 47
+	arithmetic_unary  goto 48
+	unit  goto 49
+	integer_value  goto 50
+	bool_value  goto 51
+
+
+state 64
+	relational_expression : relational_expression LESS . bool_expression  (42)
+
+	IDENTIFIER  shift 29
+	MINUS  shift 30
+	BANG  shift 31
+	LPAREN  shift 32
+	DECIMAL  shift 33
+	OCTAL  shift 34
+	HEX  shift 35
+	BINARY  shift 36
+	TRUE  shift 37
+	FALSE  shift 38
+	.  error
+
+	function_invocation  goto 40
+	bool_expression  goto 82
+	arithmetic_expression  goto 46
+	arithmetic_factor  goto 47
+	arithmetic_unary  goto 48
+	unit  goto 49
+	integer_value  goto 50
+	bool_value  goto 51
+
+
+state 65
+	relational_expression : relational_expression GTR_EQ . bool_expression  (43)
+
+	IDENTIFIER  shift 29
+	MINUS  shift 30
+	BANG  shift 31
+	LPAREN  shift 32
+	DECIMAL  shift 33
+	OCTAL  shift 34
+	HEX  shift 35
+	BINARY  shift 36
+	TRUE  shift 37
+	FALSE  shift 38
+	.  error
+
+	function_invocation  goto 40
+	bool_expression  goto 83
+	arithmetic_expression  goto 46
+	arithmetic_factor  goto 47
+	arithmetic_unary  goto 48
+	unit  goto 49
+	integer_value  goto 50
+	bool_value  goto 51
+
+
+state 66
+	relational_expression : relational_expression LESS_EQ . bool_expression  (44)
+
+	IDENTIFIER  shift 29
+	MINUS  shift 30
+	BANG  shift 31
+	LPAREN  shift 32
+	DECIMAL  shift 33
+	OCTAL  shift 34
+	HEX  shift 35
+	BINARY  shift 36
+	TRUE  shift 37
+	FALSE  shift 38
+	.  error
+
+	function_invocation  goto 40
+	bool_expression  goto 84
+	arithmetic_expression  goto 46
+	arithmetic_factor  goto 47
+	arithmetic_unary  goto 48
+	unit  goto 49
+	integer_value  goto 50
+	bool_value  goto 51
+
+
+state 67
+	arithmetic_expression : arithmetic_expression PLUS . arithmetic_factor  (48)
+
+	IDENTIFIER  shift 29
+	MINUS  shift 30
+	LPAREN  shift 32
+	DECIMAL  shift 33
+	OCTAL  shift 34
+	HEX  shift 35
+	BINARY  shift 36
+	TRUE  shift 37
+	FALSE  shift 38
+	.  error
+
+	function_invocation  goto 40
+	arithmetic_factor  goto 85
+	arithmetic_unary  goto 48
+	unit  goto 49
+	integer_value  goto 50
+	bool_value  goto 51
+
+
+state 68
+	arithmetic_expression : arithmetic_expression MINUS . arithmetic_factor  (49)
+
+	IDENTIFIER  shift 29
+	MINUS  shift 30
+	LPAREN  shift 32
+	DECIMAL  shift 33
+	OCTAL  shift 34
+	HEX  shift 35
+	BINARY  shift 36
+	TRUE  shift 37
+	FALSE  shift 38
+	.  error
+
+	function_invocation  goto 40
+	arithmetic_factor  goto 86
+	arithmetic_unary  goto 48
+	unit  goto 49
+	integer_value  goto 50
+	bool_value  goto 51
+
+
+state 69
+	arithmetic_factor : arithmetic_factor STAR . arithmetic_unary  (51)
+
+	IDENTIFIER  shift 29
+	MINUS  shift 30
+	LPAREN  shift 32
+	DECIMAL  shift 33
+	OCTAL  shift 34
+	HEX  shift 35
+	BINARY  shift 36
+	TRUE  shift 37
+	FALSE  shift 38
+	.  error
+
+	function_invocation  goto 40
+	arithmetic_unary  goto 87
+	unit  goto 49
+	integer_value  goto 50
+	bool_value  goto 51
+
+
+state 70
+	arithmetic_factor : arithmetic_factor SLASH . arithmetic_unary  (52)
+
+	IDENTIFIER  shift 29
+	MINUS  shift 30
+	LPAREN  shift 32
+	DECIMAL  shift 33
+	OCTAL  shift 34
+	HEX  shift 35
+	BINARY  shift 36
+	TRUE  shift 37
+	FALSE  shift 38
+	.  error
+
+	function_invocation  goto 40
+	arithmetic_unary  goto 88
+	unit  goto 49
+	integer_value  goto 50
+	bool_value  goto 51
+
+
+state 71
+	formal_parameter_list : primitive_declarator COMMA formal_parameter_list .  (28)
+
+	.  reduce 28
+
+
+state 72
+	block_statement : LBRACE . statement_list_block_level RBRACE  (7)
+
+	IDENTIFIER  shift 89
+	BOOL  shift 1
+	INT  shift 2
+	CHAR  shift 3
+	POINTER  shift 4
+	VOID  shift 5
+	IF  shift 90
+	WHILE  shift 91
+	LBRACE  shift 72
+	.  error
+
+	primitive_definition_statement  goto 92
+	block_statement  goto 93
+	statement_list_block_level  goto 94
+	statement_block_level  goto 95
+	variable_set_statement  goto 96
+	function_invocation_statement  goto 97
+	if_block_statement  goto 98
+	while_block_statement  goto 99
+	primitive_declarator  goto 100
+	primitive_type  goto 20
+	function_invocation  goto 101
+
+
+state 73
+	function_definition_statement : primitive_declarator LPAREN formal_parameter_list RPAREN block_statement .  (19)
+
+	.  reduce 19
+
+
+state 74
+	parameter_list : expression .  (30)
+	parameter_list : expression . COMMA parameter_list  (31)
+
+	COMMA  shift 102
+	RPAREN  reduce 30
+
+
+state 75
+	function_invocation : IDENTIFIER LPAREN parameter_list . RPAREN  (21)
+
+	RPAREN  shift 103
+	.  error
+
+
+state 76
+	arithmetic_unary : LPAREN arithmetic_expression RPAREN .  (55)
+
+	.  reduce 55
+
+
+state 77
+	logical_expression : logical_expression OR logical_and_expression .  (34)
+	logical_and_expression : logical_and_expression . AND equality_expression  (36)
+
+	AND  shift 60
+	RPAREN  reduce 34
+	OR  reduce 34
+	COMMA  reduce 34
+	SEMICOLON  reduce 34
+
+
+state 78
+	logical_and_expression : logical_and_expression AND equality_expression .  (36)
+	equality_expression : equality_expression . DBL_EQ relational_expression  (38)
+	equality_expression : equality_expression . NOT_EQ relational_expression  (39)
+
+	DBL_EQ  shift 61
+	NOT_EQ  shift 62
+	RPAREN  reduce 36
+	OR  reduce 36
+	AND  reduce 36
+	COMMA  reduce 36
+	SEMICOLON  reduce 36
+
+
+state 79
+	equality_expression : equality_expression DBL_EQ relational_expression .  (38)
+	relational_expression : relational_expression . GTR bool_expression  (41)
+	relational_expression : relational_expression . LESS bool_expression  (42)
+	relational_expression : relational_expression . GTR_EQ bool_expression  (43)
+	relational_expression : relational_expression . LESS_EQ bool_expression  (44)
+
+	GTR  shift 63
+	LESS  shift 64
+	GTR_EQ  shift 65
+	LESS_EQ  shift 66
+	RPAREN  reduce 38
+	DBL_EQ  reduce 38
+	NOT_EQ  reduce 38
+	OR  reduce 38
+	AND  reduce 38
+	COMMA  reduce 38
+	SEMICOLON  reduce 38
+
+
+state 80
+	equality_expression : equality_expression NOT_EQ relational_expression .  (39)
+	relational_expression : relational_expression . GTR bool_expression  (41)
+	relational_expression : relational_expression . LESS bool_expression  (42)
+	relational_expression : relational_expression . GTR_EQ bool_expression  (43)
+	relational_expression : relational_expression . LESS_EQ bool_expression  (44)
+
+	GTR  shift 63
+	LESS  shift 64
+	GTR_EQ  shift 65
+	LESS_EQ  shift 66
+	RPAREN  reduce 39
+	DBL_EQ  reduce 39
+	NOT_EQ  reduce 39
+	OR  reduce 39
+	AND  reduce 39
+	COMMA  reduce 39
+	SEMICOLON  reduce 39
+
+
+state 81
+	relational_expression : relational_expression GTR bool_expression .  (41)
+
+	.  reduce 41
+
+
+state 82
+	relational_expression : relational_expression LESS bool_expression .  (42)
+
+	.  reduce 42
+
+
+state 83
+	relational_expression : relational_expression GTR_EQ bool_expression .  (43)
+
+	.  reduce 43
+
+
+state 84
+	relational_expression : relational_expression LESS_EQ bool_expression .  (44)
+
+	.  reduce 44
+
+
+state 85
+	arithmetic_expression : arithmetic_expression PLUS arithmetic_factor .  (48)
+	arithmetic_factor : arithmetic_factor . STAR arithmetic_unary  (51)
+	arithmetic_factor : arithmetic_factor . SLASH arithmetic_unary  (52)
+
+	STAR  shift 69
+	SLASH  shift 70
+	PLUS  reduce 48
+	MINUS  reduce 48
+	RPAREN  reduce 48
+	GTR  reduce 48
+	LESS  reduce 48
+	GTR_EQ  reduce 48
+	LESS_EQ  reduce 48
+	DBL_EQ  reduce 48
+	NOT_EQ  reduce 48
+	OR  reduce 48
+	AND  reduce 48
+	COMMA  reduce 48
+	SEMICOLON  reduce 48
+
+
+state 86
+	arithmetic_expression : arithmetic_expression MINUS arithmetic_factor .  (49)
+	arithmetic_factor : arithmetic_factor . STAR arithmetic_unary  (51)
+	arithmetic_factor : arithmetic_factor . SLASH arithmetic_unary  (52)
+
+	STAR  shift 69
+	SLASH  shift 70
+	PLUS  reduce 49
+	MINUS  reduce 49
+	RPAREN  reduce 49
+	GTR  reduce 49
+	LESS  reduce 49
+	GTR_EQ  reduce 49
+	LESS_EQ  reduce 49
+	DBL_EQ  reduce 49
+	NOT_EQ  reduce 49
+	OR  reduce 49
+	AND  reduce 49
+	COMMA  reduce 49
+	SEMICOLON  reduce 49
+
+
+state 87
+	arithmetic_factor : arithmetic_factor STAR arithmetic_unary .  (51)
+
+	.  reduce 51
+
+
+state 88
+	arithmetic_factor : arithmetic_factor SLASH arithmetic_unary .  (52)
+
+	.  reduce 52
+
+
+state 89
+	variable_set_statement : IDENTIFIER . EQ expression SEMICOLON  (20)
+	function_invocation : IDENTIFIER . LPAREN parameter_list RPAREN  (21)
+
+	LPAREN  shift 54
+	EQ  shift 104
+	.  error
+
+
+state 90
+	if_block_statement : IF . LPAREN expression RPAREN block_statement  (23)
+	if_block_statement : IF . LPAREN expression RPAREN block_statement ELSE block_statement  (24)
+
+	LPAREN  shift 105
+	.  error
+
+
+state 91
+	while_block_statement : WHILE . LPAREN expression RPAREN block_statement  (25)
+
+	LPAREN  shift 106
+	.  error
+
+
+state 92
+	statement_block_level : primitive_definition_statement .  (10)
+
+	.  reduce 10
+
+
+state 93
+	statement_block_level : block_statement .  (11)
+
+	.  reduce 11
+
+
+state 94
+	block_statement : LBRACE statement_list_block_level . RBRACE  (7)
+
+	RBRACE  shift 107
+	.  error
+
+
+state 95
+	statement_list_block_level : statement_block_level .  (8)
+	statement_list_block_level : statement_block_level . statement_list_block_level  (9)
+
+	IDENTIFIER  shift 89
+	BOOL  shift 1
+	INT  shift 2
+	CHAR  shift 3
+	POINTER  shift 4
+	VOID  shift 5
+	IF  shift 90
+	WHILE  shift 91
+	LBRACE  shift 72
+	RBRACE  reduce 8
+
+	primitive_definition_statement  goto 92
+	block_statement  goto 93
+	statement_list_block_level  goto 108
+	statement_block_level  goto 95
+	variable_set_statement  goto 96
+	function_invocation_statement  goto 97
+	if_block_statement  goto 98
+	while_block_statement  goto 99
+	primitive_declarator  goto 100
+	primitive_type  goto 20
+	function_invocation  goto 101
+
+
+state 96
+	statement_block_level : variable_set_statement .  (12)
+
+	.  reduce 12
+
+
+state 97
+	statement_block_level : function_invocation_statement .  (13)
+
+	.  reduce 13
+
+
+state 98
+	statement_block_level : if_block_statement .  (14)
+
+	.  reduce 14
+
+
+state 99
+	statement_block_level : while_block_statement .  (15)
+
+	.  reduce 15
+
+
+state 100
+	primitive_definition_statement : primitive_declarator . EQ expression SEMICOLON  (18)
+
+	EQ  shift 24
+	.  error
+
+
+state 101
+	function_invocation_statement : function_invocation . SEMICOLON  (22)
+
+	SEMICOLON  shift 109
+	.  error
+
+
+state 102
+	parameter_list : expression COMMA . parameter_list  (31)
+	parameter_list : .  (29)
+
+	IDENTIFIER  shift 29
+	MINUS  shift 30
+	BANG  shift 31
+	LPAREN  shift 32
+	DECIMAL  shift 33
+	OCTAL  shift 34
+	HEX  shift 35
+	BINARY  shift 36
+	TRUE  shift 37
+	FALSE  shift 38
+	RPAREN  reduce 29
+
+	expression  goto 74
+	function_invocation  goto 40
+	parameter_list  goto 110
+	logical_expression  goto 41
+	logical_and_expression  goto 42
+	equality_expression  goto 43
+	relational_expression  goto 44
+	bool_expression  goto 45
+	arithmetic_expression  goto 46
+	arithmetic_factor  goto 47
+	arithmetic_unary  goto 48
+	unit  goto 49
+	integer_value  goto 50
+	bool_value  goto 51
+
+
+state 103
+	function_invocation : IDENTIFIER LPAREN parameter_list RPAREN .  (21)
+
+	.  reduce 21
+
+
+state 104
+	variable_set_statement : IDENTIFIER EQ . expression SEMICOLON  (20)
+
+	IDENTIFIER  shift 29
+	MINUS  shift 30
+	BANG  shift 31
+	LPAREN  shift 32
+	DECIMAL  shift 33
+	OCTAL  shift 34
+	HEX  shift 35
+	BINARY  shift 36
+	TRUE  shift 37
+	FALSE  shift 38
+	.  error
+
+	expression  goto 111
+	function_invocation  goto 40
+	logical_expression  goto 41
+	logical_and_expression  goto 42
+	equality_expression  goto 43
+	relational_expression  goto 44
+	bool_expression  goto 45
+	arithmetic_expression  goto 46
+	arithmetic_factor  goto 47
+	arithmetic_unary  goto 48
+	unit  goto 49
+	integer_value  goto 50
+	bool_value  goto 51
+
+
+state 105
+	if_block_statement : IF LPAREN . expression RPAREN block_statement  (23)
+	if_block_statement : IF LPAREN . expression RPAREN block_statement ELSE block_statement  (24)
+
+	IDENTIFIER  shift 29
+	MINUS  shift 30
+	BANG  shift 31
+	LPAREN  shift 32
+	DECIMAL  shift 33
+	OCTAL  shift 34
+	HEX  shift 35
+	BINARY  shift 36
+	TRUE  shift 37
+	FALSE  shift 38
+	.  error
+
+	expression  goto 112
+	function_invocation  goto 40
+	logical_expression  goto 41
+	logical_and_expression  goto 42
+	equality_expression  goto 43
+	relational_expression  goto 44
+	bool_expression  goto 45
+	arithmetic_expression  goto 46
+	arithmetic_factor  goto 47
+	arithmetic_unary  goto 48
+	unit  goto 49
+	integer_value  goto 50
+	bool_value  goto 51
+
+
+state 106
+	while_block_statement : WHILE LPAREN . expression RPAREN block_statement  (25)
+
+	IDENTIFIER  shift 29
+	MINUS  shift 30
+	BANG  shift 31
+	LPAREN  shift 32
+	DECIMAL  shift 33
+	OCTAL  shift 34
+	HEX  shift 35
+	BINARY  shift 36
+	TRUE  shift 37
+	FALSE  shift 38
+	.  error
+
+	expression  goto 113
+	function_invocation  goto 40
+	logical_expression  goto 41
+	logical_and_expression  goto 42
+	equality_expression  goto 43
+	relational_expression  goto 44
+	bool_expression  goto 45
+	arithmetic_expression  goto 46
+	arithmetic_factor  goto 47
+	arithmetic_unary  goto 48
+	unit  goto 49
+	integer_value  goto 50
+	bool_value  goto 51
+
+
+state 107
+	block_statement : LBRACE statement_list_block_level RBRACE .  (7)
+
+	.  reduce 7
+
+
+state 108
+	statement_list_block_level : statement_block_level statement_list_block_level .  (9)
+
+	.  reduce 9
+
+
+state 109
+	function_invocation_statement : function_invocation SEMICOLON .  (22)
+
+	.  reduce 22
+
+
+state 110
+	parameter_list : expression COMMA parameter_list .  (31)
+
+	.  reduce 31
+
+
+state 111
+	variable_set_statement : IDENTIFIER EQ expression . SEMICOLON  (20)
+
+	SEMICOLON  shift 114
+	.  error
+
+
+state 112
+	if_block_statement : IF LPAREN expression . RPAREN block_statement  (23)
+	if_block_statement : IF LPAREN expression . RPAREN block_statement ELSE block_statement  (24)
+
+	RPAREN  shift 115
+	.  error
+
+
+state 113
+	while_block_statement : WHILE LPAREN expression . RPAREN block_statement  (25)
+
+	RPAREN  shift 116
+	.  error
+
+
+state 114
+	variable_set_statement : IDENTIFIER EQ expression SEMICOLON .  (20)
+
+	.  reduce 20
+
+
+state 115
+	if_block_statement : IF LPAREN expression RPAREN . block_statement  (23)
+	if_block_statement : IF LPAREN expression RPAREN . block_statement ELSE block_statement  (24)
+
+	LBRACE  shift 72
+	.  error
+
+	block_statement  goto 117
+
+
+state 116
+	while_block_statement : WHILE LPAREN expression RPAREN . block_statement  (25)
+
+	LBRACE  shift 72
+	.  error
+
+	block_statement  goto 118
+
+
+state 117
+	if_block_statement : IF LPAREN expression RPAREN block_statement .  (23)
+	if_block_statement : IF LPAREN expression RPAREN block_statement . ELSE block_statement  (24)
+
+	ELSE  shift 119
+	IDENTIFIER  reduce 23
+	BOOL  reduce 23
+	INT  reduce 23
+	CHAR  reduce 23
+	POINTER  reduce 23
+	VOID  reduce 23
+	IF  reduce 23
+	WHILE  reduce 23
+	LBRACE  reduce 23
+	RBRACE  reduce 23
+
+
+state 118
+	while_block_statement : WHILE LPAREN expression RPAREN block_statement .  (25)
+
+	.  reduce 25
+
+
+state 119
+	if_block_statement : IF LPAREN expression RPAREN block_statement ELSE . block_statement  (24)
+
+	LBRACE  shift 72
+	.  error
+
+	block_statement  goto 120
+
+
+state 120
+	if_block_statement : IF LPAREN expression RPAREN block_statement ELSE block_statement .  (24)
+
+	.  reduce 24
+
+
+43 terminals, 32 nonterminals
+77 grammar rules, 121 states

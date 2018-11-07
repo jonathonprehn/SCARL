@@ -1,0 +1,10 @@
+
+// expressions
+
+int doSomething(int x) {
+	doSomething = (x * 5) + 2;
+}
+
+void main() {
+	int some = doSomething(12) / 2;
+}

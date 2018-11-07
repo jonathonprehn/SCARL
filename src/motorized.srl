@@ -1,0 +1,12 @@
+//sensors and actuators declared in
+//global scope
+ServoActuator motor1;
+ServoActuator motor2;
+
+void main() {
+	motor1.forward(50);
+	motor2.forward(50);
+	wait(3000);
+	motor1.stop();
+	motor2.stop();
+}

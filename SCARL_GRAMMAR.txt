@@ -1,0 +1,121 @@
+<program> := <statement_list>
+
+<statement_list> := <statement> | 
+					<statement> <statement_list>
+
+<statement> := <device_declarator_statement> | 
+				<primitive_definition_statement> |
+				<function_definition_statement>
+				
+<block_statement> := '{' '}'  |
+					 '{' <statement_list_block_level> '}'
+					  
+
+<statement_list_block_level> := <statement_block_level> |
+								<statement_block_level> <statement_list_block_level>
+
+<statement_block_level> := <primitive_definition_statement> |
+							<block_statement> |
+							<variable_set_statement> |
+							<function_invocation_statement> |
+							<if_block_statement> |
+							<while_block_statement>
+								
+<device_declarator_statement> := <device_type> <identifier> ';'
+
+<primitive_definition_statement> := <primitive_type> <identifier> '=' <expression> ';'
+
+<function_definition_statement> := <primitive_type> <identifier> '(' <formal_parameter_list> ')' <block_statement>
+
+<variable_set_statement> := <identifier> '=' <expression> ';'
+
+<function_invocation_statement> := <function_invocation> ';'
+
+<if_block_statement> := 'if' '(' <expression> ')' <block_statement> |
+						'if' '(' <expression> ')' <block_statement> 'else' <block_statement>
+						
+<while_statement> := 'while' '(' <expression> ')' <block_statement>
+
+
+<formal_parameter_list> :=  (empty)
+						    <primitive_type> <identifier> |
+							<primitive_type> <identifier> ',' <formal_parameter_list>
+							
+<parameter_list> := (empty)
+					<unit> |
+					<unit> ',' <parameter_list>
+					
+<function_invocation> := <identifier> '(' <parameter_list> ')'
+					
+NOTE: Did I do the expression statements wrong??					
+
+<expression> := <logical_expression>
+				
+<arithmetic_expression> := <arithmetic_factor> |
+							<airthmetic_expression> '+' <arithmetic_factor> |
+							<airthmetic_expression> '-' <arithmetic_factor>
+
+<arithmetic_factor> := <arithmetic_unary> |
+						<arithmetic_factor> '*' <arithmetic_unary> |
+						<arithmetic_factor> '/' <arithmetic_unary> 
+						
+<arithmetic_unary> := <unit>
+					  '-' <arithmetic_unary> |
+					  '(' <arithmetic_expression> ')' 
+
+<logical_expression> := <logical_and_expression> |
+						<logical_expression> '||' <logical_and_expression>
+						
+<logical_and_expression> := <equality_expression> |
+							<logical_and_expression> '&&' <relational_expression>
+						
+<equality_expression> := <relational_expression> |
+						 <equality_expression> '==' <relational_expression> |
+						 <equality_expression> '!=' <relational_expression>
+						
+<relational_expression> := <bool_expression> |
+						   <relational_expression> '>' <bool_expression> |
+						   <relational_expression> '<' <bool_expression> |
+						   <relational_expression> '>=' <bool_expression> |
+						   <relational_expression> '<=' <bool_expression> |
+						
+<bool_expression> := <arithmetic_expression> |
+					 '!' <bool_expression> |
+					 '(' <logical_expression> ')' |
+					 
+<unit> := <identifier> |
+		  <integer_val> |
+		  <bool> |
+		  <function_invocation>
+		  
+<bool_val> := 'true' | 'false'
+
+<primitive_type> := 'int' | 'char' | 'bool' | 'pointer'
+
+<device_type> := 'LightActuator' | 'ServoActuator' | 'SoundSensor' |
+				 'LightSensor' | 'DistanceSensor' | 'TemperatureSensor'
+
+<identifier> := <letter>(<letter> | <dec_digit> | "." )*               //period allowed in identifier for compound statement
+ 
+<letter> := 'a' | 'b' | 'c' | ... | 'W' | 'X' | 'Y' | 'Z'
+
+<integer_val> := <decimal_number> | <binary_number> | <octal_number> | <hex_number>
+
+<decimal_number> := <digit_nonzero>(<dec_digit>)*
+					
+<binary_number> := '0b'(<bin_digit>)+
+
+<octal_number> := '0'(<octal_digit>)+
+
+<hex_number> := '0x'(<hex_digit>)+
+
+<digit> := '0' | '1' | '2' | '3' | '4' | '5' | '6' | '7' | '8' | '9'
+
+<digit_nonzero> := '1' | '2' | '3' | '4' | '5' | '6' | '7' | '8' | '9'
+
+<octal_digit> := '0' | '1' | '2' | '3' | '4' | '5' | '6' | '7'
+
+<bin_digit> := '0' | '1'
+
+<hex_digit> := '0' | '1' | '2' | '3' | '4' | '5' | '6' | '7' | '8' | '9' | 'A' |
+				'B' | 'C' | 'D' | 'E' | 'F' | 'a' | 'b' | 'c' | 'd' | 'e' | 'f'
