@@ -99,6 +99,7 @@ struct ast_node * create_node(struct ast_node *parent, int type_flag)
 	nod->type_flag = type_flag;
 	nod->int_value = 0;
 	nod->str_value = NULL;
+	nod->symbol_table_value = NULL;
 	return nod;
 }
 

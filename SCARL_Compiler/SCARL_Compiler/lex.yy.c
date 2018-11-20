@@ -403,6 +403,7 @@ char *yytext;
 #include "y.tab.h"
 #include "visitors.h"
 #include "scarlnodestack.h"
+#include "scarl_symboltable.h"
 
 unsigned lineNumber = 0;
 
@@ -419,6 +420,11 @@ struct ast_node_stack *node_stack;
 
 struct ast_node_stack *ident_stack;
 
+//for type checking and tracking program constructs
+struct scarl_symbol_table *symbol_table;
+
+struct scarl_symbol_table *current_symbol_table;
+
 void setLastTokenText(char *txt) {
 	if (lastTokenText != NULL) {
 		free(lastTokenText);
@@ -427,7 +433,7 @@ void setLastTokenText(char *txt) {
 	lastTokenText = _strdup(txt);
 }
 
-#line 431 "lex.yy.c"
+#line 437 "lex.yy.c"
 
 /* Macros after this point can all be overridden by user definitions in
  * section 1.
@@ -578,10 +584,10 @@ YY_DECL
 	register char *yy_cp, *yy_bp;
 	register int yy_act;
 
-#line 45 "scarl.l"
+#line 51 "scarl.l"
 
 
-#line 585 "lex.yy.c"
+#line 591 "lex.yy.c"
 
 	if ( yy_init )
 		{
@@ -666,22 +672,22 @@ do_action:	/* This label is used only to access EOF actions. */
 
 case 1:
 YY_RULE_SETUP
-#line 47 "scarl.l"
+#line 53 "scarl.l"
 { /*Ignore everything for the rest of this line */ }
 	YY_BREAK
 case 2:
 YY_RULE_SETUP
-#line 48 "scarl.l"
+#line 54 "scarl.l"
 { /* Do nothing for whitespace */ }
 	YY_BREAK
 case 3:
 YY_RULE_SETUP
-#line 49 "scarl.l"
+#line 55 "scarl.l"
 { /*Count lines for debug*/ lineNumber++; }
 	YY_BREAK
 case 4:
 YY_RULE_SETUP
-#line 50 "scarl.l"
+#line 56 "scarl.l"
 { 
 	//can set up a binary search later
 	setLastTokenText(yytext);
@@ -768,7 +774,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 5:
 YY_RULE_SETUP
-#line 133 "scarl.l"
+#line 139 "scarl.l"
 { 
 	setLastTokenText(yytext);
 	return DECIMAL;  
@@ -776,7 +782,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 6:
 YY_RULE_SETUP
-#line 137 "scarl.l"
+#line 143 "scarl.l"
 {
 	setLastTokenText(yytext);
 	return OCTAL;
@@ -784,7 +790,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 7:
 YY_RULE_SETUP
-#line 141 "scarl.l"
+#line 147 "scarl.l"
 {
 	setLastTokenText(yytext);
 	return HEX;
@@ -792,7 +798,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 8:
 YY_RULE_SETUP
-#line 145 "scarl.l"
+#line 151 "scarl.l"
 {
 	setLastTokenText(yytext);
 	return BINARY;
@@ -800,7 +806,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 9:
 YY_RULE_SETUP
-#line 149 "scarl.l"
+#line 155 "scarl.l"
 {/* Weird "just 0" case */
 	setLastTokenText(yytext); 
 	return DECIMAL; 
@@ -808,7 +814,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 10:
 YY_RULE_SETUP
-#line 153 "scarl.l"
+#line 159 "scarl.l"
 { 
 	setLastTokenText(yytext); 
 	return PLUS; 
@@ -816,7 +822,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 11:
 YY_RULE_SETUP
-#line 157 "scarl.l"
+#line 163 "scarl.l"
 { 
 	setLastTokenText(yytext);
 	return MINUS; 
@@ -824,7 +830,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 12:
 YY_RULE_SETUP
-#line 161 "scarl.l"
+#line 167 "scarl.l"
 { 
 	setLastTokenText(yytext); 
 	return STAR; 
@@ -832,7 +838,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 13:
 YY_RULE_SETUP
-#line 165 "scarl.l"
+#line 171 "scarl.l"
 { 
 	setLastTokenText(yytext); 
 	return SLASH; 
@@ -840,7 +846,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 14:
 YY_RULE_SETUP
-#line 169 "scarl.l"
+#line 175 "scarl.l"
 { 
 	setLastTokenText(yytext);
 	return BANG; 
@@ -848,7 +854,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 15:
 YY_RULE_SETUP
-#line 173 "scarl.l"
+#line 179 "scarl.l"
 { 
 	setLastTokenText(yytext); 
 	return LPAREN; 
@@ -856,7 +862,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 16:
 YY_RULE_SETUP
-#line 177 "scarl.l"
+#line 183 "scarl.l"
 { 
 	setLastTokenText(yytext); 
 	return RPAREN;
@@ -864,7 +870,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 17:
 YY_RULE_SETUP
-#line 181 "scarl.l"
+#line 187 "scarl.l"
 { 
 	setLastTokenText(yytext); 
 	return GTR; 
@@ -872,7 +878,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 18:
 YY_RULE_SETUP
-#line 185 "scarl.l"
+#line 191 "scarl.l"
 { 
 	setLastTokenText(yytext); 
 	return LESS; 
@@ -880,7 +886,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 19:
 YY_RULE_SETUP
-#line 189 "scarl.l"
+#line 195 "scarl.l"
 { 
 	setLastTokenText(yytext); 
 	return GTR_EQ; 
@@ -888,7 +894,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 20:
 YY_RULE_SETUP
-#line 193 "scarl.l"
+#line 199 "scarl.l"
 { 
 	setLastTokenText(yytext); 
 	return LESS_EQ; 
@@ -896,7 +902,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 21:
 YY_RULE_SETUP
-#line 197 "scarl.l"
+#line 203 "scarl.l"
 { 
 	setLastTokenText(yytext); 
 	return DBL_EQ; 
@@ -904,7 +910,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 22:
 YY_RULE_SETUP
-#line 201 "scarl.l"
+#line 207 "scarl.l"
 { 
 	setLastTokenText(yytext); 
 	return EQ; 
@@ -912,7 +918,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 23:
 YY_RULE_SETUP
-#line 205 "scarl.l"
+#line 211 "scarl.l"
 { 
 	setLastTokenText(yytext); 
 	return NOT_EQ; 
@@ -920,7 +926,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 24:
 YY_RULE_SETUP
-#line 209 "scarl.l"
+#line 215 "scarl.l"
 { 
 	setLastTokenText(yytext); 
 	return OR; 
@@ -928,7 +934,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 25:
 YY_RULE_SETUP
-#line 213 "scarl.l"
+#line 219 "scarl.l"
 { 
 	setLastTokenText(yytext); 
 	return AND; 
@@ -936,7 +942,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 26:
 YY_RULE_SETUP
-#line 217 "scarl.l"
+#line 223 "scarl.l"
 { 
 	setLastTokenText(yytext); 
 	return COMMA; 
@@ -944,7 +950,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 27:
 YY_RULE_SETUP
-#line 221 "scarl.l"
+#line 227 "scarl.l"
 { 
 	setLastTokenText(yytext); 
 	return SEMICOLON; 
@@ -952,15 +958,20 @@ YY_RULE_SETUP
 	YY_BREAK
 case 28:
 YY_RULE_SETUP
-#line 225 "scarl.l"
+#line 231 "scarl.l"
 { 
+	/* Scoping controls here with the curly braces */
+	struct scarl_symbol_table *new_scope_table = create_symbol_table(NULL);
+	add_symbol_table_child(current_symbol_table, new_scope_table);
+	current_symbol_table = new_scope_table; //introducing a new scope
+
 	setLastTokenText(yytext); 
 	return LBRACE; 
 }
 	YY_BREAK
 case 29:
 YY_RULE_SETUP
-#line 229 "scarl.l"
+#line 240 "scarl.l"
 { 
 	setLastTokenText(yytext); 
 	return RBRACE; 
@@ -968,15 +979,15 @@ YY_RULE_SETUP
 	YY_BREAK
 case 30:
 YY_RULE_SETUP
-#line 233 "scarl.l"
+#line 244 "scarl.l"
 { setLastTokenText(yytext); fprintf(stderr, "unrecognized characters: \'%s\'\n", yytext); }
 	YY_BREAK
 case 31:
 YY_RULE_SETUP
-#line 235 "scarl.l"
+#line 246 "scarl.l"
 ECHO;
 	YY_BREAK
-#line 980 "lex.yy.c"
+#line 991 "lex.yy.c"
 case YY_STATE_EOF(INITIAL):
 	yyterminate();
 
@@ -1862,7 +1873,7 @@ int main()
 	return 0;
 	}
 #endif
-#line 235 "scarl.l"
+#line 246 "scarl.l"
 
 
 
@@ -1953,6 +1964,10 @@ int main(int argc, char *argv[]) {
 	node_stack = create_node_stack(100);
 	extern struct ast_node_stack *ident_stack;
 	ident_stack = create_node_stack(100);
+	extern struct scarl_symbol_table *symbol_table;
+	symbol_table = create_symbol_table(NULL);
+	extern struct scarl_symbol_table *current_symbol_table;
+	current_symbol_table = symbol_table; // for scope tracking
 
 	init_visitor_func_parsing_constructs(); //visitor.h specific
 
@@ -1962,6 +1977,7 @@ int main(int argc, char *argv[]) {
 	}
 	else {
 		fprintf(stderr, "\nFailed to parse. Check your file.\n");
+		return 1; //error
 	}
 	
 	struct ast_node *should_be_program_node = ast_node_stack_pop(node_stack);
@@ -1982,8 +1998,12 @@ int main(int argc, char *argv[]) {
 	printf("\nAbstract Syntax Tree:\n");
 	print_ast(syntax_tree);
 
-	//now we can process the AST here
+	printf("\nSymbol Table:\n");
+	print_symbol_table(symbol_table);
 
+	//now we can process the AST here
+	//you can check the types while the tree is being built
+	//symbol tables are built while tree is parsed too
 	
 	
 

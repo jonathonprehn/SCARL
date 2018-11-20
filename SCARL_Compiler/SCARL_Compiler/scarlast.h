@@ -2,6 +2,7 @@
 #define __SCARL_AST_H__
 
 #include "y.tab.h"
+#include "scarl_symboltable.h"
 
 struct ast_node;
 
@@ -58,6 +59,7 @@ struct ast_node {
 
 	int int_value; //depends on the context
 	char *str_value;
+	struct scarl_symbol_table *symbol_table_value;
 };
 
 typedef struct ast_node*(*ast_node_visitor_func)(int argc, char **argv);

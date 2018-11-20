@@ -26,6 +26,13 @@ extern struct ast_node *syntax_tree;
 //the stack to be used when creating nonterminal sub-ASTs
 extern struct ast_node_stack *node_stack;
 extern struct ast_node_stack *ident_stack;
+
+//the symbol table for tracking program constructs. type checking. This is the parent
+//symbol table - the global symbol table
+extern struct scarl_symbol_table *symbol_table;
+
+extern struct scarl_symbol_table *current_symbol_table;
+
 %}
 
 %token IDENTIFIER PLUS MINUS STAR SLASH BANG 
@@ -65,10 +72,12 @@ statement: function_definition_statement {
 }
 
 block_statement : LBRACE statement_list_block_level RBRACE {
-	printf("Block statement action\n");
-	printf("The type of the node to conver is %s\n", get_node_str($2));
-	
-	$$ = NON_TERMINAL_BLOCK_STATEMENT_func(1, $2); //converts the type to a block statement
+	struct ast_node *block_statement_node = NON_TERMINAL_BLOCK_STATEMENT_func(1, $2); //converts the type to a block statement
+	//closing out this scope
+	block_statement_node->symbol_table_value = current_symbol_table;
+	current_symbol_table = current_symbol_table->parentTable; //bring it back up a level
+
+	$$ = block_statement_node;
 }
 
 statement_list_block_level : statement_block_level {
@@ -106,7 +115,30 @@ statement_block_level : while_block_statement {
 }
 
 device_declarator_statement : device_type IDENTIFIER SEMICOLON {
-	$$ = NON_TERMINAL_DEVICE_DECLARATOR_STATEMENT_func(2, $1, TERMINAL_IDENTIFIER_func(0));
+	struct ast_node *device_declarator_node = NON_TERMINAL_DEVICE_DECLARATOR_STATEMENT_func(2, $1, TERMINAL_IDENTIFIER_func(0));
+	int device_type = 0;
+	char *ident = NULL;
+	struct ast_node *cur_node = device_declarator_node->leftmostChild;
+	device_type = cur_node->int_value;
+	cur_node = cur_node->nextSibling;
+	ident = _strdup(cur_node->str_value);
+	
+	if (lookup_in_scope(current_symbol_table, ident, 0, NULL) == NULL) {
+		declare_symbol_table_entry(
+				current_symbol_table, 
+				create_symbol_table_entry(
+					ident,
+					device_type,
+					NULL,
+					0,
+					NULL
+				));
+	} else {
+		fprintf(stderr, "Duplicate identifiers \'%s\' (near line %i)\n", ident, lineNumber);
+		exit(0);
+	}
+
+	$$ = device_declarator_node;
 }
 
 primitive_declarator : primitive_type IDENTIFIER {
@@ -114,11 +146,92 @@ primitive_declarator : primitive_type IDENTIFIER {
 }
 
 primitive_definition_statement : primitive_declarator EQ expression SEMICOLON {
-	$$ = NON_TERMINAL_PRIMITIVE_DEFINITION_STATEMENT_func(2, $1, $3);
+	struct ast_node *prim_def_node = NON_TERMINAL_PRIMITIVE_DEFINITION_STATEMENT_func(2, $1, $3);
+		
+	struct ast_node *prim_decl_node = prim_def_node->leftmostChild;
+	struct ast_node *prim_info_node = prim_decl_node->leftmostChild;
+	int ident_type = prim_info_node->int_value;
+	char *ident = _strdup(prim_info_node->nextSibling->str_value);
+	
+	//add this identifier to the symbol table
+
+	if (lookup_in_scope(current_symbol_table, ident, 0, NULL) == NULL) {
+		declare_symbol_table_entry(
+				current_symbol_table, 
+				create_symbol_table_entry(
+					ident,
+					ident_type,
+					NULL,
+					0,
+					NULL
+				));
+	} else {
+		fprintf(stderr, "Duplicate identifiers \'%s\' (near line %i)\n", ident, lineNumber);
+		exit(0);
+	}
+
+	prim_info_node = prim_decl_node->nextSibling;
+	//now the prim_info_node is pointing to the expression that
+	//this declarator is initially set to
+
+	//TO DO: expression assignment to definition code
+	
+
+	$$ = prim_def_node;
 }
 
 function_definition_statement : primitive_declarator LPAREN formal_parameter_list RPAREN block_statement {
-	$$ = NON_TERMINAL_FUNCTION_DEFINITION_STATEMENT_func(3, $1, $3, $5);
+	struct ast_node *function_def_node = NON_TERMINAL_FUNCTION_DEFINITION_STATEMENT_func(3, $1, $3, $5);
+
+	struct ast_node *prim_decl_node = function_def_node->leftmostChild;
+	struct ast_node *info_node = prim_decl_node->leftmostChild;
+	int return_type = info_node->int_value;
+	char *ident = _strdup(info_node->nextSibling->str_value);
+	info_node = prim_decl_node->nextSibling; //now we are pointing to the formal parameter list
+	
+	int parameterCounter = 0;
+	int *paramListConstruct = NULL;
+	//counting parameters
+	if (info_node->leftmostChild != NULL) {
+		//counting the number of formal parameters
+		struct ast_node *formal_param_node = info_node->leftmostChild;
+		while(formal_param_node != NULL) {
+			formal_param_node = formal_param_node->nextSibling;
+			parameterCounter++;
+		}
+
+
+		//now allocate space and fill it up with the list of types
+		//printf("Allocting %i bytes\n", (sizeof(int) * parameterCounter));
+
+		paramListConstruct = (int*)malloc(sizeof(int) * parameterCounter);
+		formal_param_node = info_node->leftmostChild;
+		for (int i = 0; i < parameterCounter; i++) {
+			paramListConstruct[i] = formal_param_node->leftmostChild->int_value;
+			formal_param_node = formal_param_node->nextSibling;
+		}
+		//complete list created
+
+	} 
+
+	//add this identifier to the symbol table
+
+	if (lookup_in_scope(current_symbol_table, ident, parameterCounter, paramListConstruct) == NULL) {
+		declare_symbol_table_entry(
+				current_symbol_table, 
+				create_symbol_table_entry(
+					ident,
+					return_type,
+					paramListConstruct,
+					parameterCounter,
+					NULL
+				));
+	} else {
+		fprintf(stderr, "Duplicate function definition \'%s\' (near line %i)\n", ident, lineNumber);
+		exit(0);
+	}
+
+	$$ = function_def_node;
 }
 
 variable_set_statement : IDENTIFIER EQ expression SEMICOLON {

@@ -35,7 +35,14 @@ extern struct ast_node *syntax_tree;
 /*the stack to be used when creating nonterminal sub-ASTs*/
 extern struct ast_node_stack *node_stack;
 extern struct ast_node_stack *ident_stack;
-#line 39 "y.tab.c"
+
+/*the symbol table for tracking program constructs. type checking. This is the parent*/
+/*symbol table - the global symbol table*/
+extern struct scarl_symbol_table *symbol_table;
+
+extern struct scarl_symbol_table *current_symbol_table;
+
+#line 46 "y.tab.c"
 #define IDENTIFIER 257
 #define PLUS 258
 #define MINUS 259
@@ -334,12 +341,12 @@ YYSTYPE yylval;
 short yyss[YYSTACKSIZE];
 YYSTYPE yyvs[YYSTACKSIZE];
 #define yystacksize YYSTACKSIZE
-#line 417 "scarl_tokens.y"
+#line 530 "scarl_tokens.y"
 
 void yyerror(char *s) {
 	fprintf(stderr, "%s at line %i near \'%s\'\n", s, lineNumber, lastTokenText);
 }
-#line 343 "y.tab.c"
+#line 350 "y.tab.c"
 #define YYABORT goto yyabort
 #define YYREJECT goto yyabort
 #define YYACCEPT goto yyaccept
@@ -481,214 +488,320 @@ yyreduce:
     switch (yyn)
     {
 case 1:
-#line 42 "scarl_tokens.y"
+#line 49 "scarl_tokens.y"
 { 
 	NON_TERMINAL_PROGRAM_func(1, yyvsp[0]); /*this pushes the program onto the node stack*/
 }
 break;
 case 2:
-#line 46 "scarl_tokens.y"
+#line 53 "scarl_tokens.y"
 {
 	yyval = NON_TERMINAL_STATEMENT_LIST_func(1, yyvsp[0]);
 }
 break;
 case 3:
-#line 50 "scarl_tokens.y"
+#line 57 "scarl_tokens.y"
 {
 	/*add the statement to the existing statement list*/
 	yyval = NON_TERMINAL_STATEMENT_LIST_func(2, yyvsp[0], yyvsp[-1]);
 }
 break;
 case 4:
-#line 55 "scarl_tokens.y"
+#line 62 "scarl_tokens.y"
 {
 	yyval = yyvsp[0]; /*pass through*/
 }
 break;
 case 5:
-#line 59 "scarl_tokens.y"
+#line 66 "scarl_tokens.y"
 {
 	yyval = yyvsp[0]; /*pass through*/
 }
 break;
 case 6:
-#line 63 "scarl_tokens.y"
+#line 70 "scarl_tokens.y"
 {
 	yyval = yyvsp[0]; /*pass through*/
 }
 break;
 case 7:
-#line 67 "scarl_tokens.y"
+#line 74 "scarl_tokens.y"
 {
-	printf("Block statement action\n");
-	printf("The type of the node to conver is %s\n", get_node_str(yyvsp[-1]));
-	
-	yyval = NON_TERMINAL_BLOCK_STATEMENT_func(1, yyvsp[-1]); /*converts the type to a block statement*/
+	struct ast_node *block_statement_node = NON_TERMINAL_BLOCK_STATEMENT_func(1, yyvsp[-1]); /*converts the type to a block statement*/
+	/*closing out this scope*/
+	block_statement_node->symbol_table_value = current_symbol_table;
+	current_symbol_table = current_symbol_table->parentTable; /*bring it back up a level*/
+
+	yyval = block_statement_node;
 }
 break;
 case 8:
-#line 74 "scarl_tokens.y"
+#line 83 "scarl_tokens.y"
 {
 	/*create the statement list node and add the statement to it*/
 	yyval = NON_TERMINAL_STATEMENT_LIST_BLOCK_LEVEL_func(1, yyvsp[0]);
 }
 break;
 case 9:
-#line 79 "scarl_tokens.y"
+#line 88 "scarl_tokens.y"
 {
 	/*add the statement to the existing statement list*/
 	yyval = NON_TERMINAL_STATEMENT_LIST_BLOCK_LEVEL_func(2, yyvsp[0], yyvsp[-1]);
 }
 break;
 case 10:
-#line 84 "scarl_tokens.y"
+#line 93 "scarl_tokens.y"
 { 
 	yyval = yyvsp[0]; /*pass through*/
 }
 break;
 case 11:
-#line 88 "scarl_tokens.y"
+#line 97 "scarl_tokens.y"
 {
 	yyval = yyvsp[0]; /*pass through*/
 }
 break;
 case 12:
-#line 92 "scarl_tokens.y"
+#line 101 "scarl_tokens.y"
 {
 	yyval = yyvsp[0]; /*pass through*/
 }
 break;
 case 13:
-#line 96 "scarl_tokens.y"
+#line 105 "scarl_tokens.y"
 {
 	yyval = yyvsp[0]; /*pass through*/
 }
 break;
 case 14:
-#line 100 "scarl_tokens.y"
+#line 109 "scarl_tokens.y"
 {
 	yyval = yyvsp[0]; /*pass through*/
 }
 break;
 case 15:
-#line 104 "scarl_tokens.y"
+#line 113 "scarl_tokens.y"
 {
 	yyval = yyvsp[0]; /*pass through*/
 }
 break;
 case 16:
-#line 108 "scarl_tokens.y"
+#line 117 "scarl_tokens.y"
 {
-	yyval = NON_TERMINAL_DEVICE_DECLARATOR_STATEMENT_func(2, yyvsp[-2], TERMINAL_IDENTIFIER_func(0));
+	struct ast_node *device_declarator_node = NON_TERMINAL_DEVICE_DECLARATOR_STATEMENT_func(2, yyvsp[-2], TERMINAL_IDENTIFIER_func(0));
+	int device_type = 0;
+	char *ident = NULL;
+	struct ast_node *cur_node = device_declarator_node->leftmostChild;
+	device_type = cur_node->int_value;
+	cur_node = cur_node->nextSibling;
+	ident = _strdup(cur_node->str_value);
+	
+	if (lookup_in_scope(current_symbol_table, ident, 0, NULL) == NULL) {
+		declare_symbol_table_entry(
+				current_symbol_table, 
+				create_symbol_table_entry(
+					ident,
+					device_type,
+					NULL,
+					0,
+					NULL
+				));
+	} else {
+		fprintf(stderr, "Duplicate identifiers \'%s\' (near line %i)\n", ident, lineNumber);
+		exit(0);
+	}
+
+	yyval = device_declarator_node;
 }
 break;
 case 17:
-#line 112 "scarl_tokens.y"
+#line 144 "scarl_tokens.y"
 {
 	yyval = NON_TERMINAL_PRIMITIVE_DECLARATOR_func(2, yyvsp[-1], TERMINAL_IDENTIFIER_func(0));
 }
 break;
 case 18:
-#line 116 "scarl_tokens.y"
+#line 148 "scarl_tokens.y"
 {
-	yyval = NON_TERMINAL_PRIMITIVE_DEFINITION_STATEMENT_func(2, yyvsp[-3], yyvsp[-1]);
+	struct ast_node *prim_def_node = NON_TERMINAL_PRIMITIVE_DEFINITION_STATEMENT_func(2, yyvsp[-3], yyvsp[-1]);
+		
+	struct ast_node *prim_decl_node = prim_def_node->leftmostChild;
+	struct ast_node *prim_info_node = prim_decl_node->leftmostChild;
+	int ident_type = prim_info_node->int_value;
+	char *ident = _strdup(prim_info_node->nextSibling->str_value);
+	
+	/*add this identifier to the symbol table*/
+
+	if (lookup_in_scope(current_symbol_table, ident, 0, NULL) == NULL) {
+		declare_symbol_table_entry(
+				current_symbol_table, 
+				create_symbol_table_entry(
+					ident,
+					ident_type,
+					NULL,
+					0,
+					NULL
+				));
+	} else {
+		fprintf(stderr, "Duplicate identifiers \'%s\' (near line %i)\n", ident, lineNumber);
+		exit(0);
+	}
+
+	prim_info_node = prim_decl_node->nextSibling;
+	/*now the prim_info_node is pointing to the expression that*/
+	/*this declarator is initially set to*/
+
+	/*TO DO: expression assignment to definition code*/
+	
+
+	yyval = prim_def_node;
 }
 break;
 case 19:
-#line 120 "scarl_tokens.y"
+#line 183 "scarl_tokens.y"
 {
-	yyval = NON_TERMINAL_FUNCTION_DEFINITION_STATEMENT_func(3, yyvsp[-4], yyvsp[-2], yyvsp[0]);
+	struct ast_node *function_def_node = NON_TERMINAL_FUNCTION_DEFINITION_STATEMENT_func(3, yyvsp[-4], yyvsp[-2], yyvsp[0]);
+
+	struct ast_node *prim_decl_node = function_def_node->leftmostChild;
+	struct ast_node *info_node = prim_decl_node->leftmostChild;
+	int return_type = info_node->int_value;
+	char *ident = _strdup(info_node->nextSibling->str_value);
+	info_node = prim_decl_node->nextSibling; /*now we are pointing to the formal parameter list*/
+	
+	int parameterCounter = 0;
+	int *paramListConstruct = NULL;
+	/*counting parameters*/
+	if (info_node->leftmostChild != NULL) {
+		/*counting the number of formal parameters*/
+		struct ast_node *formal_param_node = info_node->leftmostChild;
+		while(formal_param_node != NULL) {
+			formal_param_node = formal_param_node->nextSibling;
+			parameterCounter++;
+		}
+
+
+		/*now allocate space and fill it up with the list of types*/
+		/*printf("Allocting %i bytes\n", (sizeof(int) * parameterCounter));*/
+
+		paramListConstruct = (int*)malloc(sizeof(int) * parameterCounter);
+		formal_param_node = info_node->leftmostChild;
+		for (int i = 0; i < parameterCounter; i++) {
+			paramListConstruct[i] = formal_param_node->leftmostChild->int_value;
+			formal_param_node = formal_param_node->nextSibling;
+		}
+		/*complete list created*/
+
+	} 
+
+	/*add this identifier to the symbol table*/
+
+	if (lookup_in_scope(current_symbol_table, ident, parameterCounter, paramListConstruct) == NULL) {
+		declare_symbol_table_entry(
+				current_symbol_table, 
+				create_symbol_table_entry(
+					ident,
+					return_type,
+					paramListConstruct,
+					parameterCounter,
+					NULL
+				));
+	} else {
+		fprintf(stderr, "Duplicate function definition \'%s\' (near line %i)\n", ident, lineNumber);
+		exit(0);
+	}
+
+	yyval = function_def_node;
 }
 break;
 case 20:
-#line 124 "scarl_tokens.y"
+#line 237 "scarl_tokens.y"
 {
 	yyval = NON_TERMINAL_VARIABLE_SET_STATEMENT_func(2, TERMINAL_IDENTIFIER_func(0), yyvsp[-1]);
 }
 break;
 case 21:
-#line 128 "scarl_tokens.y"
+#line 241 "scarl_tokens.y"
 {
 	yyval = NON_TERMINAL_FUNCTION_INVOCATION_func(2, TERMINAL_IDENTIFIER_func(0), yyvsp[-1]);
 }
 break;
 case 22:
-#line 132 "scarl_tokens.y"
+#line 245 "scarl_tokens.y"
 {
 	yyval = NON_TERMINAL_FUNCTION_INVOCATION_STATEMENT_func(1, yyvsp[-1]);
 }
 break;
 case 23:
-#line 136 "scarl_tokens.y"
+#line 249 "scarl_tokens.y"
 {
 	yyval = NON_TERMINAL_IF_BLOCK_STATEMENT_func(2, yyvsp[-2], yyvsp[0]);
 }
 break;
 case 24:
-#line 140 "scarl_tokens.y"
+#line 253 "scarl_tokens.y"
 { 
 	yyval = NON_TERMINAL_IF_BLOCK_STATEMENT_func(3, yyvsp[-4], yyvsp[-2], yyvsp[0]);
 }
 break;
 case 25:
-#line 144 "scarl_tokens.y"
+#line 257 "scarl_tokens.y"
 { 
 	/*expression and block statement*/
 	yyval = NON_TERMINAL_WHILE_BLOCK_STATEMENT_func(2, yyvsp[-2], yyvsp[0]);
 }
 break;
 case 26:
-#line 149 "scarl_tokens.y"
+#line 262 "scarl_tokens.y"
 {
 	/*empty formal parameter list*/
 	yyval = NON_TERMINAL_FORMAL_PARAMETER_LIST_func(0);
 }
 break;
 case 27:
-#line 154 "scarl_tokens.y"
+#line 267 "scarl_tokens.y"
 { 
 	yyval = NON_TERMINAL_FORMAL_PARAMETER_LIST_func(1, yyvsp[0]);
 }
 break;
 case 28:
-#line 158 "scarl_tokens.y"
+#line 271 "scarl_tokens.y"
 { 
 	yyval = NON_TERMINAL_FORMAL_PARAMETER_LIST_func(2, yyvsp[0], yyvsp[-2]);
 }
 break;
 case 29:
-#line 162 "scarl_tokens.y"
+#line 275 "scarl_tokens.y"
 { 
 	/*empty parameter list*/
 	yyval = NON_TERMINAL_PARAMETER_LIST_func(0);
 }
 break;
 case 30:
-#line 167 "scarl_tokens.y"
+#line 280 "scarl_tokens.y"
 { 
 	yyval = NON_TERMINAL_PARAMETER_LIST_func(1, yyvsp[0]);
 }
 break;
 case 31:
-#line 171 "scarl_tokens.y"
+#line 284 "scarl_tokens.y"
 { 
 	yyval = NON_TERMINAL_PARAMETER_LIST_func(2, yyvsp[0], yyvsp[-2]); /*add to existing parameter list*/
 }
 break;
 case 32:
-#line 175 "scarl_tokens.y"
+#line 288 "scarl_tokens.y"
 { 
 	yyval = yyvsp[0];
 }
 break;
 case 33:
-#line 179 "scarl_tokens.y"
+#line 292 "scarl_tokens.y"
 { 
 	yyval = yyvsp[0];
 }
 break;
 case 34:
-#line 183 "scarl_tokens.y"
+#line 296 "scarl_tokens.y"
 {
 	/*     logical_expression && logical_and_expression*/
 	/*     logical_expression should be on the LEFT*/
@@ -698,13 +811,13 @@ case 34:
 }
 break;
 case 35:
-#line 191 "scarl_tokens.y"
+#line 304 "scarl_tokens.y"
 { 
 	yyval = yyvsp[0]; /*pass through*/
 }
 break;
 case 36:
-#line 195 "scarl_tokens.y"
+#line 308 "scarl_tokens.y"
 { 
 	/*     logical_and_expression && equality_expression*/
 	/*     logical_and_expression should be on the LEFT*/
@@ -715,13 +828,13 @@ case 36:
 }
 break;
 case 37:
-#line 204 "scarl_tokens.y"
+#line 317 "scarl_tokens.y"
 { 
 	yyval = yyvsp[0]; /*pass through*/
 }
 break;
 case 38:
-#line 208 "scarl_tokens.y"
+#line 321 "scarl_tokens.y"
 { 
 	/*     equality_expression == relational_expression*/
 	/*     equality_expression should be on the LEFT*/
@@ -731,7 +844,7 @@ case 38:
 }
 break;
 case 39:
-#line 216 "scarl_tokens.y"
+#line 329 "scarl_tokens.y"
 { 
 	/*     equality_expression != relational_expression*/
 	/*     equality_expression should be on the LEFT*/
@@ -741,13 +854,13 @@ case 39:
 }
 break;
 case 40:
-#line 224 "scarl_tokens.y"
+#line 337 "scarl_tokens.y"
 { 
 	yyval = yyvsp[0]; /*pass through*/
 }
 break;
 case 41:
-#line 228 "scarl_tokens.y"
+#line 341 "scarl_tokens.y"
 { 
 	/*     relational_expression > bool_expression*/
 	/*     relational_expression should be on the LEFT*/
@@ -757,7 +870,7 @@ case 41:
 }
 break;
 case 42:
-#line 236 "scarl_tokens.y"
+#line 349 "scarl_tokens.y"
 { 
 	/*     relational_expression < bool_expression*/
 	/*     relational_expression should be on the LEFT*/
@@ -767,7 +880,7 @@ case 42:
 }
 break;
 case 43:
-#line 244 "scarl_tokens.y"
+#line 357 "scarl_tokens.y"
 { 
 	/*     relational_expression >= bool_expression*/
 	/*     relational_expression should be on the LEFT*/
@@ -777,7 +890,7 @@ case 43:
 }
 break;
 case 44:
-#line 252 "scarl_tokens.y"
+#line 365 "scarl_tokens.y"
 { 
 	/*     relational_expression <= bool_expression*/
 	/*     relational_expression should be on the LEFT*/
@@ -787,25 +900,25 @@ case 44:
 }
 break;
 case 45:
-#line 260 "scarl_tokens.y"
+#line 373 "scarl_tokens.y"
 { 
 	yyval = yyvsp[0]; /*pass through*/
 }
 break;
 case 46:
-#line 264 "scarl_tokens.y"
+#line 377 "scarl_tokens.y"
 { 
 	yyval = NON_TERMINAL_BOOL_EXPRESSION_func(2, TERMINAL_BANG_func(0), yyvsp[0]);
 }
 break;
 case 47:
-#line 268 "scarl_tokens.y"
+#line 381 "scarl_tokens.y"
 { 
 	yyval = yyvsp[0]; /*pass through*/
 }
 break;
 case 48:
-#line 272 "scarl_tokens.y"
+#line 385 "scarl_tokens.y"
 { 
 	/*     arithmetic_expression - arithmetic_factor*/
 	/*     arithmetic_expression should be on the LEFT*/
@@ -815,7 +928,7 @@ case 48:
 }
 break;
 case 49:
-#line 280 "scarl_tokens.y"
+#line 393 "scarl_tokens.y"
 { 
 	/*     arithmetic_expression - arithmetic_factor*/
 	/*     arithmetic_expression should be on the LEFT*/
@@ -825,13 +938,13 @@ case 49:
 }
 break;
 case 50:
-#line 288 "scarl_tokens.y"
+#line 401 "scarl_tokens.y"
 { 
 	yyval = yyvsp[0]; /*pass through*/
 }
 break;
 case 51:
-#line 292 "scarl_tokens.y"
+#line 405 "scarl_tokens.y"
 { 
 	/*     arithmetic_factor * arithmetic_unary*/
 	/*     arithmetic_factor should be on the LEFT*/
@@ -841,7 +954,7 @@ case 51:
 }
 break;
 case 52:
-#line 300 "scarl_tokens.y"
+#line 413 "scarl_tokens.y"
 { 
 	/*     arithmetic_factor / arithmetic_unary*/
 	/*     arithmetic_factor should be on the LEFT*/
@@ -851,49 +964,49 @@ case 52:
 }
 break;
 case 53:
-#line 308 "scarl_tokens.y"
+#line 421 "scarl_tokens.y"
 { 
 	yyval = yyvsp[0]; /*straight pass*/
 }
 break;
 case 54:
-#line 312 "scarl_tokens.y"
+#line 425 "scarl_tokens.y"
 { 
 	yyval = NON_TERMINAL_ARITHMETIC_UNARY_func(2, TERMINAL_MINUS_func(0), yyvsp[0]);
 }
 break;
 case 55:
-#line 316 "scarl_tokens.y"
+#line 429 "scarl_tokens.y"
 { 
 	yyval = yyvsp[-1]; /*pass the arithmetic expression as an arithmetic unary*/
 }
 break;
 case 56:
-#line 320 "scarl_tokens.y"
+#line 433 "scarl_tokens.y"
 { 
 	yyval = TERMINAL_IDENTIFIER_func(0); /*receives identifier from ident_stack*/
 }
 break;
 case 57:
-#line 324 "scarl_tokens.y"
+#line 437 "scarl_tokens.y"
 { 
 	yyval = yyvsp[0]; /*straight pass*/
 }
 break;
 case 58:
-#line 328 "scarl_tokens.y"
+#line 441 "scarl_tokens.y"
 { 
 	yyval = yyvsp[0]; /*straight pass*/
 }
 break;
 case 59:
-#line 332 "scarl_tokens.y"
+#line 445 "scarl_tokens.y"
 { 
 	yyval = yyvsp[0]; /*straight pass*/
 }
 break;
 case 60:
-#line 336 "scarl_tokens.y"
+#line 449 "scarl_tokens.y"
 { 
 	NON_TERMINAL_INTEGER_VALUE_func(0); /*for debug printing*/
 
@@ -902,7 +1015,7 @@ case 60:
 }
 break;
 case 61:
-#line 343 "scarl_tokens.y"
+#line 456 "scarl_tokens.y"
 { 
 	NON_TERMINAL_INTEGER_VALUE_func(0); /*for debug printing*/
 
@@ -911,7 +1024,7 @@ case 61:
 }
 break;
 case 62:
-#line 350 "scarl_tokens.y"
+#line 463 "scarl_tokens.y"
 { 
 	NON_TERMINAL_INTEGER_VALUE_func(0); /*for debug printing*/
 
@@ -920,7 +1033,7 @@ case 62:
 }
 break;
 case 63:
-#line 357 "scarl_tokens.y"
+#line 470 "scarl_tokens.y"
 { 
 	NON_TERMINAL_INTEGER_VALUE_func(0); /*for debug printing*/
 
@@ -929,84 +1042,84 @@ case 63:
 }
 break;
 case 64:
-#line 364 "scarl_tokens.y"
+#line 477 "scarl_tokens.y"
 { 
 	yyval = NON_TERMINAL_BOOL_VALUE_func(1, 1); /* 1 being true*/
 }
 break;
 case 65:
-#line 368 "scarl_tokens.y"
+#line 481 "scarl_tokens.y"
 { 
 	yyval = NON_TERMINAL_BOOL_VALUE_func(1, 0); /* 0 being false*/
 }
 break;
 case 66:
-#line 372 "scarl_tokens.y"
+#line 485 "scarl_tokens.y"
 {
 	yyval = NON_TERMINAL_PRIMITIVE_TYPE_func(1, BOOL);
 }
 break;
 case 67:
-#line 376 "scarl_tokens.y"
+#line 489 "scarl_tokens.y"
 { 
 	yyval = NON_TERMINAL_PRIMITIVE_TYPE_func(1, INT);
 }
 break;
 case 68:
-#line 380 "scarl_tokens.y"
+#line 493 "scarl_tokens.y"
 { 
 	yyval = NON_TERMINAL_PRIMITIVE_TYPE_func(1, CHAR);
 }
 break;
 case 69:
-#line 384 "scarl_tokens.y"
+#line 497 "scarl_tokens.y"
 { 
 	yyval = NON_TERMINAL_PRIMITIVE_TYPE_func(1, POINTER);
 }
 break;
 case 70:
-#line 388 "scarl_tokens.y"
+#line 501 "scarl_tokens.y"
 { 
 	yyval = NON_TERMINAL_PRIMITIVE_TYPE_func(1, VOID);
 }
 break;
 case 71:
-#line 392 "scarl_tokens.y"
+#line 505 "scarl_tokens.y"
 { 
 	yyval = NON_TERMINAL_DEVICE_TYPE_func(1, LIGHT_ACTUATOR);
 }
 break;
 case 72:
-#line 396 "scarl_tokens.y"
+#line 509 "scarl_tokens.y"
 { 
 	yyval = NON_TERMINAL_DEVICE_TYPE_func(1, SERVO_ACTUATOR);
 }
 break;
 case 73:
-#line 400 "scarl_tokens.y"
+#line 513 "scarl_tokens.y"
 { 
 	yyval = NON_TERMINAL_DEVICE_TYPE_func(1, SOUND_SENSOR);
 }
 break;
 case 74:
-#line 404 "scarl_tokens.y"
+#line 517 "scarl_tokens.y"
 { 
 	yyval = NON_TERMINAL_DEVICE_TYPE_func(1, LIGHT_SENSOR);
 }
 break;
 case 75:
-#line 408 "scarl_tokens.y"
+#line 521 "scarl_tokens.y"
 {
 	yyval = NON_TERMINAL_DEVICE_TYPE_func(1, DISTANCE_SENSOR);
 }
 break;
 case 76:
-#line 412 "scarl_tokens.y"
+#line 525 "scarl_tokens.y"
 { 
 	yyval = NON_TERMINAL_DEVICE_TYPE_func(1, TEMPERATURE_SENSOR);
 }
 break;
-#line 1010 "y.tab.c"
+#line 1123 "y.tab.c"
     }
     yyssp -= yym;
     yystate = *yyssp;

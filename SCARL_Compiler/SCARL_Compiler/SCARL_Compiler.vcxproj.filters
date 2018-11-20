@@ -38,6 +38,9 @@
     <ClCompile Include="scarlnodestack.c">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="scarl_symboltable.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="y.tab.h">
@@ -50,6 +53,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="scarlnodestack.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="scarl_symboltable.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

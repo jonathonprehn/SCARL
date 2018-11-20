@@ -12,7 +12,7 @@ extern struct ast_node_stack *node_stack;
 extern char *lastTokenText;
 extern struct ast_node_stack *ident_stack;
 
-const int print_productions = 1;
+const int print_productions = 0;
 
 //this stack is used in this file only to handle the evaluation
 //of expressions

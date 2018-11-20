@@ -9,6 +9,7 @@
 #include "y.tab.h"
 #include "visitors.h"
 #include "scarlnodestack.h"
+#include "scarl_symboltable.h"
 
 unsigned lineNumber = 0;
 
@@ -24,6 +25,11 @@ struct ast_node *syntax_tree;
 struct ast_node_stack *node_stack;
 
 struct ast_node_stack *ident_stack;
+
+//for type checking and tracking program constructs
+struct scarl_symbol_table *symbol_table;
+
+struct scarl_symbol_table *current_symbol_table;
 
 void setLastTokenText(char *txt) {
 	if (lastTokenText != NULL) {
@@ -223,6 +229,11 @@ hex_digit [0-9a-fA-F]
 	return SEMICOLON; 
 }
 "{"		{ 
+	/* Scoping controls here with the curly braces */
+	struct scarl_symbol_table *new_scope_table = create_symbol_table(NULL);
+	add_symbol_table_child(current_symbol_table, new_scope_table);
+	current_symbol_table = new_scope_table; //introducing a new scope
+
 	setLastTokenText(yytext); 
 	return LBRACE; 
 }
@@ -322,6 +333,10 @@ int main(int argc, char *argv[]) {
 	node_stack = create_node_stack(100);
 	extern struct ast_node_stack *ident_stack;
 	ident_stack = create_node_stack(100);
+	extern struct scarl_symbol_table *symbol_table;
+	symbol_table = create_symbol_table(NULL);
+	extern struct scarl_symbol_table *current_symbol_table;
+	current_symbol_table = symbol_table; // for scope tracking
 
 	init_visitor_func_parsing_constructs(); //visitor.h specific
 
@@ -331,6 +346,7 @@ int main(int argc, char *argv[]) {
 	}
 	else {
 		fprintf(stderr, "\nFailed to parse. Check your file.\n");
+		return 1; //error
 	}
 	
 	struct ast_node *should_be_program_node = ast_node_stack_pop(node_stack);
@@ -351,9 +367,14 @@ int main(int argc, char *argv[]) {
 	printf("\nAbstract Syntax Tree:\n");
 	print_ast(syntax_tree);
 
-	//now we can process the AST here
+	printf("\nSymbol Table:\n");
+	print_symbol_table(symbol_table);
 
+	//now we can process the AST here
+	//you can check the types while the tree is being built
+	//symbol tables are built while tree is parsed too
 	
+	//now we can traverse the tree in post order and generate the code
 	
 
 	fclose(codeFile);

@@ -126,12 +126,14 @@
     <ClCompile Include="lex.yy.c" />
     <ClCompile Include="scarlast.c" />
     <ClCompile Include="scarlnodestack.c" />
+    <ClCompile Include="scarl_symboltable.c" />
     <ClCompile Include="visitors.c" />
     <ClCompile Include="y.tab.c" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="scarlast.h" />
     <ClInclude Include="scarlnodestack.h" />
+    <ClInclude Include="scarl_symboltable.h" />
     <ClInclude Include="visitors.h" />
     <ClInclude Include="y.tab.h" />
   </ItemGroup>

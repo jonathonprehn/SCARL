@@ -25,6 +25,8 @@ struct ast_node *ast_node_stack_peek(struct ast_node_stack *stk);
 
 const char *get_node_str(struct ast_node *nod);
 
+const char *get_node_type_str(int type_flag);
+
 void print_node_stack(struct ast_node_stack *stk);
 
 #endif
