@@ -10,6 +10,7 @@
 #include "visitors.h"
 #include "scarlnodestack.h"
 #include "scarl_symboltable.h"
+#include "arcl_codegen.h"
 
 unsigned lineNumber = 0;
 
@@ -288,7 +289,7 @@ int main(int argc, char *argv[]) {
 	}
 
 	//figuring out the output file name
-	char *outputFileName = "code.rc";
+	char *outputFileName = "code.rcl";
 
 	//processing options that may have been passed
 	if (argc >= 4) {
@@ -375,7 +376,7 @@ int main(int argc, char *argv[]) {
 	//symbol tables are built while tree is parsed too
 	
 	//now we can traverse the tree in post order and generate the code
-	
+	generate_arcl_code(codeFile, symbol_table, syntax_tree);
 
 	fclose(codeFile);
 	fclose(yyin);

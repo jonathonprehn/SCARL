@@ -41,6 +41,12 @@
     <ClCompile Include="scarl_symboltable.c">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="arcl_codegen.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="function_labels.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="y.tab.h">
@@ -56,6 +62,12 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="scarl_symboltable.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="arcl_codegen.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="function_labels.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

@@ -1,6 +1,7 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 
 #include "scarl_symboltable.h"
 #include "scarlast.h"
@@ -99,6 +100,7 @@ int entry_matches_signature(
 			entry->parameters == paramCount &&
 			cmp_param_list(entry->parameterList, paramList, paramCount);
 	}
+	return 0; //no match
 }
 
 //if the entry violates any language rules, then it returns an error code,
@@ -113,6 +115,7 @@ int declare_symbol_table_entry(
 	if (cur == NULL) {
 		st->entries = entry;
 		entry->st = st;
+		
 	} 
 	else {
 		while (cur->nextEntry != NULL) {
@@ -121,6 +124,7 @@ int declare_symbol_table_entry(
 		cur->nextEntry = entry;
 		entry->st = st;
 	}
+	return 1;
 }
 
 
@@ -211,6 +215,7 @@ void print_symbol_table(struct scarl_symbol_table *st) {
 		printf("<empty symbol table>\n");
 	}
 	else {
+		
 		//print the header
 		printf("+");
 		for (int i = 0; i < 109; i++) {
@@ -254,7 +259,7 @@ void print_symbol_table(struct scarl_symbol_table *st) {
 					char *type_str = get_node_type_str(entry->parameterList[i]);
 					charsLeft = charsLeft - (strlen(type_str) + 2);
 					
-					printf("%s, ", type_str, entry->parameterList[i]);
+					printf("%s, ", type_str);
 				}
 				if (charsLeft > 0) {
 					for (int i = 0; i < charsLeft-1; i++) {

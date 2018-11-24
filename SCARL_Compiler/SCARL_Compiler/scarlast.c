@@ -4,6 +4,7 @@
 
 #include "scarlast.h"
 #include "scarlnodestack.h"
+#include "arcl_codegen.h"
 
 const char *non_terminals_mnemonic[] = {
 	"NON_TERMINAL_PROGRAM",
@@ -100,6 +101,9 @@ struct ast_node * create_node(struct ast_node *parent, int type_flag)
 	nod->int_value = 0;
 	nod->str_value = NULL;
 	nod->symbol_table_value = NULL;
+	nod->register1 = NO_REGISTER;
+	nod->register2 = NO_REGISTER;
+	nod->label = 0;
 	return nod;
 }
 
@@ -235,21 +239,6 @@ void init_visitor_func_table() {
 	terminal_visitor_func_table[FALSE - SCARL_TERMINAL_FUNC_TABLE_OFFSET_VAL] = TERMINAL_FALSE_func;
 
 }
-
-/*
-Do not need this function
-
-void call_visitor_func(int type_flag, int argc, char **argv)
-{
-	if (type_flag >= NON_TERMINAL_PROGRAM && type_flag <= NON_TERMINAL_DEVICE_TYPE) {
-		(*non_terminal_visitor_func_table[type_flag - NON_TERMINAL_OFFSET_VAL])(argc, argv);
-	}
-	else {
-		//must be a terminal
-		(*terminal_visitor_func_table[type_flag - SCARL_TERMINAL_FUNC_TABLE_OFFSET_VAL])(argc, argv);
-	}
-}
-*/
 
 void print_ast_r(int level, struct ast_node *subtree);
 

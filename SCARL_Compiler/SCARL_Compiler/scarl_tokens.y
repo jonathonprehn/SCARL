@@ -2,6 +2,8 @@
 %{
 
 #include <stdio.h>
+#include <string.h>
+#include <stdlib.h>
 
 #include "scarlast.h"
 #include "visitors.h"
@@ -123,7 +125,7 @@ device_declarator_statement : device_type IDENTIFIER SEMICOLON {
 	cur_node = cur_node->nextSibling;
 	ident = _strdup(cur_node->str_value);
 	
-	if (lookup_in_scope(current_symbol_table, ident, 0, NULL) == NULL) {
+	if (lookup_in_scope(current_symbol_table, ident, NULL, 0) == NULL) {
 		declare_symbol_table_entry(
 				current_symbol_table, 
 				create_symbol_table_entry(
@@ -155,7 +157,7 @@ primitive_definition_statement : primitive_declarator EQ expression SEMICOLON {
 	
 	//add this identifier to the symbol table
 
-	if (lookup_in_scope(current_symbol_table, ident, 0, NULL) == NULL) {
+	if (lookup_in_scope(current_symbol_table, ident, NULL, 0) == NULL) {
 		declare_symbol_table_entry(
 				current_symbol_table, 
 				create_symbol_table_entry(
@@ -216,7 +218,7 @@ function_definition_statement : primitive_declarator LPAREN formal_parameter_lis
 
 	//add this identifier to the symbol table
 
-	if (lookup_in_scope(current_symbol_table, ident, parameterCounter, paramListConstruct) == NULL) {
+	if (lookup_in_scope(current_symbol_table, ident, paramListConstruct, parameterCounter) == NULL) {
 		declare_symbol_table_entry(
 				current_symbol_table, 
 				create_symbol_table_entry(

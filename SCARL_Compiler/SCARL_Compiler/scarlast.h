@@ -60,6 +60,9 @@ struct ast_node {
 	int int_value; //depends on the context
 	char *str_value;
 	struct scarl_symbol_table *symbol_table_value;
+	int register1;
+	int register2;
+	int label;
 };
 
 typedef struct ast_node*(*ast_node_visitor_func)(int argc, char **argv);
