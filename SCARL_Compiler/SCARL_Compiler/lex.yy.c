@@ -405,6 +405,8 @@ char *yytext;
 #include "scarlnodestack.h"
 #include "scarl_symboltable.h"
 #include "arcl_codegen.h"
+#include "memory_layout.h"
+#include "scarl_semantic_analysis.h"
 
 unsigned lineNumber = 0;
 
@@ -434,7 +436,7 @@ void setLastTokenText(char *txt) {
 	lastTokenText = _strdup(txt);
 }
 
-#line 438 "lex.yy.c"
+#line 440 "lex.yy.c"
 
 /* Macros after this point can all be overridden by user definitions in
  * section 1.
@@ -585,10 +587,10 @@ YY_DECL
 	register char *yy_cp, *yy_bp;
 	register int yy_act;
 
-#line 52 "scarl.l"
+#line 54 "scarl.l"
 
 
-#line 592 "lex.yy.c"
+#line 594 "lex.yy.c"
 
 	if ( yy_init )
 		{
@@ -673,22 +675,22 @@ do_action:	/* This label is used only to access EOF actions. */
 
 case 1:
 YY_RULE_SETUP
-#line 54 "scarl.l"
+#line 56 "scarl.l"
 { /*Ignore everything for the rest of this line */ }
 	YY_BREAK
 case 2:
 YY_RULE_SETUP
-#line 55 "scarl.l"
+#line 57 "scarl.l"
 { /* Do nothing for whitespace */ }
 	YY_BREAK
 case 3:
 YY_RULE_SETUP
-#line 56 "scarl.l"
+#line 58 "scarl.l"
 { /*Count lines for debug*/ lineNumber++; }
 	YY_BREAK
 case 4:
 YY_RULE_SETUP
-#line 57 "scarl.l"
+#line 59 "scarl.l"
 { 
 	//can set up a binary search later
 	setLastTokenText(yytext);
@@ -775,7 +777,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 5:
 YY_RULE_SETUP
-#line 140 "scarl.l"
+#line 142 "scarl.l"
 { 
 	setLastTokenText(yytext);
 	return DECIMAL;  
@@ -783,7 +785,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 6:
 YY_RULE_SETUP
-#line 144 "scarl.l"
+#line 146 "scarl.l"
 {
 	setLastTokenText(yytext);
 	return OCTAL;
@@ -791,7 +793,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 7:
 YY_RULE_SETUP
-#line 148 "scarl.l"
+#line 150 "scarl.l"
 {
 	setLastTokenText(yytext);
 	return HEX;
@@ -799,7 +801,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 8:
 YY_RULE_SETUP
-#line 152 "scarl.l"
+#line 154 "scarl.l"
 {
 	setLastTokenText(yytext);
 	return BINARY;
@@ -807,7 +809,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 9:
 YY_RULE_SETUP
-#line 156 "scarl.l"
+#line 158 "scarl.l"
 {/* Weird "just 0" case */
 	setLastTokenText(yytext); 
 	return DECIMAL; 
@@ -815,7 +817,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 10:
 YY_RULE_SETUP
-#line 160 "scarl.l"
+#line 162 "scarl.l"
 { 
 	setLastTokenText(yytext); 
 	return PLUS; 
@@ -823,7 +825,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 11:
 YY_RULE_SETUP
-#line 164 "scarl.l"
+#line 166 "scarl.l"
 { 
 	setLastTokenText(yytext);
 	return MINUS; 
@@ -831,7 +833,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 12:
 YY_RULE_SETUP
-#line 168 "scarl.l"
+#line 170 "scarl.l"
 { 
 	setLastTokenText(yytext); 
 	return STAR; 
@@ -839,7 +841,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 13:
 YY_RULE_SETUP
-#line 172 "scarl.l"
+#line 174 "scarl.l"
 { 
 	setLastTokenText(yytext); 
 	return SLASH; 
@@ -847,7 +849,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 14:
 YY_RULE_SETUP
-#line 176 "scarl.l"
+#line 178 "scarl.l"
 { 
 	setLastTokenText(yytext);
 	return BANG; 
@@ -855,7 +857,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 15:
 YY_RULE_SETUP
-#line 180 "scarl.l"
+#line 182 "scarl.l"
 { 
 	setLastTokenText(yytext); 
 	return LPAREN; 
@@ -863,7 +865,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 16:
 YY_RULE_SETUP
-#line 184 "scarl.l"
+#line 186 "scarl.l"
 { 
 	setLastTokenText(yytext); 
 	return RPAREN;
@@ -871,7 +873,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 17:
 YY_RULE_SETUP
-#line 188 "scarl.l"
+#line 190 "scarl.l"
 { 
 	setLastTokenText(yytext); 
 	return GTR; 
@@ -879,7 +881,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 18:
 YY_RULE_SETUP
-#line 192 "scarl.l"
+#line 194 "scarl.l"
 { 
 	setLastTokenText(yytext); 
 	return LESS; 
@@ -887,7 +889,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 19:
 YY_RULE_SETUP
-#line 196 "scarl.l"
+#line 198 "scarl.l"
 { 
 	setLastTokenText(yytext); 
 	return GTR_EQ; 
@@ -895,7 +897,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 20:
 YY_RULE_SETUP
-#line 200 "scarl.l"
+#line 202 "scarl.l"
 { 
 	setLastTokenText(yytext); 
 	return LESS_EQ; 
@@ -903,7 +905,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 21:
 YY_RULE_SETUP
-#line 204 "scarl.l"
+#line 206 "scarl.l"
 { 
 	setLastTokenText(yytext); 
 	return DBL_EQ; 
@@ -911,7 +913,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 22:
 YY_RULE_SETUP
-#line 208 "scarl.l"
+#line 210 "scarl.l"
 { 
 	setLastTokenText(yytext); 
 	return EQ; 
@@ -919,7 +921,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 23:
 YY_RULE_SETUP
-#line 212 "scarl.l"
+#line 214 "scarl.l"
 { 
 	setLastTokenText(yytext); 
 	return NOT_EQ; 
@@ -927,7 +929,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 24:
 YY_RULE_SETUP
-#line 216 "scarl.l"
+#line 218 "scarl.l"
 { 
 	setLastTokenText(yytext); 
 	return OR; 
@@ -935,7 +937,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 25:
 YY_RULE_SETUP
-#line 220 "scarl.l"
+#line 222 "scarl.l"
 { 
 	setLastTokenText(yytext); 
 	return AND; 
@@ -943,7 +945,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 26:
 YY_RULE_SETUP
-#line 224 "scarl.l"
+#line 226 "scarl.l"
 { 
 	setLastTokenText(yytext); 
 	return COMMA; 
@@ -951,7 +953,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 27:
 YY_RULE_SETUP
-#line 228 "scarl.l"
+#line 230 "scarl.l"
 { 
 	setLastTokenText(yytext); 
 	return SEMICOLON; 
@@ -959,7 +961,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 28:
 YY_RULE_SETUP
-#line 232 "scarl.l"
+#line 234 "scarl.l"
 { 
 	/* Scoping controls here with the curly braces */
 	struct scarl_symbol_table *new_scope_table = create_symbol_table(NULL);
@@ -972,7 +974,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 29:
 YY_RULE_SETUP
-#line 241 "scarl.l"
+#line 243 "scarl.l"
 { 
 	setLastTokenText(yytext); 
 	return RBRACE; 
@@ -980,15 +982,15 @@ YY_RULE_SETUP
 	YY_BREAK
 case 30:
 YY_RULE_SETUP
-#line 245 "scarl.l"
+#line 247 "scarl.l"
 { setLastTokenText(yytext); fprintf(stderr, "unrecognized characters: \'%s\'\n", yytext); }
 	YY_BREAK
 case 31:
 YY_RULE_SETUP
-#line 247 "scarl.l"
+#line 249 "scarl.l"
 ECHO;
 	YY_BREAK
-#line 992 "lex.yy.c"
+#line 994 "lex.yy.c"
 case YY_STATE_EOF(INITIAL):
 	yyterminate();
 
@@ -1874,7 +1876,7 @@ int main()
 	return 0;
 	}
 #endif
-#line 247 "scarl.l"
+#line 249 "scarl.l"
 
 
 
@@ -1990,6 +1992,25 @@ int main(int argc, char *argv[]) {
 	//we have the abstract syntax tree!!!!!!!!
 	syntax_tree = should_be_program_node;
 
+	//now we can process the AST here
+	//you can check the types while the tree is being built
+	//symbol tables are built while tree is parsed too
+
+	if (!has_correct_main_method(syntax_tree)) {
+		fprintf(stderr, "No main() method or main() method has incorrect signature (must have no formal parameters and its return type must be void)\n");
+		return 1;
+	}
+	if (!types_are_correct(syntax_tree)) {
+		fprintf(stderr, "Incompatible types (see above)\n");
+		return 1;
+	}
+	
+	//process symbol tables here
+	calculate_frame_sizes(symbol_table);
+	calculate_frame_offsets(symbol_table);
+
+	//end of processing before code generation here
+
 	//print what we have
 	printf("Node stack is\n\n");
 	print_node_stack(node_stack);
@@ -2002,10 +2023,6 @@ int main(int argc, char *argv[]) {
 	printf("\nSymbol Table:\n");
 	print_symbol_table(symbol_table);
 
-	//now we can process the AST here
-	//you can check the types while the tree is being built
-	//symbol tables are built while tree is parsed too
-	
 	//now we can traverse the tree in post order and generate the code
 	generate_arcl_code(codeFile, symbol_table, syntax_tree);
 

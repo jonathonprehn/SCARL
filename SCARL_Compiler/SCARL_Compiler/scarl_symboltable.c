@@ -35,6 +35,7 @@ struct scarl_symbol_table *create_symbol_table(struct scarl_symbol_table *parent
 	st->parentTable = parent_table;
 	st->firstChildSt = NULL;
 	st->nextSiblingSt = NULL;
+	st->frameSize = 0;
 	return st;
 }
 
@@ -53,6 +54,8 @@ struct scarl_symbol_table_entry *create_symbol_table_entry(
 	entry->functionSt = symbol_table;
 	entry->st = NULL; //we have not been added into a symbol table yet
 	entry->nextEntry = NULL;
+	entry->frameOffset = 0;
+	entry->memSize = get_type_size(type_flag);
 	return entry;
 }
 
@@ -64,14 +67,22 @@ void add_symbol_table_child(
 		child_table->parentTable = parent_table;
 	}
 	else {
-		printf("adding to child\n");
+		//printf("adding to child\n");
 		struct scarl_symbol_table *cur_st = parent_table->firstChildSt;
 		while (cur_st->nextSiblingSt != NULL) {
 			cur_st = cur_st->nextSiblingSt;
 		}
-		printf("added child table\n");
+		//printf("added child table\n");
 		cur_st->nextSiblingSt = child_table;
 		child_table->parentTable = parent_table;
+		//incremement frame size based on this child's table size
+	}
+}
+
+int get_type_size(int type) {
+	switch (type) {
+	default:
+		return 1; //assuming everything is 1 value
 	}
 }
 
@@ -115,7 +126,6 @@ int declare_symbol_table_entry(
 	if (cur == NULL) {
 		st->entries = entry;
 		entry->st = st;
-		
 	} 
 	else {
 		while (cur->nextEntry != NULL) {
@@ -189,18 +199,38 @@ struct scarl_symbol_table_entry *lookup_in_scope(
 	return NULL;
 }
 
-/*
+struct scarl_symbol_table_entry *lookup_based_on_invocation_node(
+	struct scarl_symbol_table *st,
+	struct ast_node *invocation_node
+) {
+	//first we derive the types of the parameter list
+	//by inferring its types
 
-A reminder of what a symbol table entry contains:
-char *ident;
-int type_flag;
-int *parameterList;
-int parameters;
-struct scarl_symbol_table *st;
-struct scarl_symbol_table *functionSt;
-struct scarl_symbol_table_entry *nextEntry;
+	int parameterCount = 0;
+	struct ast_node *param = invocation_node->leftmostChild->nextSibling->leftmostChild;
+	while (param != NULL) {
+		param = param->nextSibling;
+		parameterCount++;
+	}
 
-*/
+	int *inferred_types = NULL;
+	//now we have the number of parameters
+	if (parameterCount > 0) {
+		//infer based on the expression
+
+
+	}
+	
+	struct scarl_symbol_table_entry *invoc_entry = lookup(st, invocation_node->leftmostChild->str_value, inferred_types, parameterCount);
+	if (invoc_entry == NULL) {
+		printf("Could not find signature for function \'%s\'. Expected a function with ");
+		printf("%i parameters of types ");
+		for (int i = 0; i < parameterCount; i++) {
+			printf("%s, ", get_node_type_str(inferred_types[i]));
+		}
+	}
+	return invoc_entry;
+}
 
 //only prints the entries of a symbol table
 void print_symbol_table(struct scarl_symbol_table *st) {
@@ -215,7 +245,7 @@ void print_symbol_table(struct scarl_symbol_table *st) {
 		printf("<empty symbol table>\n");
 	}
 	else {
-		
+		printf("Frame size is %i\n", st->frameSize);
 		//print the header
 		printf("+");
 		for (int i = 0; i < 109; i++) {
@@ -227,12 +257,12 @@ void print_symbol_table(struct scarl_symbol_table *st) {
 		//type is 25
 		printf("| type                   ");
 		//parameters is 13
-		printf("| parm count ");
+		printf("| param count ");
 		//parameter list is 35
 		int paramListSpace = 39;
-		printf("| parameter list                        ");
-		//symbol table presence is 15
-		printf("| symbol table ");
+		printf("| parameter list                       ");
+		//frame offset is 15
+		printf("| frame offset ");
 		//line end is 1
 		printf("|\n");
 		//total space taken up is 102 characters
@@ -272,12 +302,7 @@ void print_symbol_table(struct scarl_symbol_table *st) {
 				printf("<none>                                |");
 			}
 			//existence of symbol table
-			if (entry->functionSt == NULL) {
-				printf(" no table     |");
-			}
-			else {
-				printf(" table id=%-3i |", entry->functionSt->tableId);
-			}
+			printf("%-14i|", entry->frameOffset);
 
 			printf("\n");
 			entry = entry->nextEntry;
@@ -297,4 +322,26 @@ void print_symbol_table(struct scarl_symbol_table *st) {
 		print_symbol_table(child_table);
 		child_table = child_table->nextSiblingSt;
 	}
+}
+
+void formal_parameter_node_to_parameter_list(struct ast_node *formal_parameters, int *paramCount, int **paramList) {
+
+		//counting the number of formal parameters
+		struct ast_node *formal_param_node = formal_parameters->leftmostChild;
+		while (formal_param_node != NULL) {
+			formal_param_node = formal_param_node->nextSibling;
+			*paramCount = *paramCount + 1;
+		}
+
+
+		//now allocate space and fill it up with the list of types
+		//printf("Allocting %i bytes\n", (sizeof(int) * parameterCounter));
+
+		*paramList = (int*)malloc(sizeof(int) * (*paramCount));
+		formal_param_node = formal_parameters->leftmostChild;
+		for (int i = 0; i < *paramCount; i++) {
+			(*paramList)[i] = formal_param_node->leftmostChild->int_value;
+			formal_param_node = formal_param_node->nextSibling;
+		}
+		//complete list created
 }

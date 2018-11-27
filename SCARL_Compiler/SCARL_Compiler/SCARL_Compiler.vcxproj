@@ -126,18 +126,24 @@
     <ClCompile Include="arcl_codegen.c" />
     <ClCompile Include="function_labels.c" />
     <ClCompile Include="lex.yy.c" />
+    <ClCompile Include="memory_layout.c" />
     <ClCompile Include="scarlast.c" />
     <ClCompile Include="scarlnodestack.c" />
+    <ClCompile Include="scarl_semantic_analysis.c" />
     <ClCompile Include="scarl_symboltable.c" />
+    <ClCompile Include="scarl_type.c" />
     <ClCompile Include="visitors.c" />
     <ClCompile Include="y.tab.c" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="function_labels.h" />
+    <ClInclude Include="memory_layout.h" />
     <ClInclude Include="scarlast.h" />
     <ClInclude Include="scarlnodestack.h" />
     <ClInclude Include="arcl_codegen.h" />
+    <ClInclude Include="scarl_semantic_analysis.h" />
     <ClInclude Include="scarl_symboltable.h" />
+    <ClInclude Include="scarl_type.h" />
     <ClInclude Include="visitors.h" />
     <ClInclude Include="y.tab.h" />
   </ItemGroup>

@@ -3,6 +3,7 @@
 
 #define ARCL_REGISTER_COUNT 8
 #define NO_REGISTER -1
+#define ARCL_FRR_REGISTER 100
 
 #include <stdlib.h>
 #include <stdio.h>
@@ -30,6 +31,11 @@ void generate_arcl_arithmetic_expression(
 	struct scarl_symbol_table *symbol_table, 
 	struct ast_node *ast);
 
+void generate_arcl_bool_expression(
+	FILE *output,
+	struct scarl_symbol_table *symbol_table,
+	struct ast_node *ast);
+
 void generate_arcl_if_statement(
 	FILE *output,
 	struct scarl_symbol_table *symbol_table,
@@ -51,6 +57,21 @@ void generate_arcl_function_statement(
 	struct ast_node *ast);
 
 void generate_statements_in_block(
+	FILE *output,
+	struct scarl_symbol_table *symbol_table,
+	struct ast_node *ast);
+
+void generate_arcl_function_invocation(
+	FILE *output,
+	struct scarl_symbol_table *symbol_table,
+	struct ast_node *ast);
+
+void generate_arcl_register_save(
+	FILE *output,
+	struct scarl_symbol_table *symbol_table,
+	struct ast_node *ast);
+
+void generate_arcl_register_load(
 	FILE *output,
 	struct scarl_symbol_table *symbol_table,
 	struct ast_node *ast);

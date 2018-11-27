@@ -47,6 +47,15 @@
     <ClCompile Include="function_labels.c">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="memory_layout.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="scarl_semantic_analysis.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="scarl_type.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="y.tab.h">
@@ -68,6 +77,15 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="function_labels.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="memory_layout.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="scarl_semantic_analysis.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="scarl_type.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

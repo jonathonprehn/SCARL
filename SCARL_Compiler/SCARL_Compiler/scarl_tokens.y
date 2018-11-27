@@ -7,6 +7,7 @@
 
 #include "scarlast.h"
 #include "visitors.h"
+#include "scarl_symboltable.h"
 
 int yylex(void);
 void yyerror(char *);
@@ -77,8 +78,11 @@ block_statement : LBRACE statement_list_block_level RBRACE {
 	struct ast_node *block_statement_node = NON_TERMINAL_BLOCK_STATEMENT_func(1, $2); //converts the type to a block statement
 	//closing out this scope
 	block_statement_node->symbol_table_value = current_symbol_table;
-	current_symbol_table = current_symbol_table->parentTable; //bring it back up a level
+	
+	//frame size should be correctly calculated for the child symbol table
+	current_symbol_table->parentTable->frameSize += current_symbol_table->frameSize;
 
+	current_symbol_table = current_symbol_table->parentTable; //bring it back up a level
 	$$ = block_statement_node;
 }
 
@@ -125,7 +129,7 @@ device_declarator_statement : device_type IDENTIFIER SEMICOLON {
 	cur_node = cur_node->nextSibling;
 	ident = _strdup(cur_node->str_value);
 	
-	if (lookup_in_scope(current_symbol_table, ident, NULL, 0) == NULL) {
+	if (lookup(current_symbol_table, ident, NULL, 0) == NULL) {
 		declare_symbol_table_entry(
 				current_symbol_table, 
 				create_symbol_table_entry(
@@ -157,7 +161,7 @@ primitive_definition_statement : primitive_declarator EQ expression SEMICOLON {
 	
 	//add this identifier to the symbol table
 
-	if (lookup_in_scope(current_symbol_table, ident, NULL, 0) == NULL) {
+	if (lookup(current_symbol_table, ident, NULL, 0) == NULL) {
 		declare_symbol_table_entry(
 				current_symbol_table, 
 				create_symbol_table_entry(
@@ -193,32 +197,11 @@ function_definition_statement : primitive_declarator LPAREN formal_parameter_lis
 	
 	int parameterCounter = 0;
 	int *paramListConstruct = NULL;
-	//counting parameters
-	if (info_node->leftmostChild != NULL) {
-		//counting the number of formal parameters
-		struct ast_node *formal_param_node = info_node->leftmostChild;
-		while(formal_param_node != NULL) {
-			formal_param_node = formal_param_node->nextSibling;
-			parameterCounter++;
-		}
-
-
-		//now allocate space and fill it up with the list of types
-		//printf("Allocting %i bytes\n", (sizeof(int) * parameterCounter));
-
-		paramListConstruct = (int*)malloc(sizeof(int) * parameterCounter);
-		formal_param_node = info_node->leftmostChild;
-		for (int i = 0; i < parameterCounter; i++) {
-			paramListConstruct[i] = formal_param_node->leftmostChild->int_value;
-			formal_param_node = formal_param_node->nextSibling;
-		}
-		//complete list created
-
-	} 
+	formal_parameter_node_to_parameter_list(info_node, &parameterCounter, &paramListConstruct);
 
 	//add this identifier to the symbol table
 
-	if (lookup_in_scope(current_symbol_table, ident, paramListConstruct, parameterCounter) == NULL) {
+	if (lookup(current_symbol_table, ident, paramListConstruct, parameterCounter) == NULL) {
 		declare_symbol_table_entry(
 				current_symbol_table, 
 				create_symbol_table_entry(
@@ -226,7 +209,7 @@ function_definition_statement : primitive_declarator LPAREN formal_parameter_lis
 					return_type,
 					paramListConstruct,
 					parameterCounter,
-					NULL
+					info_node->nextSibling->symbol_table_value
 				));
 	} else {
 		fprintf(stderr, "Duplicate function definition \'%s\' (near line %i)\n", ident, lineNumber);

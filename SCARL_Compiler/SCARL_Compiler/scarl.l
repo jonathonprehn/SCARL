@@ -11,6 +11,8 @@
 #include "scarlnodestack.h"
 #include "scarl_symboltable.h"
 #include "arcl_codegen.h"
+#include "memory_layout.h"
+#include "scarl_semantic_analysis.h"
 
 unsigned lineNumber = 0;
 
@@ -359,6 +361,25 @@ int main(int argc, char *argv[]) {
 	//we have the abstract syntax tree!!!!!!!!
 	syntax_tree = should_be_program_node;
 
+	//now we can process the AST here
+	//you can check the types while the tree is being built
+	//symbol tables are built while tree is parsed too
+
+	if (!has_correct_main_method(syntax_tree)) {
+		fprintf(stderr, "No main() method or main() method has incorrect signature (must have no formal parameters and its return type must be void)\n");
+		return 1;
+	}
+	if (!types_are_correct(syntax_tree)) {
+		fprintf(stderr, "Incompatible types (see above)\n");
+		return 1;
+	}
+	
+	//process symbol tables here
+	calculate_frame_sizes(symbol_table);
+	calculate_frame_offsets(symbol_table);
+
+	//end of processing before code generation here
+
 	//print what we have
 	printf("Node stack is\n\n");
 	print_node_stack(node_stack);
@@ -371,10 +392,6 @@ int main(int argc, char *argv[]) {
 	printf("\nSymbol Table:\n");
 	print_symbol_table(symbol_table);
 
-	//now we can process the AST here
-	//you can check the types while the tree is being built
-	//symbol tables are built while tree is parsed too
-	
 	//now we can traverse the tree in post order and generate the code
 	generate_arcl_code(codeFile, symbol_table, syntax_tree);
 

@@ -1,6 +1,8 @@
 #ifndef __SCARL_SYMBOL_TABLE_H__
 #define __SCARL_SYMBOL_TABLE_H__
 
+#include "scarlast.h"
+
 struct scarl_symbol_table;
 struct scarl_symbol_table_entry;
 
@@ -20,6 +22,12 @@ struct scarl_symbol_table_entry {
 	struct scarl_symbol_table *functionSt;
 	//the next symbol table entry in the list
 	struct scarl_symbol_table_entry *nextEntry;
+	
+	//code generation varables
+	int frameOffset; //applicable to local variables only
+	int memSize; //applicable to local variables only
+	int *parameterOffsets; //the offsets of the parameters within the 
+	//function frame. It is to be stacked by the callee
 };
 
 struct scarl_symbol_table {
@@ -33,6 +41,8 @@ struct scarl_symbol_table {
 	struct scarl_symbol_table *firstChildSt;
 	//the next sibling in the list of symbol table siblings (from a symbol table parent)
 	struct scarl_symbol_table *nextSiblingSt;
+
+	int frameSize; // the size of this symbol table
 };
 
 struct scarl_symbol_table *create_symbol_table(struct scarl_symbol_table *parent_table);
@@ -47,6 +57,10 @@ struct scarl_symbol_table_entry *create_symbol_table_entry(
 		//the symbol table for if this is a function
 		struct scarl_symbol_table *symbol_table
 	);
+
+void formal_parameter_node_to_parameter_list(struct ast_node *formal_param_node, int *paramCont, int **paramList);
+
+int get_type_size(int type);
 
 int entry_matches_signature(struct scarl_symbol_table_entry *entry, char *ident, int paramCount, int *paramList);
 
@@ -88,6 +102,11 @@ struct scarl_symbol_table_entry *lookup_in_scope(
 	int *paramList,
 	//number of parameters. Should be 0 if paramList is NULL. Vice versa.
 	int paramCount
+);
+
+struct scarl_symbol_table_entry *lookup_based_on_invocation_node(
+	struct scarl_symbol_table *st, 
+	struct ast_node *invocation_node
 );
 
 void print_symbol_table(struct scarl_symbol_table *st);
