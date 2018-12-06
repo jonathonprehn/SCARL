@@ -30,6 +30,9 @@ int get_expression_type(struct scarl_symbol_table *symbol_table, struct ast_node
 	}
 	else if (expr->type_flag == IDENTIFIER) {
 		struct scarl_symbol_table_entry *ident_entry = lookup(symbol_table, expr->str_value, NULL, 0);
+		if (ident_entry == NULL) {
+			printf("Cannot find identifier \"%s\"\n", expr->str_value);
+		}
 		return ident_entry->type_flag;
 	}
 	else if (expr->type_flag == NON_TERMINAL_FUNCTION_INVOCATION) {

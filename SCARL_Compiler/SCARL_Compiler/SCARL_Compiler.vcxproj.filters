@@ -56,6 +56,9 @@
     <ClCompile Include="scarl_type.c">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="devices_placeholders.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="y.tab.h">
@@ -86,6 +89,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="scarl_type.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="devices_placeholders.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

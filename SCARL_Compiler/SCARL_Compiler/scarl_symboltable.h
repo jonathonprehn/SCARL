@@ -14,6 +14,8 @@ struct scarl_symbol_table_entry {
 	//the list of formal parameters if function type.
 	//the parameterList not being null denotes a function
 	int *parameterList;
+	//identifiers of parameters for the code generation part
+	char **parameterIdentifiers;
 	//count of params
 	int parameters;
 	//the symbol table that this entry resides in
@@ -26,8 +28,8 @@ struct scarl_symbol_table_entry {
 	//code generation varables
 	int frameOffset; //applicable to local variables only
 	int memSize; //applicable to local variables only
-	int *parameterOffsets; //the offsets of the parameters within the 
-	//function frame. It is to be stacked by the callee
+
+	int is_placeholder; //for device function placeholders
 };
 
 struct scarl_symbol_table {
@@ -58,7 +60,7 @@ struct scarl_symbol_table_entry *create_symbol_table_entry(
 		struct scarl_symbol_table *symbol_table
 	);
 
-void formal_parameter_node_to_parameter_list(struct ast_node *formal_param_node, int *paramCont, int **paramList);
+void formal_parameter_node_to_parameter_list(struct ast_node *formal_param_node, int *paramCont, int **paramList, char ***paramIdentifiers);
 
 int get_type_size(int type);
 

@@ -6,6 +6,7 @@
 #include "scarl_symboltable.h"
 #include "scarlast.h"
 #include "scarlnodestack.h"
+#include "scarl_type.h"
 
 /*
 	struct scarl_symbol_table_entry {
@@ -56,6 +57,8 @@ struct scarl_symbol_table_entry *create_symbol_table_entry(
 	entry->nextEntry = NULL;
 	entry->frameOffset = 0;
 	entry->memSize = get_type_size(type_flag);
+	entry->parameterIdentifiers = NULL;
+	entry->is_placeholder = 0;
 	return entry;
 }
 
@@ -216,18 +219,33 @@ struct scarl_symbol_table_entry *lookup_based_on_invocation_node(
 	int *inferred_types = NULL;
 	//now we have the number of parameters
 	if (parameterCount > 0) {
-		//infer based on the expression
-
-
+		inferred_types = malloc(sizeof(int)*parameterCount);
+		param = invocation_node->leftmostChild->nextSibling->leftmostChild;
+		int i = 0;
+		while (param != NULL) {
+			//infer based on the expression
+			int expr_type_inference = get_expression_type(st, param);
+			if (expr_type_inference == -1) {
+				printf("An expression has an invalid type (near function invocation for %s)\n", invocation_node->leftmostChild->str_value);
+				exit(1);
+			}
+			inferred_types[i] = expr_type_inference;
+			i++;
+			param = param->nextSibling;
+		}
+		
 	}
 	
 	struct scarl_symbol_table_entry *invoc_entry = lookup(st, invocation_node->leftmostChild->str_value, inferred_types, parameterCount);
 	if (invoc_entry == NULL) {
-		printf("Could not find signature for function \'%s\'. Expected a function with ");
-		printf("%i parameters of types ");
+		printf("Could not find signature for function \'%s\'. Expected a function with ", invocation_node->leftmostChild->str_value);
+		printf("%i parameters of types ", parameterCount);
 		for (int i = 0; i < parameterCount; i++) {
 			printf("%s, ", get_node_type_str(inferred_types[i]));
 		}
+	}
+	if (inferred_types != NULL) {
+		free(inferred_types);
 	}
 	return invoc_entry;
 }
@@ -324,7 +342,7 @@ void print_symbol_table(struct scarl_symbol_table *st) {
 	}
 }
 
-void formal_parameter_node_to_parameter_list(struct ast_node *formal_parameters, int *paramCount, int **paramList) {
+void formal_parameter_node_to_parameter_list(struct ast_node *formal_parameters, int *paramCount, int **paramList, char ***paramIdentList) {
 
 		//counting the number of formal parameters
 		struct ast_node *formal_param_node = formal_parameters->leftmostChild;
@@ -338,9 +356,11 @@ void formal_parameter_node_to_parameter_list(struct ast_node *formal_parameters,
 		//printf("Allocting %i bytes\n", (sizeof(int) * parameterCounter));
 
 		*paramList = (int*)malloc(sizeof(int) * (*paramCount));
+		*paramIdentList = (char**)malloc(sizeof(char*) * (*paramCount));
 		formal_param_node = formal_parameters->leftmostChild;
 		for (int i = 0; i < *paramCount; i++) {
 			(*paramList)[i] = formal_param_node->leftmostChild->int_value;
+			(*paramIdentList)[i] = _strdup(formal_param_node->leftmostChild->nextSibling->str_value);
 			formal_param_node = formal_param_node->nextSibling;
 		}
 		//complete list created

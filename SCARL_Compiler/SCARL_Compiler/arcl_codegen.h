@@ -34,27 +34,8 @@ void generate_arcl_arithmetic_expression(
 void generate_arcl_bool_expression(
 	FILE *output,
 	struct scarl_symbol_table *symbol_table,
-	struct ast_node *ast);
-
-void generate_arcl_if_statement(
-	FILE *output,
-	struct scarl_symbol_table *symbol_table,
-	struct ast_node *ast);
-
-void generate_arcl_while_statement(
-	FILE *output,
-	struct scarl_symbol_table *symbol_table,
-	struct ast_node *ast);
-
-void generate_arcl_primitive_definition_statement(
-	FILE *output,
-	struct scarl_symbol_table *symbol_table,
-	struct ast_node *ast);
-
-void generate_arcl_function_statement(
-	FILE *output,
-	struct scarl_symbol_table *symbol_table,
-	struct ast_node *ast);
+	struct ast_node *ast
+);
 
 void generate_statements_in_block(
 	FILE *output,

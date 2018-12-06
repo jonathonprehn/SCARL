@@ -61,6 +61,13 @@ char *label_str(int label) {
 	return str;
 }
 
+
+//lazy programming with a global
+//to keep track of temporary frame offset for stacking variables
+//when generating a function call related to the current frame
+int additionalFrameOffset = 0;
+
+
 void pass_to_expression_generator_handler(FILE *output, struct scarl_symbol_table *symbol_table, struct ast_node *expr, int primitiveType) {
 	//we know that this is the global scope
 	//store in global ("static") storage
@@ -77,7 +84,7 @@ void pass_to_expression_generator_handler(FILE *output, struct scarl_symbol_tabl
 		fprintf(output, "!! Pointer types are not supported yet !!\n");
 	}
 	else {
-		fprintf("!! Invalid primitive type (how did that happen?): %i !!\n", primitiveType);
+		fprintf(output, "!! Invalid primitive type (how did that happen?): %i !!\n", primitiveType);
 	}
 }
 
@@ -111,7 +118,7 @@ void generate_arcl_code(FILE * output, struct scarl_symbol_table * symbol_table,
 			struct ast_node *block_statement = ast->leftmostChild->nextSibling->nextSibling;
 			struct scarl_symbol_table *func_symbol_table = block_statement->symbol_table_value;
 			if (func_symbol_table == NULL) {
-				fprintf("FATAL ERROR: Symbol table for function %s was not correctly passed down\n", ast->leftmostChild->leftmostChild->nextSibling->str_value);
+				fprintf(stderr, "FATAL ERROR: Symbol table for function %s was not correctly passed down\n", ast->leftmostChild->leftmostChild->nextSibling->str_value);
 				exit(1);
 			}
 			//code gen
@@ -194,10 +201,26 @@ void generate_arcl_arithmetic_expression(FILE * output, struct scarl_symbol_tabl
 		*/
 
 		int memOffset = 0;
-		
-		
 		int r = allocate_register();
-		fprintf(output, "LOADF %s %i\n", register_str(r), memOffset);
+	
+		if (ident_entry == NULL) {
+			printf("Could not find identifier %s\n", ast->str_value);
+		}
+
+		if (ident_entry->st == NULL) {
+			printf("No symbol table on the symbol table entry (%s)\n", ast->str_value);
+		}
+
+		if (ident_entry->st->parentTable == NULL) {
+			//this is the root table. it is in global memory
+			memOffset = ident_entry->frameOffset;
+			fprintf(output, "LOADR %s %i\n", register_str(r), memOffset);
+		}
+		else {
+			//this is in the stack frame
+			memOffset = ident_entry->frameOffset; 
+			fprintf(output, "LOADF %s %i\n", register_str(r), memOffset+additionalFrameOffset);
+		}
 		ast->register1 = r;
 	}
 		break; 
@@ -272,11 +295,41 @@ void generate_arcl_bool_expression(
 		//just load the value into a register
 		int r = allocate_register();
 		fprintf(output, "LOADL %s %i\n", register_str(r), ast->int_value);
+		ast->register1 = r;
 	}
 	break;
 	case NON_TERMINAL_FUNCTION_INVOCATION:
 	{
 		generate_arcl_function_invocation(output, symbol_table, ast);
+	}
+	break;
+	case BANG:
+	{
+		//operation to flip boolean value
+		//basically, if false set to true if true set to false
+
+		int label1 = generate_label();
+		int label2 = generate_label();
+
+		char *label1_str = label_str(label1);
+		char *label2_str = label_str(label2);
+
+		struct ast_node *expr = ast->leftmostChild; //only 1 child that is a boolean expression
+		generate_arcl_bool_expression(output, symbol_table, expr);
+		int r = expr->register1;
+
+		fprintf(output, "CMP %s 0\n", register_str(r));
+		fprintf(output, "JPE %s\n", label1_str); //if false
+		fprintf(output, "LOADL %s 0\n", register_str(r)); //it is true, so load the register with false
+		fprintf(output, "JMP %s\n", label2_str); //skip to end since we already set it
+		fprintf(output, "LABEL %s\n", label1_str);
+		fprintf(output, "LOADL %s 1\n", register_str(r)); //it is false so load it with true
+		fprintf(output, "LABEL %s\n", label2_str);
+
+		ast->register1 = r; //pass the register up
+
+		free(label1_str);
+		free(label2_str);
 	}
 	break;
 	/*
@@ -324,7 +377,7 @@ void generate_arcl_bool_expression(
 		fprintf(output, "JMP %s\n", label2_str);
 		fprintf(output, "LABEL %s\n", label1_str);
 		fprintf(output, "LOADL %s 1\n", register_str(r)); //true
-		fprintf(output, "LABEL %s\n", label1_str);
+		fprintf(output, "LABEL %s\n", label2_str);
 
 		free(label1_str);
 		free(label2_str);
@@ -360,7 +413,7 @@ void generate_arcl_bool_expression(
 		fprintf(output, "JMP %s\n", label2_str);
 		fprintf(output, "LABEL %s\n", label1_str);
 		fprintf(output, "LOADL %s 1\n", register_str(r)); //true
-		fprintf(output, "LABEL %s\n", label1_str);
+		fprintf(output, "LABEL %s\n", label2_str);
 
 		free(label1_str);
 		free(label2_str);
@@ -396,7 +449,7 @@ void generate_arcl_bool_expression(
 		fprintf(output, "JMP %s\n", label2_str);
 		fprintf(output, "LABEL %s\n", label1_str);
 		fprintf(output, "LOADL %s 1\n", register_str(r)); //true
-		fprintf(output, "LABEL %s\n", label1_str);
+		fprintf(output, "LABEL %s\n", label2_str);
 
 		free(label1_str);
 		free(label2_str);
@@ -432,7 +485,7 @@ void generate_arcl_bool_expression(
 		fprintf(output, "JMP %s\n", label2_str);
 		fprintf(output, "LABEL %s\n", label1_str);
 		fprintf(output, "LOADL %s 1\n", register_str(r)); //true
-		fprintf(output, "LABEL %s\n", label1_str);
+		fprintf(output, "LABEL %s\n", label2_str);
 
 		free(label1_str);
 		free(label2_str);
@@ -468,7 +521,7 @@ void generate_arcl_bool_expression(
 		fprintf(output, "JMP %s\n", label2_str);
 		fprintf(output, "LABEL %s\n", label1_str);
 		fprintf(output, "LOADL %s 1\n", register_str(r)); //true
-		fprintf(output, "LABEL %s\n", label1_str);
+		fprintf(output, "LABEL %s\n", label2_str);
 
 		free(label1_str);
 		free(label2_str);
@@ -504,7 +557,7 @@ void generate_arcl_bool_expression(
 		fprintf(output, "JMP %s\n", label2_str);
 		fprintf(output, "LABEL %s\n", label1_str);
 		fprintf(output, "LOADL %s 1\n", register_str(r)); //true
-		fprintf(output, "LABEL %s\n", label1_str);
+		fprintf(output, "LABEL %s\n", label2_str);
 
 		free(label1_str);
 		free(label2_str);
@@ -542,7 +595,7 @@ void generate_arcl_bool_expression(
 		fprintf(output, "JMP %s\n", label2_str);
 		fprintf(output, "LABEL %s\n", label1_str);
 		fprintf(output, "LOADL %s 1\n", register_str(r)); //true
-		fprintf(output, "LABEL %s\n", label1_str);
+		fprintf(output, "LABEL %s\n", label2_str);
 
 		free(label1_str);
 		free(label2_str);
@@ -581,7 +634,7 @@ void generate_arcl_bool_expression(
 		fprintf(output, "JMP %s\n", label2_str);
 		fprintf(output, "LABEL %s\n", label1_str);
 		fprintf(output, "LOADL %s 1\n", register_str(r)); //true
-		fprintf(output, "LABEL %s\n", label1_str);
+		fprintf(output, "LABEL %s\n", label2_str);
 
 		free(label1_str);
 		free(label2_str);
@@ -589,27 +642,42 @@ void generate_arcl_bool_expression(
 		ast->register1 = r;
 	}
 	break;
+	case IDENTIFIER:
+	{
+		struct scarl_symbol_table_entry *ident_entry = lookup(symbol_table, ast->str_value, NULL, 0);
+		//the entry should have the memory location
+		//of this object
+
+		/*
+		Considerations:
+		- on an activation record or in global memory?
+		*/
+
+		int memOffset = 0;
+		int r = allocate_register();
+
+		if (ident_entry == NULL) {
+			printf("Could not find identifier %s\n", ast->str_value);
+		}
+
+		if (ident_entry->st == NULL) {
+			printf("No symbol table on the symbol table entry (%s)\n", ast->str_value);
+		}
+
+		if (ident_entry->st->parentTable == NULL) {
+			//this is the root table. it is in global memory
+			memOffset = ident_entry->frameOffset;
+			fprintf(output, "LOADR %s %i\n", register_str(r), memOffset);
+		}
+		else {
+			//this is in the stack frame
+			memOffset = ident_entry->frameOffset;
+			fprintf(output, "LOADF %s %i\n", register_str(r), memOffset + additionalFrameOffset);
+		}
+		ast->register1 = r;
 	}
-}
-
-void generate_arcl_if_statement(FILE * output, struct scarl_symbol_table * symbol_table, struct ast_node * ast)
-{
-
-}
-
-void generate_arcl_while_statement(FILE * output, struct scarl_symbol_table * symbol_table, struct ast_node * ast)
-{
-
-}
-
-void generate_arcl_primitive_definition_statement(FILE * output, struct scarl_symbol_table * symbol_table, struct ast_node * ast)
-{
-
-}
-
-void generate_arcl_function_statement(FILE * output, struct scarl_symbol_table * symbol_table, struct ast_node * ast)
-{
-	//do I really need this?
+	break;
+	}
 }
 
 void generate_arcl_function_invocation(
@@ -620,9 +688,6 @@ void generate_arcl_function_invocation(
 	//Big TO DO:
 	//we are assuming that the types have already been checked and confirmed
 	generate_arcl_register_save(output, symbol_table, ast);
-	
-	//frame stack
-	fprintf(output, "FRAMEU %i\n", symbol_table->frameSize);
 	
 	//set parameters 
 	//to do this we need to evaluate all of the expressions as they are and then
@@ -637,34 +702,86 @@ void generate_arcl_function_invocation(
 	if (function_entry == NULL) {
 		printf("ERROR: cannot generate function call for the identifier for it (%s, see types) does not exist\n", ast->leftmostChild->str_value);
 	}
-	else {
-		//setup parameters and frame
-		fprintf(output, "FRAMEU %i\n", function_entry->functionSt->frameSize);
-
+	else if (strcmp(function_entry->ident, "wait") == 0) {
+		//wait has special behavior
+		//generate the parameter (this is a function invocation)
 		struct ast_node *parameter_list_node = ast->leftmostChild->nextSibling;
-		//now evaluate the expressions for each one and then stack the
-		//parameters in order
 		struct ast_node *cur_param = parameter_list_node->leftmostChild;
-		int param_index = 0;
-		while (cur_param != NULL) {
-			pass_to_expression_generator_handler(output, function_entry->functionSt, cur_param, function_entry->parameterList[param_index]);
-			//store it on the function stack before calling
-			fprintf(output, "STORF %s %i\n", register_str(cur_param->register1), function_entry->parameterOffsets[param_index]);
-			param_index++;
-			cur_param = cur_param->nextSibling;
-		}
 
-		//transfer control. the parameters should be in the desired location now
-		//we need to find out how to create the procedure label from just
-		//the parameters and the function call
-		//fprintf(output, "CALL %s\n", get_procedure_label());
+		//there is only one parameter for wait()
+		generate_arcl_arithmetic_expression(output, symbol_table, cur_param);
 
-		//unstack function frame
-		fprintf(output, "FRAMEO %i\n", function_entry->functionSt->frameSize);
+		fprintf(output, "DELAY %s\n", register_str(cur_param->register1));
+		free_register(cur_param->register1);
+	}
+	else {
+		
+			//setup parameters and frame
+			fprintf(output, "FRAMEU %i\n", function_entry->functionSt->frameSize);
+
+			struct ast_node *parameter_list_node = ast->leftmostChild->nextSibling;
+			//now evaluate the expressions for each one and then stack the
+			//parameters in order
+			struct ast_node *cur_param = parameter_list_node->leftmostChild;
+
+			if (cur_param != NULL) {
+				int param_index = 0;
+				//this is the only time this global needs to be changed
+				additionalFrameOffset = 8 + function_entry->functionSt->frameSize;
+				while (cur_param != NULL) {
+					//we need to propogate a frame offset here because the variables
+					//in use in the parent stack frame are now farther away by
+					//8 + functionTableSize
+					pass_to_expression_generator_handler(
+						output, 
+						function_entry->functionSt,
+						cur_param,
+						function_entry->parameterList[param_index]
+					);
+					//store it on the function stack before calling
+					int parameterOffsetVal = 0; //how to get this if it
+					//it treated as a local variable in the symbol table
+					//what is the original identifier for this parameter?
+					//we got the identifiers of the parameters
+					char *formal_parameter_identifier = function_entry->parameterIdentifiers[param_index];
+					//lookup the formal parameter in the function scope and
+					//then use that offset
+					struct scarl_symbol_table_entry *formal_parameter_entry = lookup(function_entry->functionSt, formal_parameter_identifier, NULL, 0);
+					if (formal_parameter_entry == NULL) {
+						printf("ERROR in code generation - the formal parameter %s is not in the function scope\n", formal_parameter_identifier);
+					}
+					parameterOffsetVal = formal_parameter_entry->frameOffset;
+
+					fprintf(output, "STORF %s %i\n", register_str(cur_param->register1), parameterOffsetVal);
+					free_register(cur_param->register1);
+					param_index++;
+					cur_param = cur_param->nextSibling;
+				}
+				//make things back to normal after the parameters are stacked
+				additionalFrameOffset = 0;
+			}
+
+			//transfer control. the parameters should be in the desired location now
+			//we need to find out how to create the procedure label from just
+			//the parameters and the function call
+			if (function_entry->is_placeholder) {
+				char *proc_label_fly = generate_procedure_name_on_the_fly(function_entry->ident, function_entry->parameterList, function_entry->parameters);
+				fprintf(output, "CALL %s\n", proc_label_fly);
+				free(proc_label_fly);
+			}
+			else {
+				char *proc_label_to_call = get_procedure_label_entry(function_entry);
+				if (proc_label_to_call == NULL) {
+					fprintf(stderr, "No such defined function \'%s\'\n", function_entry->ident);
+				}
+				fprintf(output, "CALL %s\n", proc_label_to_call);
+			}
+
+			//unstack function frame
+			fprintf(output, "FRAMEO %i\n", function_entry->functionSt->frameSize);
+	
 	}
 
-	//pop frame
-	fprintf(output, "FRAMEO %i\n", symbol_table->frameSize);
 	//restore
 	generate_arcl_register_load(output, symbol_table, ast);
 }
@@ -723,7 +840,7 @@ void generate_statements_in_block(FILE * output, struct scarl_symbol_table * sym
 				}
 				else {
 					//local scope
-					fprintf(output, "STORF %s %i\n", register_str(expr->register1), entry->frameOffset);
+					fprintf(output, "STORF %s %i\n", register_str(expr->register1), entry->frameOffset+additionalFrameOffset);
 				}
 				//no longer need this register
 				free_register(expr->register1);
@@ -731,12 +848,78 @@ void generate_statements_in_block(FILE * output, struct scarl_symbol_table * sym
 			break;
 			case NON_TERMINAL_IF_BLOCK_STATEMENT:
 			{
+				struct ast_node *expr_node = cur_block_statement->leftmostChild;
+				struct ast_node *if_block = expr_node->nextSibling;
+				struct ast_node *else_block = if_block->nextSibling;
+				
+				if (else_block == NULL) {
+					//if without else
+					generate_arcl_bool_expression(output, symbol_table, expr_node);
+					int label1 = generate_label();
+					char *label1_str = label_str(label1);
 
+					fprintf(output, "CMP %s 0\n", register_str(expr_node->register1)); //check to see if expression is true
+					free_register(expr_node->register1);
+
+					//if the value is false, jump, otherwise execute
+					fprintf(output, "JPE %s\n", label1_str);
+					//execute if true
+					generate_statements_in_block(output, if_block->symbol_table_value, if_block);
+					fprintf(output, "LABEL %s\n", label1_str); //place to jump to if false
+
+					free(label1_str);
+				}
+				else {
+					//if with else
+
+					generate_arcl_bool_expression(output, symbol_table, expr_node);
+					int label1 = generate_label();
+					int label2 = generate_label();
+					char *label1_str = label_str(label1);
+					char *label2_str = label_str(label2);
+
+					fprintf(output, "CMP %s 0\n", register_str(expr_node->register1)); //check to see if expression is true
+					free_register(expr_node->register1);
+					fprintf(output, "JPE %s\n", label1_str); //jump to false area if equal to false
+					//otherwise execute true area
+					generate_statements_in_block(output, if_block->symbol_table_value, if_block);
+					fprintf(output, "JMP %s\n", label2_str);
+					fprintf(output, "LABEL %s\n", label1_str);
+					//false area here
+					generate_statements_in_block(output, else_block->symbol_table_value, else_block);
+					fprintf(output, "LABEL %s\n", label2_str); //where to skip to after true statements
+
+					free(label1_str);
+					free(label2_str);
+				}
 			}
 			break;
 			case NON_TERMINAL_WHILE_BLOCK_STATEMENT:
 			{
-
+				struct ast_node *expr_node = cur_block_statement->leftmostChild;
+				struct ast_node *block_node = expr_node->nextSibling;
+				
+				int label1 = generate_label();
+				int label2 = generate_label();
+				char *label1_str = label_str(label1);
+				char *label2_str = label_str(label2);
+				
+				fprintf(output, "LABEL %s\n", label1_str);
+				generate_arcl_bool_expression(output, symbol_table, expr_node);
+				//check to see if the expression is false
+				fprintf(output, "CMP %s 0\n", register_str(expr_node->register1));
+				free_register(expr_node->register1);
+				//if false, skip to the end
+				fprintf(output, "JPE %s\n", label2_str);
+				//not false, the expression was true. Run the block
+				generate_statements_in_block(output, block_node->symbol_table_value, block_node);
+				//completed the block. evaluate the boolean expr again
+				fprintf(output, "JMP %s\n", label1_str);
+				//go here when the expression is true
+				fprintf(output, "LABEL %s\n", label2_str);
+				
+				free(label1_str);
+				free(label2_str);
 			}
 			break;
 		}

@@ -27,12 +27,16 @@ void calculate_frame_sizes_function(struct scarl_symbol_table *functionSt, int c
 	//for the expectation of stacking parameters
 	struct scarl_symbol_table_entry *entry = functionSt->entries;
 	int frame_size = 0;
-
+	
+	//commented this part out because the parameters are now added
+	//as local variables in the symbol table
+	/*
 	if (callee_param > 0) {
 		for (int i = 0; i < callee_param; i++) {
 			functionSt->frameSize += get_type_size(callee_paramList[i]);
 		}
 	}
+	*/
 
 	int functionSt_frameSize = get_total_tables_size(functionSt);
 	//functionSt->frameSize += functionSt_frameSize;
@@ -98,8 +102,14 @@ void calculate_frame_offsets(struct scarl_symbol_table *st) {
 		}
 		else {
 			//frame relative offsets
+			
+			
+			
 			int offset = 0;
-
+		
+			//commented this stuff out because the parameters are added
+			//as local variables now
+			/*
 			//allocate space for parameter offsets
 			entry->parameterOffsets = (int*)malloc(sizeof(int) * entry->parameters);
 
@@ -108,6 +118,7 @@ void calculate_frame_offsets(struct scarl_symbol_table *st) {
 				entry->parameterOffsets[i] = offset;
 				offset++;
 			}
+			*/ 
 			//now the rest of the offsets
 			subtable_frame_offsets(&offset, entry->functionSt);
 		}

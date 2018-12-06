@@ -8,6 +8,7 @@
 #include "scarlast.h"
 #include "visitors.h"
 #include "scarl_symboltable.h"
+#include "devices_placeholders.h"
 
 int yylex(void);
 void yyerror(char *);
@@ -139,6 +140,12 @@ device_declarator_statement : device_type IDENTIFIER SEMICOLON {
 					0,
 					NULL
 				));
+
+
+		//we also want to include the functions that
+		//will be used for the functionality of this particular device
+		add_device_functions_to_symbol_table(ident, device_type, current_symbol_table);
+		//how will these functions be implemented??
 	} else {
 		fprintf(stderr, "Duplicate identifiers \'%s\' (near line %i)\n", ident, lineNumber);
 		exit(0);
@@ -180,9 +187,6 @@ primitive_definition_statement : primitive_declarator EQ expression SEMICOLON {
 	//now the prim_info_node is pointing to the expression that
 	//this declarator is initially set to
 
-	//TO DO: expression assignment to definition code
-	
-
 	$$ = prim_def_node;
 }
 
@@ -197,24 +201,62 @@ function_definition_statement : primitive_declarator LPAREN formal_parameter_lis
 	
 	int parameterCounter = 0;
 	int *paramListConstruct = NULL;
-	formal_parameter_node_to_parameter_list(info_node, &parameterCounter, &paramListConstruct);
+	char **paramIdentifiersList = NULL;
+	formal_parameter_node_to_parameter_list(info_node, &parameterCounter, &paramListConstruct, &paramIdentifiersList);
 
 	//add this identifier to the symbol table
 
 	if (lookup(current_symbol_table, ident, paramListConstruct, parameterCounter) == NULL) {
-		declare_symbol_table_entry(
-				current_symbol_table, 
-				create_symbol_table_entry(
+		struct scarl_symbol_table *function_symbol_table = info_node->nextSibling->symbol_table_value;
+		struct scarl_symbol_table_entry *function_entry_to_declare = create_symbol_table_entry(
 					ident,
 					return_type,
 					paramListConstruct,
 					parameterCounter,
-					info_node->nextSibling->symbol_table_value
-				));
+					function_symbol_table
+				);
+		function_entry_to_declare->parameterIdentifiers = paramIdentifiersList;
+		//add in the identifiers too
+
+
+		declare_symbol_table_entry(
+				current_symbol_table, 
+				function_entry_to_declare
+		);
+
+				//add the formal parameters to the symbol table of this function
+				//the frame offsets of these parameters are handled differently
+				//than the other local variables
+				//this is implicit with the construction of the function (?)
+				//this needs testing
+				struct ast_node *formal_param_list = $3;
+				struct ast_node *fp = formal_param_list->leftmostChild;
+				while(fp != NULL) {
+					char *fp_ident = fp->leftmostChild->nextSibling->str_value;
+					if (lookup(function_symbol_table, fp_ident, NULL, 0) == NULL) {
+						declare_symbol_table_entry(
+						function_symbol_table, 
+						create_symbol_table_entry(
+							fp_ident,
+							fp->leftmostChild->int_value,
+							NULL,
+							0,
+							NULL
+						));
+					}
+					else {
+						fprintf(stderr, "Duplicate variable declaration from formal parameters in function %s (parameters %s)\n", ident, fp_ident);
+						exit(0);
+					}			
+					fp = fp->nextSibling;
+				}
 	} else {
 		fprintf(stderr, "Duplicate function definition \'%s\' (near line %i)\n", ident, lineNumber);
 		exit(0);
 	}
+
+	
+
 
 	$$ = function_def_node;
 }
@@ -255,6 +297,7 @@ formal_parameter_list : primitive_declarator {
 						
 formal_parameter_list : primitive_declarator COMMA formal_parameter_list { 
 	$$ = NON_TERMINAL_FORMAL_PARAMETER_LIST_func(2, $3, $1);
+
 }
 
 parameter_list :      { 
