@@ -46,7 +46,8 @@ extern struct scarl_symbol_table *current_symbol_table;
 %token WHILE LBRACE RBRACE DECIMAL OCTAL HEX
 %token BINARY LIGHT_ACTUATOR SERVO_ACTUATOR
 %token SOUND_SENSOR LIGHT_SENSOR DISTANCE_SENSOR
-%token TEMPERATURE_SENSOR TRUE FALSE
+%token TEMPERATURE_SENSOR TRUE FALSE 
+%token RETURN
 
 %%
 
@@ -106,6 +107,10 @@ statement_block_level : block_statement {
 }
 						
 statement_block_level : variable_set_statement {
+	$$ = $1; //pass through
+}
+
+statement_block_level : return_statement {
 	$$ = $1; //pass through
 }
 						
@@ -256,13 +261,15 @@ function_definition_statement : primitive_declarator LPAREN formal_parameter_lis
 	}
 
 	
-
-
 	$$ = function_def_node;
 }
 
 variable_set_statement : IDENTIFIER EQ expression SEMICOLON {
 	$$ = NON_TERMINAL_VARIABLE_SET_STATEMENT_func(2, TERMINAL_IDENTIFIER_func(0), $3);
+}
+
+return_statement : RETURN expression SEMICOLON {
+	$$ = NON_TERMINAL_RETURN_STATEMENT_func(1, $2);
 }
 
 function_invocation : IDENTIFIER LPAREN parameter_list RPAREN {

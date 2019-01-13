@@ -16,6 +16,8 @@ char *arcl_registers_symbols[ARCL_REGISTER_COUNT] = {
 };
 char *frr = "FRR";
 
+// TODO: Return statements must be implemented!
+
 //allocate a 1 byte register
 int allocate_register()
 {
@@ -279,6 +281,11 @@ void generate_arcl_arithmetic_expression(FILE * output, struct scarl_symbol_tabl
 	case NON_TERMINAL_FUNCTION_INVOCATION:
 	{
 		generate_arcl_function_invocation(output, symbol_table, ast);
+		//we expect that this function has returned something
+		//it should be in the FRR register. Save the result to a register
+		int r = allocate_register();
+		fprintf(output, "MOV %s %s\n", register_str(ARCL_FRR_REGISTER), register_str(r));
+		ast->register1 = r;
 	}
 	break;
 	}
@@ -301,6 +308,11 @@ void generate_arcl_bool_expression(
 	case NON_TERMINAL_FUNCTION_INVOCATION:
 	{
 		generate_arcl_function_invocation(output, symbol_table, ast);
+		//we expect that this function has returned something
+		//it should be in the FRR register. Save the result to a register
+		int r = allocate_register();
+		fprintf(output, "MOV %s %s\n", register_str(ARCL_FRR_REGISTER), register_str(r));
+		ast->register1 = r;
 	}
 	break;
 	case BANG:
@@ -921,6 +933,38 @@ void generate_statements_in_block(FILE * output, struct scarl_symbol_table * sym
 				free(label1_str);
 				free(label2_str);
 			}
+			case NON_TERMINAL_RETURN_STATEMENT:
+			{
+				//Copy the value in the expression register
+				//to FRR and call a RET instruction to stop
+				//the function where it stands
+
+				//The type is the return type of the current function.
+				//how do we know which function we are currently in?
+
+				struct ast_node *expr_node = cur_block_statement->leftmostChild;
+
+				//we expect that the parent of this block
+				//eventually becomes a NON_TERMINAL_FUNCTION_DEFINITION_STATEMENT
+				struct ast_node *func_def_node = ast;
+				while ((func_def_node = func_def_node->parent)->type_flag != NON_TERMINAL_FUNCTION_DEFINITION_STATEMENT) {
+					//repeat until we find the function definition
+				}
+				//we found the function definition. the return type is 
+				//based on the primitive declarator node
+				int return_type = func_def_node->leftmostChild->leftmostChild->int_value;
+				//printf("return type is %s\n", get_terminal_mnemonic(return_type));
+
+				pass_to_expression_generator_handler(output, symbol_table, expr_node, return_type);
+				// copy this return into the FRR register
+				fprintf(output, "MOVE %s %s\n", register_str(expr_node->register1), register_str(ARCL_FRR_REGISTER));
+				free_register(expr_node->register1);
+
+				//TO DO - do not add this if it is the last statement in the block
+				if (cur_block_statement->nextSibling != NULL) {
+					fprintf(output, "RET\n");
+				}
+			}
 			break;
 		}
 		cur_block_statement = cur_block_statement->nextSibling;
@@ -934,15 +978,7 @@ void generate_arcl_register_save(
 	struct ast_node *ast
 ) {
 	//save register state
-	fprintf(output, "FRAMEU 8\n");
-	fprintf(output, "STORF R0 0\n");
-	fprintf(output, "STORF R1 1\n");
-	fprintf(output, "STORF R2 2\n");
-	fprintf(output, "STORF R3 3\n");
-	fprintf(output, "STORF R4 4\n");
-	fprintf(output, "STORF R5 5\n");
-	fprintf(output, "STORF R6 6\n");
-	fprintf(output, "STORF R7 7\n");
+	fprintf(output, "RSAVE\n");
 }
 
 //to be done after function invocation
@@ -952,13 +988,5 @@ void generate_arcl_register_load(
 	struct ast_node *ast
 ) {
 	//restore register state
-	fprintf(output, "LOADF R0 0\n");
-	fprintf(output, "LOADF R1 1\n");
-	fprintf(output, "LOADF R2 2\n");
-	fprintf(output, "LOADF R3 3\n");
-	fprintf(output, "LOADF R4 4\n");
-	fprintf(output, "LOADF R5 5\n");
-	fprintf(output, "LOADF R6 6\n");
-	fprintf(output, "LOADF R7 7\n");
-	fprintf(output, "FRAMEO 8\n");
+	fprintf(output, "RLOAD\n");
 }

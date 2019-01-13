@@ -14,6 +14,7 @@ struct ast_node * NON_TERMINAL_PRIMITIVE_DECLARATOR_func(int argc, ...);
 struct ast_node * NON_TERMINAL_PRIMITIVE_DEFINITION_STATEMENT_func(int argc, ...);
 struct ast_node * NON_TERMINAL_FUNCTION_DEFINITION_STATEMENT_func(int argc, ...);
 struct ast_node * NON_TERMINAL_VARIABLE_SET_STATEMENT_func(int argc, ...);
+struct ast_node * NON_TERMINAL_RETURN_STATEMENT_func(int argc, ...);
 struct ast_node * NON_TERMINAL_FUNCTION_INVOCATION_func(int argc, ...);
 struct ast_node * NON_TERMINAL_FUNCTION_INVOCATION_STATEMENT_func(int argc, ...);
 struct ast_node * NON_TERMINAL_IF_BLOCK_STATEMENT_func(int argc, ...);
@@ -75,6 +76,7 @@ struct ast_node * TERMINAL_DISTANCE_SENSOR_func(int argc, ...);
 struct ast_node * TERMINAL_TEMPERATURE_SENSOR_func(int argc, ...);
 struct ast_node * TERMINAL_TRUE_func(int argc, ...);
 struct ast_node * TERMINAL_FALSE_func(int argc, ...);
+struct ast_node * TERMINAL_RETURN_func(int argc, ...);
 
 void print_current_state();
 void init_visitor_func_parsing_constructs();

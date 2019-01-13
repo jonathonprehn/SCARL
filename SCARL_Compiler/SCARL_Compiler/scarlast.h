@@ -41,6 +41,7 @@ struct ast_node;
 #define NON_TERMINAL_BOOL_VALUE						0x31D
 #define NON_TERMINAL_PRIMITIVE_TYPE					0x31E
 #define NON_TERMINAL_DEVICE_TYPE					0x31F
+#define NON_TERMINAL_RETURN_STATEMENT				0x320
 //we have y.tab.h for the terminals
 
 

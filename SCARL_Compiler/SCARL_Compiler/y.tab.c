@@ -88,143 +88,147 @@ extern struct scarl_symbol_table *current_symbol_table;
 #define TEMPERATURE_SENSOR 295
 #define TRUE 296
 #define FALSE 297
+#define RETURN 298
 #define YYERRCODE 256
 short yylhs[] = {                                        -1,
     0,    1,    1,    2,    2,    2,    6,    7,    7,    8,
-    8,    8,    8,    8,    8,    3,   14,    4,    5,    9,
-   18,   10,   11,   11,   12,   17,   17,   17,   19,   19,
-   19,   16,   20,   20,   21,   21,   22,   22,   22,   23,
-   23,   23,   23,   23,   24,   24,   25,   25,   25,   26,
-   26,   26,   27,   27,   27,   28,   28,   28,   28,   29,
-   29,   29,   29,   30,   30,   15,   15,   15,   15,   15,
-   13,   13,   13,   13,   13,   13,
+    8,    8,    8,    8,    8,    8,    3,   15,    4,    5,
+    9,   10,   19,   11,   12,   12,   13,   18,   18,   18,
+   20,   20,   20,   17,   21,   21,   22,   22,   23,   23,
+   23,   24,   24,   24,   24,   24,   25,   25,   26,   26,
+   26,   27,   27,   27,   28,   28,   28,   29,   29,   29,
+   29,   30,   30,   30,   30,   31,   31,   16,   16,   16,
+   16,   16,   14,   14,   14,   14,   14,   14,
 };
 short yylen[] = {                                         2,
     1,    1,    2,    1,    1,    1,    3,    1,    2,    1,
-    1,    1,    1,    1,    1,    3,    2,    4,    5,    4,
-    4,    2,    5,    7,    5,    0,    1,    3,    0,    1,
-    3,    1,    1,    3,    1,    3,    1,    3,    3,    1,
-    3,    3,    3,    3,    1,    2,    1,    3,    3,    1,
-    3,    3,    1,    2,    3,    1,    1,    1,    1,    1,
+    1,    1,    1,    1,    1,    1,    3,    2,    4,    5,
+    4,    3,    4,    2,    5,    7,    5,    0,    1,    3,
+    0,    1,    3,    1,    1,    3,    1,    3,    1,    3,
+    3,    1,    3,    3,    3,    3,    1,    2,    1,    3,
+    3,    1,    3,    3,    1,    2,    3,    1,    1,    1,
     1,    1,    1,    1,    1,    1,    1,    1,    1,    1,
-    1,    1,    1,    1,    1,    1,
+    1,    1,    1,    1,    1,    1,    1,    1,
 };
 short yydefred[] = {                                      0,
-   66,   67,   68,   69,   70,   71,   72,   73,   74,   75,
-   76,    0,    1,    0,    4,    5,    6,    0,    0,    0,
-    3,    0,    0,    0,   17,   16,    0,    0,    0,    0,
-    0,    0,   60,   61,   62,   63,   64,   65,    0,   59,
-    0,    0,    0,    0,   40,    0,    0,   50,   53,   57,
-   58,    0,    0,    0,   54,    0,    0,   18,    0,    0,
+   68,   69,   70,   71,   72,   73,   74,   75,   76,   77,
+   78,    0,    1,    0,    4,    5,    6,    0,    0,    0,
+    3,    0,    0,    0,   18,   17,    0,    0,    0,    0,
+    0,    0,   62,   63,   64,   65,   66,   67,    0,   61,
+    0,    0,    0,    0,   42,    0,    0,   52,   55,   59,
+   60,    0,    0,    0,   56,    0,    0,   19,    0,    0,
     0,    0,    0,    0,    0,    0,    0,    0,    0,    0,
-   28,    0,   19,    0,    0,   55,    0,    0,    0,    0,
-   41,   42,   43,   44,    0,    0,   51,   52,    0,    0,
-    0,   10,   11,    0,    0,   12,   13,   14,   15,    0,
-    0,    0,   21,    0,    0,    0,    7,    9,   22,   31,
-    0,    0,    0,   20,    0,    0,    0,   25,    0,   24,
+   30,    0,   20,    0,    0,   57,    0,    0,    0,    0,
+   43,   44,   45,   46,    0,    0,   53,   54,    0,    0,
+    0,    0,   10,   11,    0,    0,   12,   13,   14,   15,
+   16,    0,    0,    0,   23,    0,    0,    0,    0,    7,
+    9,   24,   33,    0,    0,    0,   22,   21,    0,    0,
+    0,   27,    0,   26,
 };
 short yydgoto[] = {                                      12,
-   13,   14,   15,   16,   17,   93,   94,   95,   96,   97,
-   98,   99,   18,   19,   20,   74,   28,   40,   75,   41,
-   42,   43,   44,   45,   46,   47,   48,   49,   50,   51,
+   13,   14,   15,   16,   17,   94,   95,   96,   97,   98,
+   99,  100,  101,   18,   19,   20,   74,   28,   40,   75,
+   41,   42,   43,   44,   45,   46,   47,   48,   49,   50,
+   51,
 };
-short yysindex[] = {                                   -207,
+short yysindex[] = {                                   -175,
     0,    0,    0,    0,    0,    0,    0,    0,    0,    0,
-    0,    0,    0, -207,    0,    0,    0, -247, -227, -240,
-    0, -255, -160, -254,    0,    0, -251, -238, -228, -250,
- -250, -250,    0,    0,    0,    0,    0,    0, -231,    0,
- -205, -204, -221, -132,    0, -196, -216,    0,    0,    0,
-    0, -160, -193, -254,    0, -196, -243,    0, -254, -254,
- -254, -254, -254, -254, -254, -254, -250, -250, -250, -250,
-    0, -165,    0, -185, -161,    0, -204, -221, -132, -132,
-    0,    0,    0,    0, -216, -216,    0,    0, -214, -155,
- -154,    0,    0, -170, -165,    0,    0,    0,    0, -158,
- -138, -254,    0, -254, -254, -254,    0,    0,    0,    0,
- -122, -104,  -88,    0, -193, -193,  -98,    0, -193,    0,
+    0,    0,    0, -175,    0,    0,    0, -235, -209, -230,
+    0, -240, -158, -210,    0,    0, -231, -212, -206, -233,
+ -233, -233,    0,    0,    0,    0,    0,    0, -213,    0,
+ -202, -193, -251, -264,    0, -220, -217,    0,    0,    0,
+    0, -158, -185, -210,    0, -220, -198,    0, -210, -210,
+ -210, -210, -210, -210, -210, -210, -233, -233, -233, -233,
+    0, -247,    0, -165, -126,    0, -193, -251, -264, -264,
+    0,    0,    0,    0, -217, -217,    0,    0, -203,  -86,
+  -83, -210,    0,    0,  -99, -247,    0,    0,    0,    0,
+    0, -109,  -93, -210,    0, -210, -210, -210,  -92,    0,
+    0,    0,    0,  -91,  -73,  -61,    0,    0, -185, -185,
+  -66,    0, -185,    0,
 };
 short yyrindex[] = {                                      0,
     0,    0,    0,    0,    0,    0,    0,    0,    0,    0,
-    0,    0,    0,  185,    0,    0,    0,    0,    0,    0,
-    0,    0,  -83,    0,    0,    0,  -82,    0, -149,    0,
+    0,    0,    0,  215,    0,    0,    0,    0,    0,    0,
+    0,    0,  -49,    0,    0,    0,  -40,    0, -148,    0,
     0,    0,    0,    0,    0,    0,    0,    0,    0,    0,
- -256, -120, -258,  -43,    0,  -67, -126,    0,    0,    0,
-    0,  -83,    0,  -81,    0,  -55,    0,    0,    0,    0,
+  -52,  -96, -142,  -55,    0, -176, -125,    0,    0,    0,
+    0,  -49,    0,  -39,    0,  -67,    0,    0,    0,    0,
     0,    0,    0,    0,    0,    0,    0,    0,    0,    0,
-    0,    0,    0,  -74,    0,    0,  -97, -143,  -31,  -19,
-    0,    0,    0,    0, -103,  -80,    0,    0,    0,    0,
-    0,    0,    0,    0,  -84,    0,    0,    0,    0,    0,
-    0,  -81,    0,    0,    0,    0,    0,    0,    0,    0,
-    0,    0,    0,    0,    0,    0, -188,    0,    0,    0,
+    0,    0,    0,  -37,    0,    0,  -27, -119,  -43,  -31,
+    0,    0,    0,    0, -102,  -79,    0,    0,    0,    0,
+    0,    0,    0,    0,    0,  -46,    0,    0,    0,    0,
+    0,    0,    0,  -39,    0,    0,    0,    0,    0,    0,
+    0,    0,    0,    0,    0,    0,    0,    0,    0,    0,
+ -252,    0,    0,    0,
 };
 short yygindex[] = {                                      0,
-  194,    0,    0,  -68,    0,  -51,  125,    0,    0,    0,
-    0,    0,    0,  -22,    0,  -24,  175,  -66,  126,    0,
-  170,  172,    5,   98,   39,   22,  -18,    0,    0,    0,
+  204,    0,    0,  -68,    0,  -50,  144,    0,    0,    0,
+    0,    0,    0,    0,  -22,    0,  -24,  189,  -51,  140,
+    0,  192,  194,   19,   76,  131,   97,  -28,    0,    0,
+    0,
 };
-#define YYTABLESIZE 261
+#define YYTABLESIZE 254
 short yytable[] = {                                      39,
-   27,   73,   29,   92,   30,  101,   29,   31,   30,   22,
-   35,   55,   32,   32,   67,   68,   25,   32,   35,   35,
-   35,   35,   32,   32,   26,   76,   92,   52,  101,   27,
-   53,   33,   34,   35,   36,   33,   34,   35,   36,   54,
-   23,   37,   38,   69,   70,   37,   38,   24,   58,  100,
-   87,   88,   61,   54,   62,    1,    2,    3,    4,    5,
-  104,   67,   68,  117,  118,   79,   80,  120,   23,   56,
-   57,   59,  100,   60,   23,   23,   23,   23,   23,  111,
-  112,  113,    6,    7,    8,    9,   10,   11,   85,   86,
-   72,   89,   23,  102,   23,   23,   23,    1,    2,    3,
-    4,    5,    1,    2,    3,    4,    5,  103,   56,   56,
-   56,   56,  105,  106,  107,   90,   24,   91,   72,   56,
-   56,   56,   56,   56,   56,   36,   56,   56,   56,   56,
-   56,   47,   47,   36,   36,   36,   36,   63,   64,   65,
-   66,  109,   47,   47,   47,   47,   47,   47,   33,   47,
-   47,   47,   47,   47,   48,   48,   33,  114,   33,   33,
-   81,   82,   83,   84,  115,   48,   48,   48,   48,   48,
-   48,   34,   48,   48,   48,   48,   48,   49,   49,   34,
-  116,   34,   34,  119,    2,   26,   27,   29,   49,   49,
-   49,   49,   49,   49,   30,   49,   49,   49,   49,   49,
-    8,   45,   45,   45,   45,   45,   45,   21,   45,   45,
-   45,   45,   45,   46,   46,   46,   46,   46,   46,  108,
-   46,   46,   46,   46,   46,   37,   71,  110,   77,    0,
-   37,   78,   37,   37,   37,   37,   37,   38,    0,    0,
-    0,    0,   38,    0,   38,   38,   38,   38,   38,   39,
-    0,    0,    0,    0,   39,    0,   39,   39,   39,   39,
-   39,
+   27,   55,   73,   93,   25,   63,   64,   65,   66,   89,
+   25,   25,   25,   25,   25,    1,    2,    3,    4,    5,
+  103,   22,   61,   29,   62,   30,   25,   93,   25,   27,
+   25,   25,   25,   90,   32,   91,   72,   67,   68,   26,
+   87,   88,   69,   70,  103,   25,   29,   52,   30,  102,
+   92,   31,   33,   34,   35,   36,   53,   32,   23,   67,
+   68,   54,   37,   38,   54,   24,   58,  109,  121,  122,
+   76,  106,  124,  102,   59,   33,   34,   35,   36,   79,
+   80,  114,  115,  116,   60,   37,   38,    1,    2,    3,
+    4,    5,   47,   47,   47,   47,   47,   47,   72,   47,
+   47,   47,   47,   47,    1,    2,    3,    4,    5,   58,
+   58,   58,   58,  104,    6,    7,    8,    9,   10,   11,
+   58,   58,   58,   58,   58,   58,   37,   58,   58,   58,
+   58,   58,   49,   49,   37,   37,   37,   37,   81,   82,
+   83,   84,  105,   49,   49,   49,   49,   49,   49,   38,
+   49,   49,   49,   49,   49,   50,   50,   38,   38,   38,
+   38,   56,   57,   85,   86,   24,   50,   50,   50,   50,
+   50,   50,   35,   50,   50,   50,   50,   50,   51,   51,
+   35,  107,   35,   35,  108,  110,  112,  117,  118,   51,
+   51,   51,   51,   51,   51,  119,   51,   51,   51,   51,
+   51,   48,   48,   48,   48,   48,   48,  120,   48,   48,
+   48,   48,   48,   39,    2,  123,   34,   21,   39,   28,
+   39,   39,   39,   39,   39,   40,   34,   34,   29,   31,
+   40,   32,   40,   40,   40,   40,   40,   41,    8,  111,
+   71,   36,   41,  113,   41,   41,   41,   41,   41,   36,
+   77,   36,   36,   78,
 };
 short yycheck[] = {                                      24,
-   23,   53,  257,   72,  259,   72,  257,  262,  259,  257,
-  269,   30,  269,  268,  258,  259,  257,  268,  277,  278,
-  279,  280,  279,  280,  280,  269,   95,  279,   95,   52,
-  269,  286,  287,  288,  289,  286,  287,  288,  289,  268,
-  268,  296,  297,  260,  261,  296,  297,  275,  280,   72,
-   69,   70,  274,  268,  276,  263,  264,  265,  266,  267,
-  275,  258,  259,  115,  116,   61,   62,  119,  257,   31,
-   32,  277,   95,  278,  263,  264,  265,  266,  267,  104,
-  105,  106,  290,  291,  292,  293,  294,  295,   67,   68,
-  284,  257,  281,  279,  283,  284,  285,  263,  264,  265,
-  266,  267,  263,  264,  265,  266,  267,  269,  258,  259,
-  260,  261,  268,  268,  285,  281,  275,  283,  284,  269,
+   23,   30,   53,   72,  257,  270,  271,  272,  273,  257,
+  263,  264,  265,  266,  267,  263,  264,  265,  266,  267,
+   72,  257,  274,  257,  276,  259,  257,   96,  281,   52,
+  283,  284,  285,  281,  268,  283,  284,  258,  259,  280,
+   69,   70,  260,  261,   96,  298,  257,  279,  259,   72,
+  298,  262,  286,  287,  288,  289,  269,  268,  268,  258,
+  259,  268,  296,  297,  268,  275,  280,   92,  119,  120,
+  269,  275,  123,   96,  277,  286,  287,  288,  289,   61,
+   62,  106,  107,  108,  278,  296,  297,  263,  264,  265,
+  266,  267,  269,  270,  271,  272,  273,  274,  284,  276,
+  277,  278,  279,  280,  263,  264,  265,  266,  267,  258,
+  259,  260,  261,  279,  290,  291,  292,  293,  294,  295,
+  269,  270,  271,  272,  273,  274,  269,  276,  277,  278,
+  279,  280,  258,  259,  277,  278,  279,  280,   63,   64,
+   65,   66,  269,  269,  270,  271,  272,  273,  274,  269,
+  276,  277,  278,  279,  280,  258,  259,  277,  278,  279,
+  280,   31,   32,   67,   68,  275,  269,  270,  271,  272,
+  273,  274,  269,  276,  277,  278,  279,  280,  258,  259,
+  277,  268,  279,  280,  268,  285,  280,  280,  280,  269,
   270,  271,  272,  273,  274,  269,  276,  277,  278,  279,
-  280,  258,  259,  277,  278,  279,  280,  270,  271,  272,
-  273,  280,  269,  270,  271,  272,  273,  274,  269,  276,
-  277,  278,  279,  280,  258,  259,  277,  280,  279,  280,
-   63,   64,   65,   66,  269,  269,  270,  271,  272,  273,
-  274,  269,  276,  277,  278,  279,  280,  258,  259,  277,
-  269,  279,  280,  282,    0,  269,  269,  269,  269,  270,
-  271,  272,  273,  274,  269,  276,  277,  278,  279,  280,
-  285,  269,  270,  271,  272,  273,  274,   14,  276,  277,
-  278,  279,  280,  269,  270,  271,  272,  273,  274,   95,
-  276,  277,  278,  279,  280,  269,   52,  102,   59,   -1,
-  274,   60,  276,  277,  278,  279,  280,  269,   -1,   -1,
-   -1,   -1,  274,   -1,  276,  277,  278,  279,  280,  269,
-   -1,   -1,   -1,   -1,  274,   -1,  276,  277,  278,  279,
-  280,
+  280,  269,  270,  271,  272,  273,  274,  269,  276,  277,
+  278,  279,  280,  269,    0,  282,  269,   14,  274,  269,
+  276,  277,  278,  279,  280,  269,  279,  280,  269,  269,
+  274,  269,  276,  277,  278,  279,  280,  269,  285,   96,
+   52,  269,  274,  104,  276,  277,  278,  279,  280,  277,
+   59,  279,  280,   60,
 };
 #define YYFINAL 12
 #ifndef YYDEBUG
 #define YYDEBUG 0
 #endif
-#define YYMAXTOKEN 297
+#define YYMAXTOKEN 298
 #if YYDEBUG
 char *yyname[] = {
 "end-of-file",0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
@@ -238,7 +242,7 @@ char *yyname[] = {
 "GTR","LESS","GTR_EQ","LESS_EQ","DBL_EQ","EQ","NOT_EQ","OR","AND","COMMA",
 "SEMICOLON","IF","ELSE","WHILE","LBRACE","RBRACE","DECIMAL","OCTAL","HEX",
 "BINARY","LIGHT_ACTUATOR","SERVO_ACTUATOR","SOUND_SENSOR","LIGHT_SENSOR",
-"DISTANCE_SENSOR","TEMPERATURE_SENSOR","TRUE","FALSE",
+"DISTANCE_SENSOR","TEMPERATURE_SENSOR","TRUE","FALSE","RETURN",
 };
 char *yyrule[] = {
 "$accept : program",
@@ -254,6 +258,7 @@ char *yyrule[] = {
 "statement_block_level : primitive_definition_statement",
 "statement_block_level : block_statement",
 "statement_block_level : variable_set_statement",
+"statement_block_level : return_statement",
 "statement_block_level : function_invocation_statement",
 "statement_block_level : if_block_statement",
 "statement_block_level : while_block_statement",
@@ -262,6 +267,7 @@ char *yyrule[] = {
 "primitive_definition_statement : primitive_declarator EQ expression SEMICOLON",
 "function_definition_statement : primitive_declarator LPAREN formal_parameter_list RPAREN block_statement",
 "variable_set_statement : IDENTIFIER EQ expression SEMICOLON",
+"return_statement : RETURN expression SEMICOLON",
 "function_invocation : IDENTIFIER LPAREN parameter_list RPAREN",
 "function_invocation_statement : function_invocation SEMICOLON",
 "if_block_statement : IF LPAREN expression RPAREN block_statement",
@@ -345,12 +351,12 @@ YYSTYPE yylval;
 short yyss[YYSTACKSIZE];
 YYSTYPE yyvs[YYSTACKSIZE];
 #define yystacksize YYSTACKSIZE
-#line 558 "scarl_tokens.y"
+#line 565 "scarl_tokens.y"
 
 void yyerror(char *s) {
 	fprintf(stderr, "%s at line %i near \'%s\'\n", s, lineNumber, lastTokenText);
 }
-#line 354 "y.tab.c"
+#line 360 "y.tab.c"
 #define YYABORT goto yyabort
 #define YYREJECT goto yyabort
 #define YYACCEPT goto yyaccept
@@ -492,44 +498,44 @@ yyreduce:
     switch (yyn)
     {
 case 1:
-#line 53 "scarl_tokens.y"
+#line 54 "scarl_tokens.y"
 { 
 	NON_TERMINAL_PROGRAM_func(1, yyvsp[0]); /*this pushes the program onto the node stack*/
 }
 break;
 case 2:
-#line 57 "scarl_tokens.y"
+#line 58 "scarl_tokens.y"
 {
 	yyval = NON_TERMINAL_STATEMENT_LIST_func(1, yyvsp[0]);
 }
 break;
 case 3:
-#line 61 "scarl_tokens.y"
+#line 62 "scarl_tokens.y"
 {
 	/*add the statement to the existing statement list*/
 	yyval = NON_TERMINAL_STATEMENT_LIST_func(2, yyvsp[0], yyvsp[-1]);
 }
 break;
 case 4:
-#line 66 "scarl_tokens.y"
+#line 67 "scarl_tokens.y"
 {
 	yyval = yyvsp[0]; /*pass through*/
 }
 break;
 case 5:
-#line 70 "scarl_tokens.y"
+#line 71 "scarl_tokens.y"
 {
 	yyval = yyvsp[0]; /*pass through*/
 }
 break;
 case 6:
-#line 74 "scarl_tokens.y"
+#line 75 "scarl_tokens.y"
 {
 	yyval = yyvsp[0]; /*pass through*/
 }
 break;
 case 7:
-#line 78 "scarl_tokens.y"
+#line 79 "scarl_tokens.y"
 {
 	struct ast_node *block_statement_node = NON_TERMINAL_BLOCK_STATEMENT_func(1, yyvsp[-1]); /*converts the type to a block statement*/
 	/*closing out this scope*/
@@ -543,57 +549,63 @@ case 7:
 }
 break;
 case 8:
-#line 90 "scarl_tokens.y"
+#line 91 "scarl_tokens.y"
 {
 	/*create the statement list node and add the statement to it*/
 	yyval = NON_TERMINAL_STATEMENT_LIST_BLOCK_LEVEL_func(1, yyvsp[0]);
 }
 break;
 case 9:
-#line 95 "scarl_tokens.y"
+#line 96 "scarl_tokens.y"
 {
 	/*add the statement to the existing statement list*/
 	yyval = NON_TERMINAL_STATEMENT_LIST_BLOCK_LEVEL_func(2, yyvsp[0], yyvsp[-1]);
 }
 break;
 case 10:
-#line 100 "scarl_tokens.y"
+#line 101 "scarl_tokens.y"
 { 
 	yyval = yyvsp[0]; /*pass through*/
 }
 break;
 case 11:
-#line 104 "scarl_tokens.y"
+#line 105 "scarl_tokens.y"
 {
 	yyval = yyvsp[0]; /*pass through*/
 }
 break;
 case 12:
-#line 108 "scarl_tokens.y"
+#line 109 "scarl_tokens.y"
 {
 	yyval = yyvsp[0]; /*pass through*/
 }
 break;
 case 13:
-#line 112 "scarl_tokens.y"
+#line 113 "scarl_tokens.y"
 {
 	yyval = yyvsp[0]; /*pass through*/
 }
 break;
 case 14:
-#line 116 "scarl_tokens.y"
+#line 117 "scarl_tokens.y"
 {
 	yyval = yyvsp[0]; /*pass through*/
 }
 break;
 case 15:
-#line 120 "scarl_tokens.y"
+#line 121 "scarl_tokens.y"
 {
 	yyval = yyvsp[0]; /*pass through*/
 }
 break;
 case 16:
-#line 124 "scarl_tokens.y"
+#line 125 "scarl_tokens.y"
+{
+	yyval = yyvsp[0]; /*pass through*/
+}
+break;
+case 17:
+#line 129 "scarl_tokens.y"
 {
 	struct ast_node *device_declarator_node = NON_TERMINAL_DEVICE_DECLARATOR_STATEMENT_func(2, yyvsp[-2], TERMINAL_IDENTIFIER_func(0));
 	int device_type = 0;
@@ -627,14 +639,14 @@ case 16:
 	yyval = device_declarator_node;
 }
 break;
-case 17:
-#line 157 "scarl_tokens.y"
+case 18:
+#line 162 "scarl_tokens.y"
 {
 	yyval = NON_TERMINAL_PRIMITIVE_DECLARATOR_func(2, yyvsp[-1], TERMINAL_IDENTIFIER_func(0));
 }
 break;
-case 18:
-#line 161 "scarl_tokens.y"
+case 19:
+#line 166 "scarl_tokens.y"
 {
 	struct ast_node *prim_def_node = NON_TERMINAL_PRIMITIVE_DEFINITION_STATEMENT_func(2, yyvsp[-3], yyvsp[-1]);
 		
@@ -667,8 +679,8 @@ case 18:
 	yyval = prim_def_node;
 }
 break;
-case 19:
-#line 193 "scarl_tokens.y"
+case 20:
+#line 198 "scarl_tokens.y"
 {
 	struct ast_node *function_def_node = NON_TERMINAL_FUNCTION_DEFINITION_STATEMENT_func(3, yyvsp[-4], yyvsp[-2], yyvsp[0]);
 
@@ -735,101 +747,105 @@ case 19:
 	}
 
 	
-
-
 	yyval = function_def_node;
 }
 break;
-case 20:
-#line 264 "scarl_tokens.y"
+case 21:
+#line 267 "scarl_tokens.y"
 {
 	yyval = NON_TERMINAL_VARIABLE_SET_STATEMENT_func(2, TERMINAL_IDENTIFIER_func(0), yyvsp[-1]);
 }
 break;
-case 21:
-#line 268 "scarl_tokens.y"
+case 22:
+#line 271 "scarl_tokens.y"
+{
+	yyval = NON_TERMINAL_RETURN_STATEMENT_func(1, yyvsp[-1]);
+}
+break;
+case 23:
+#line 275 "scarl_tokens.y"
 {
 	yyval = NON_TERMINAL_FUNCTION_INVOCATION_func(2, TERMINAL_IDENTIFIER_func(0), yyvsp[-1]);
 }
 break;
-case 22:
-#line 272 "scarl_tokens.y"
+case 24:
+#line 279 "scarl_tokens.y"
 {
 	yyval = NON_TERMINAL_FUNCTION_INVOCATION_STATEMENT_func(1, yyvsp[-1]);
 }
 break;
-case 23:
-#line 276 "scarl_tokens.y"
+case 25:
+#line 283 "scarl_tokens.y"
 {
 	yyval = NON_TERMINAL_IF_BLOCK_STATEMENT_func(2, yyvsp[-2], yyvsp[0]);
 }
 break;
-case 24:
-#line 280 "scarl_tokens.y"
+case 26:
+#line 287 "scarl_tokens.y"
 { 
 	yyval = NON_TERMINAL_IF_BLOCK_STATEMENT_func(3, yyvsp[-4], yyvsp[-2], yyvsp[0]);
 }
 break;
-case 25:
-#line 284 "scarl_tokens.y"
+case 27:
+#line 291 "scarl_tokens.y"
 { 
 	/*expression and block statement*/
 	yyval = NON_TERMINAL_WHILE_BLOCK_STATEMENT_func(2, yyvsp[-2], yyvsp[0]);
 }
 break;
-case 26:
-#line 289 "scarl_tokens.y"
+case 28:
+#line 296 "scarl_tokens.y"
 {
 	/*empty formal parameter list*/
 	yyval = NON_TERMINAL_FORMAL_PARAMETER_LIST_func(0);
 }
 break;
-case 27:
-#line 294 "scarl_tokens.y"
+case 29:
+#line 301 "scarl_tokens.y"
 { 
 	yyval = NON_TERMINAL_FORMAL_PARAMETER_LIST_func(1, yyvsp[0]);
 }
 break;
-case 28:
-#line 298 "scarl_tokens.y"
+case 30:
+#line 305 "scarl_tokens.y"
 { 
 	yyval = NON_TERMINAL_FORMAL_PARAMETER_LIST_func(2, yyvsp[0], yyvsp[-2]);
 
 }
 break;
-case 29:
-#line 303 "scarl_tokens.y"
+case 31:
+#line 310 "scarl_tokens.y"
 { 
 	/*empty parameter list*/
 	yyval = NON_TERMINAL_PARAMETER_LIST_func(0);
 }
 break;
-case 30:
-#line 308 "scarl_tokens.y"
+case 32:
+#line 315 "scarl_tokens.y"
 { 
 	yyval = NON_TERMINAL_PARAMETER_LIST_func(1, yyvsp[0]);
 }
 break;
-case 31:
-#line 312 "scarl_tokens.y"
+case 33:
+#line 319 "scarl_tokens.y"
 { 
 	yyval = NON_TERMINAL_PARAMETER_LIST_func(2, yyvsp[0], yyvsp[-2]); /*add to existing parameter list*/
 }
 break;
-case 32:
-#line 316 "scarl_tokens.y"
-{ 
-	yyval = yyvsp[0];
-}
-break;
-case 33:
-#line 320 "scarl_tokens.y"
-{ 
-	yyval = yyvsp[0];
-}
-break;
 case 34:
-#line 324 "scarl_tokens.y"
+#line 323 "scarl_tokens.y"
+{ 
+	yyval = yyvsp[0];
+}
+break;
+case 35:
+#line 327 "scarl_tokens.y"
+{ 
+	yyval = yyvsp[0];
+}
+break;
+case 36:
+#line 331 "scarl_tokens.y"
 {
 	/*     logical_expression && logical_and_expression*/
 	/*     logical_expression should be on the LEFT*/
@@ -838,14 +854,14 @@ case 34:
 	yyval = NON_TERMINAL_LOGICAL_EXPRESSION_func(3, yyvsp[-2], TERMINAL_OR_func(0), yyvsp[0]);
 }
 break;
-case 35:
-#line 332 "scarl_tokens.y"
+case 37:
+#line 339 "scarl_tokens.y"
 { 
 	yyval = yyvsp[0]; /*pass through*/
 }
 break;
-case 36:
-#line 336 "scarl_tokens.y"
+case 38:
+#line 343 "scarl_tokens.y"
 { 
 	/*     logical_and_expression && equality_expression*/
 	/*     logical_and_expression should be on the LEFT*/
@@ -855,14 +871,14 @@ case 36:
 
 }
 break;
-case 37:
-#line 345 "scarl_tokens.y"
+case 39:
+#line 352 "scarl_tokens.y"
 { 
 	yyval = yyvsp[0]; /*pass through*/
 }
 break;
-case 38:
-#line 349 "scarl_tokens.y"
+case 40:
+#line 356 "scarl_tokens.y"
 { 
 	/*     equality_expression == relational_expression*/
 	/*     equality_expression should be on the LEFT*/
@@ -871,8 +887,8 @@ case 38:
 	yyval = NON_TERMINAL_EQUALITY_EXPRESSION_func(3, yyvsp[-2], TERMINAL_DBL_EQ_func(0), yyvsp[0]);
 }
 break;
-case 39:
-#line 357 "scarl_tokens.y"
+case 41:
+#line 364 "scarl_tokens.y"
 { 
 	/*     equality_expression != relational_expression*/
 	/*     equality_expression should be on the LEFT*/
@@ -881,14 +897,14 @@ case 39:
 	yyval = NON_TERMINAL_EQUALITY_EXPRESSION_func(3, yyvsp[-2], TERMINAL_NOT_EQ_func(0), yyvsp[0]);
 }
 break;
-case 40:
-#line 365 "scarl_tokens.y"
+case 42:
+#line 372 "scarl_tokens.y"
 { 
 	yyval = yyvsp[0]; /*pass through*/
 }
 break;
-case 41:
-#line 369 "scarl_tokens.y"
+case 43:
+#line 376 "scarl_tokens.y"
 { 
 	/*     relational_expression > bool_expression*/
 	/*     relational_expression should be on the LEFT*/
@@ -897,8 +913,8 @@ case 41:
 	yyval = NON_TERMINAL_RELATIONAL_EXPRESSION_func(3, yyvsp[-2], TERMINAL_GTR_func(0), yyvsp[0]);
 }
 break;
-case 42:
-#line 377 "scarl_tokens.y"
+case 44:
+#line 384 "scarl_tokens.y"
 { 
 	/*     relational_expression < bool_expression*/
 	/*     relational_expression should be on the LEFT*/
@@ -907,8 +923,8 @@ case 42:
 	yyval = NON_TERMINAL_RELATIONAL_EXPRESSION_func(3, yyvsp[-2], TERMINAL_LESS_func(0), yyvsp[0]);
 }
 break;
-case 43:
-#line 385 "scarl_tokens.y"
+case 45:
+#line 392 "scarl_tokens.y"
 { 
 	/*     relational_expression >= bool_expression*/
 	/*     relational_expression should be on the LEFT*/
@@ -917,8 +933,8 @@ case 43:
 	yyval = NON_TERMINAL_RELATIONAL_EXPRESSION_func(3, yyvsp[-2], TERMINAL_GTR_EQ_func(0), yyvsp[0]);
 }
 break;
-case 44:
-#line 393 "scarl_tokens.y"
+case 46:
+#line 400 "scarl_tokens.y"
 { 
 	/*     relational_expression <= bool_expression*/
 	/*     relational_expression should be on the LEFT*/
@@ -927,26 +943,26 @@ case 44:
 	yyval = NON_TERMINAL_RELATIONAL_EXPRESSION_func(3, yyvsp[-2], TERMINAL_LESS_EQ_func(0), yyvsp[0]);
 }
 break;
-case 45:
-#line 401 "scarl_tokens.y"
-{ 
-	yyval = yyvsp[0]; /*pass through*/
-}
-break;
-case 46:
-#line 405 "scarl_tokens.y"
-{ 
-	yyval = NON_TERMINAL_BOOL_EXPRESSION_func(2, TERMINAL_BANG_func(0), yyvsp[0]);
-}
-break;
 case 47:
-#line 409 "scarl_tokens.y"
+#line 408 "scarl_tokens.y"
 { 
 	yyval = yyvsp[0]; /*pass through*/
 }
 break;
 case 48:
-#line 413 "scarl_tokens.y"
+#line 412 "scarl_tokens.y"
+{ 
+	yyval = NON_TERMINAL_BOOL_EXPRESSION_func(2, TERMINAL_BANG_func(0), yyvsp[0]);
+}
+break;
+case 49:
+#line 416 "scarl_tokens.y"
+{ 
+	yyval = yyvsp[0]; /*pass through*/
+}
+break;
+case 50:
+#line 420 "scarl_tokens.y"
 { 
 	/*     arithmetic_expression - arithmetic_factor*/
 	/*     arithmetic_expression should be on the LEFT*/
@@ -955,8 +971,8 @@ case 48:
 	yyval = NON_TERMINAL_ARITHMETIC_EXPRESSION_func(3, yyvsp[-2], TERMINAL_PLUS_func(0), yyvsp[0]);
 }
 break;
-case 49:
-#line 421 "scarl_tokens.y"
+case 51:
+#line 428 "scarl_tokens.y"
 { 
 	/*     arithmetic_expression - arithmetic_factor*/
 	/*     arithmetic_expression should be on the LEFT*/
@@ -965,14 +981,14 @@ case 49:
 	yyval = NON_TERMINAL_ARITHMETIC_EXPRESSION_func(3, yyvsp[-2], TERMINAL_MINUS_func(0), yyvsp[0]);
 }
 break;
-case 50:
-#line 429 "scarl_tokens.y"
+case 52:
+#line 436 "scarl_tokens.y"
 { 
 	yyval = yyvsp[0]; /*pass through*/
 }
 break;
-case 51:
-#line 433 "scarl_tokens.y"
+case 53:
+#line 440 "scarl_tokens.y"
 { 
 	/*     arithmetic_factor * arithmetic_unary*/
 	/*     arithmetic_factor should be on the LEFT*/
@@ -981,8 +997,8 @@ case 51:
 	yyval = NON_TERMINAL_ARITHMETIC_FACTOR_func(3, yyvsp[-2], TERMINAL_STAR_func(0), yyvsp[0]);
 }
 break;
-case 52:
-#line 441 "scarl_tokens.y"
+case 54:
+#line 448 "scarl_tokens.y"
 { 
 	/*     arithmetic_factor / arithmetic_unary*/
 	/*     arithmetic_factor should be on the LEFT*/
@@ -991,50 +1007,50 @@ case 52:
 	yyval = NON_TERMINAL_ARITHMETIC_FACTOR_func(3, yyvsp[-2], TERMINAL_SLASH_func(0), yyvsp[0]);
 }
 break;
-case 53:
-#line 449 "scarl_tokens.y"
+case 55:
+#line 456 "scarl_tokens.y"
 { 
 	yyval = yyvsp[0]; /*straight pass*/
 }
 break;
-case 54:
-#line 453 "scarl_tokens.y"
+case 56:
+#line 460 "scarl_tokens.y"
 { 
 	yyval = NON_TERMINAL_ARITHMETIC_UNARY_func(2, TERMINAL_MINUS_func(0), yyvsp[0]);
 }
 break;
-case 55:
-#line 457 "scarl_tokens.y"
+case 57:
+#line 464 "scarl_tokens.y"
 { 
 	yyval = yyvsp[-1]; /*pass the arithmetic expression as an arithmetic unary*/
 }
 break;
-case 56:
-#line 461 "scarl_tokens.y"
+case 58:
+#line 468 "scarl_tokens.y"
 { 
 	yyval = TERMINAL_IDENTIFIER_func(0); /*receives identifier from ident_stack*/
 }
 break;
-case 57:
-#line 465 "scarl_tokens.y"
-{ 
-	yyval = yyvsp[0]; /*straight pass*/
-}
-break;
-case 58:
-#line 469 "scarl_tokens.y"
-{ 
-	yyval = yyvsp[0]; /*straight pass*/
-}
-break;
 case 59:
-#line 473 "scarl_tokens.y"
+#line 472 "scarl_tokens.y"
 { 
 	yyval = yyvsp[0]; /*straight pass*/
 }
 break;
 case 60:
-#line 477 "scarl_tokens.y"
+#line 476 "scarl_tokens.y"
+{ 
+	yyval = yyvsp[0]; /*straight pass*/
+}
+break;
+case 61:
+#line 480 "scarl_tokens.y"
+{ 
+	yyval = yyvsp[0]; /*straight pass*/
+}
+break;
+case 62:
+#line 484 "scarl_tokens.y"
 { 
 	NON_TERMINAL_INTEGER_VALUE_func(0); /*for debug printing*/
 
@@ -1042,8 +1058,8 @@ case 60:
 	yyval = TERMINAL_DECIMAL_func(1, str);
 }
 break;
-case 61:
-#line 484 "scarl_tokens.y"
+case 63:
+#line 491 "scarl_tokens.y"
 { 
 	NON_TERMINAL_INTEGER_VALUE_func(0); /*for debug printing*/
 
@@ -1051,8 +1067,8 @@ case 61:
 	yyval = TERMINAL_OCTAL_func(1, str);
 }
 break;
-case 62:
-#line 491 "scarl_tokens.y"
+case 64:
+#line 498 "scarl_tokens.y"
 { 
 	NON_TERMINAL_INTEGER_VALUE_func(0); /*for debug printing*/
 
@@ -1060,8 +1076,8 @@ case 62:
 	yyval = TERMINAL_HEX_func(1, str);
 }
 break;
-case 63:
-#line 498 "scarl_tokens.y"
+case 65:
+#line 505 "scarl_tokens.y"
 { 
 	NON_TERMINAL_INTEGER_VALUE_func(0); /*for debug printing*/
 
@@ -1069,85 +1085,85 @@ case 63:
 	yyval = TERMINAL_BINARY_func(1, str);
 }
 break;
-case 64:
-#line 505 "scarl_tokens.y"
+case 66:
+#line 512 "scarl_tokens.y"
 { 
 	yyval = NON_TERMINAL_BOOL_VALUE_func(1, 1); /* 1 being true*/
 }
 break;
-case 65:
-#line 509 "scarl_tokens.y"
+case 67:
+#line 516 "scarl_tokens.y"
 { 
 	yyval = NON_TERMINAL_BOOL_VALUE_func(1, 0); /* 0 being false*/
 }
 break;
-case 66:
-#line 513 "scarl_tokens.y"
+case 68:
+#line 520 "scarl_tokens.y"
 {
 	yyval = NON_TERMINAL_PRIMITIVE_TYPE_func(1, BOOL);
 }
 break;
-case 67:
-#line 517 "scarl_tokens.y"
+case 69:
+#line 524 "scarl_tokens.y"
 { 
 	yyval = NON_TERMINAL_PRIMITIVE_TYPE_func(1, INT);
 }
 break;
-case 68:
-#line 521 "scarl_tokens.y"
+case 70:
+#line 528 "scarl_tokens.y"
 { 
 	yyval = NON_TERMINAL_PRIMITIVE_TYPE_func(1, CHAR);
 }
 break;
-case 69:
-#line 525 "scarl_tokens.y"
+case 71:
+#line 532 "scarl_tokens.y"
 { 
 	yyval = NON_TERMINAL_PRIMITIVE_TYPE_func(1, POINTER);
 }
 break;
-case 70:
-#line 529 "scarl_tokens.y"
+case 72:
+#line 536 "scarl_tokens.y"
 { 
 	yyval = NON_TERMINAL_PRIMITIVE_TYPE_func(1, VOID);
 }
 break;
-case 71:
-#line 533 "scarl_tokens.y"
+case 73:
+#line 540 "scarl_tokens.y"
 { 
 	yyval = NON_TERMINAL_DEVICE_TYPE_func(1, LIGHT_ACTUATOR);
 }
 break;
-case 72:
-#line 537 "scarl_tokens.y"
+case 74:
+#line 544 "scarl_tokens.y"
 { 
 	yyval = NON_TERMINAL_DEVICE_TYPE_func(1, SERVO_ACTUATOR);
 }
 break;
-case 73:
-#line 541 "scarl_tokens.y"
+case 75:
+#line 548 "scarl_tokens.y"
 { 
 	yyval = NON_TERMINAL_DEVICE_TYPE_func(1, SOUND_SENSOR);
 }
 break;
-case 74:
-#line 545 "scarl_tokens.y"
+case 76:
+#line 552 "scarl_tokens.y"
 { 
 	yyval = NON_TERMINAL_DEVICE_TYPE_func(1, LIGHT_SENSOR);
 }
 break;
-case 75:
-#line 549 "scarl_tokens.y"
+case 77:
+#line 556 "scarl_tokens.y"
 {
 	yyval = NON_TERMINAL_DEVICE_TYPE_func(1, DISTANCE_SENSOR);
 }
 break;
-case 76:
-#line 553 "scarl_tokens.y"
+case 78:
+#line 560 "scarl_tokens.y"
 { 
 	yyval = NON_TERMINAL_DEVICE_TYPE_func(1, TEMPERATURE_SENSOR);
 }
 break;
-#line 1151 "y.tab.c"
+#line 1167 "y.tab.c"
     }
     yyssp -= yym;
     yystate = *yyssp;

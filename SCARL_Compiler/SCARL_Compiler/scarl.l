@@ -128,6 +128,10 @@ hex_digit [0-9a-fA-F]
 	{
 		return VOID; 
 	}
+	else if (strcmp(yytext, "return") == 0) 
+	{
+		return RETURN;
+	}
 	else
 	{ 
 		//identifiers get their own stack 
@@ -457,18 +461,20 @@ int main(int argc, char *argv[]) {
 
 	//print what we have
 	
-	/*
-	printf("Node stack is\n\n");
-	print_node_stack(node_stack);
-	printf("Identifier stack is \n\n");
-	print_node_stack(ident_stack);
+	int print_verbose_output = 1;
 
-	printf("\nAbstract Syntax Tree:\n");
-	print_ast(syntax_tree);
+	if(print_verbose_output) {
+		printf("Node stack is\n\n");
+		print_node_stack(node_stack);
+		printf("Identifier stack is \n\n");
+		print_node_stack(ident_stack);
 
-	printf("\nSymbol Table:\n");
-	print_symbol_table(symbol_table);
-	*/
+		printf("\nAbstract Syntax Tree:\n");
+		print_ast(syntax_tree);
+
+		printf("\nSymbol Table:\n");
+		print_symbol_table(symbol_table);
+	}
 
 	//now we can create the output file
 	extern FILE *codeFile;

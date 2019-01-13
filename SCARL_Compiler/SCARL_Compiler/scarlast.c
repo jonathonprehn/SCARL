@@ -37,7 +37,8 @@ const char *non_terminals_mnemonic[] = {
 	"NON_TERMINAL_INTEGER_VALUE",
 	"NON_TERMINAL_BOOL_VALUE",
 	"NON_TERMINAL_PRIMITIVE_TYPE",
-	"NON_TERMINAL_DEVICE_TYPE"
+	"NON_TERMINAL_DEVICE_TYPE",
+	"NON_TERMINAL_RETURN_STATEMENT"
 };
 
 const char *scarl_terminals_mnemonic[] = {
@@ -81,7 +82,8 @@ const char *scarl_terminals_mnemonic[] = {
 	"DISTANCE_SENSOR",
 	"TEMPERATURE_SENSOR",
 	"TRUE",
-	"FALSE"
+	"FALSE",
+	"RETURN"
 };
 const char *get_non_terminal_mnemonic(int non_terminal_type) {
 	return non_terminals_mnemonic[non_terminal_type-NON_TERMINAL_OFFSET_VAL-1];
@@ -155,8 +157,8 @@ void add_child_front(struct ast_node * nod, struct ast_node * child)
 	}
 }
 
-#define SCARL_NON_TERMINAL_VISITOR_FUNC_TABLE_SIZE 0x20
-#define SCARL_TERMINAL_VISITOR_FUNC_TABLE_SIZE 43
+#define SCARL_NON_TERMINAL_VISITOR_FUNC_TABLE_SIZE 0x21
+#define SCARL_TERMINAL_VISITOR_FUNC_TABLE_SIZE 44
 #define SCARL_TERMINAL_FUNC_TABLE_OFFSET_VAL 257 
 #include "visitors.h"
 
@@ -195,6 +197,7 @@ void init_visitor_func_table() {
 	non_terminal_visitor_func_table[NON_TERMINAL_BOOL_VALUE-NON_TERMINAL_OFFSET_VAL] = NON_TERMINAL_BOOL_VALUE_func;
 	non_terminal_visitor_func_table[NON_TERMINAL_PRIMITIVE_TYPE-NON_TERMINAL_OFFSET_VAL] = NON_TERMINAL_PRIMITIVE_TYPE_func;
 	non_terminal_visitor_func_table[NON_TERMINAL_DEVICE_TYPE-NON_TERMINAL_OFFSET_VAL] = NON_TERMINAL_DEVICE_TYPE_func;
+	non_terminal_visitor_func_table[NON_TERMINAL_RETURN_STATEMENT - NON_TERMINAL_OFFSET_VAL] = NON_TERMINAL_RETURN_STATEMENT_func;
 
 	terminal_visitor_func_table[IDENTIFIER - SCARL_TERMINAL_FUNC_TABLE_OFFSET_VAL] = TERMINAL_IDENTIFIER_func;
 	terminal_visitor_func_table[PLUS - SCARL_TERMINAL_FUNC_TABLE_OFFSET_VAL] = TERMINAL_PLUS_func;
@@ -237,7 +240,7 @@ void init_visitor_func_table() {
 	terminal_visitor_func_table[TEMPERATURE_SENSOR - SCARL_TERMINAL_FUNC_TABLE_OFFSET_VAL] = TERMINAL_TEMPERATURE_SENSOR_func;
 	terminal_visitor_func_table[TRUE - SCARL_TERMINAL_FUNC_TABLE_OFFSET_VAL] = TERMINAL_TRUE_func;
 	terminal_visitor_func_table[FALSE - SCARL_TERMINAL_FUNC_TABLE_OFFSET_VAL] = TERMINAL_FALSE_func;
-
+	terminal_visitor_func_table[RETURN - SCARL_TERMINAL_FUNC_TABLE_OFFSET_VAL] = TERMINAL_RETURN_func;
 }
 
 void print_ast_r(int level, struct ast_node *subtree);

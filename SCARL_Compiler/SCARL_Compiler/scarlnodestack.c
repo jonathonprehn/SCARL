@@ -19,7 +19,7 @@ inline int ast_node_stack_is_empty(struct ast_node_stack *stk) {
 }
 
 const char *get_node_str(struct ast_node *nod) {
-	if (nod->type_flag >= NON_TERMINAL_PROGRAM && nod->type_flag <= NON_TERMINAL_DEVICE_TYPE) {
+	if (nod->type_flag >= NON_TERMINAL_PROGRAM && nod->type_flag <= NON_TERMINAL_RETURN_STATEMENT) {
 		return get_non_terminal_mnemonic(nod->type_flag);
 	}
 	else {
@@ -28,7 +28,7 @@ const char *get_node_str(struct ast_node *nod) {
 }
 
 const char *get_node_type_str(int type_flag) {
-	if (type_flag >= NON_TERMINAL_PROGRAM && type_flag <= NON_TERMINAL_DEVICE_TYPE) {
+	if (type_flag >= NON_TERMINAL_PROGRAM && type_flag <= NON_TERMINAL_RETURN_STATEMENT) {
 		return get_non_terminal_mnemonic(type_flag);
 	}
 	else {

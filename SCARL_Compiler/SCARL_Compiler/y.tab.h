@@ -39,3 +39,4 @@
 #define TEMPERATURE_SENSOR 295
 #define TRUE 296
 #define FALSE 297
+#define RETURN 298

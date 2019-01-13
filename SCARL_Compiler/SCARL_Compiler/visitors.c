@@ -231,6 +231,22 @@ struct ast_node * NON_TERMINAL_VARIABLE_SET_STATEMENT_func(int argc, ...) {
 	return variable_set_statement_node;
 }
 
+struct ast_node * NON_TERMINAL_RETURN_STATEMENT_func(int argc, ...) {
+	if (print_productions) printf("Match production NON_TERMINAL_RETURN_STATEMENT\n");
+
+	va_list arguments;
+	va_start(arguments, argc);
+
+	// We expect an expression node only but mark it as a return statement 
+	struct ast_node *expression_node = va_arg(arguments, struct ast_node*);
+
+	struct ast_node *return_statement_node = create_node(NULL, NON_TERMINAL_RETURN_STATEMENT);
+	add_child(return_statement_node, expression_node);
+	va_end(arguments);
+
+	return return_statement_node;
+}
+
 struct ast_node * NON_TERMINAL_FUNCTION_INVOCATION_func(int argc, ...) {
 	if (print_productions) printf("Match production  NON_TERMINAL_FUNCTION_INVOCATION\n");
 
@@ -895,4 +911,9 @@ struct ast_node * TERMINAL_TRUE_func(int argc, ...) {
 struct ast_node * TERMINAL_FALSE_func(int argc, ...) {
 	if (print_productions) printf("Recognized token  TERMINAL_FALSE\n");
 	return create_node(NULL, FALSE);
+}
+
+struct ast_node * TERMINAL_RETURN_func(int argc, ...) {
+	if (print_productions) printf("Recognized token  TERMINAL_RETURN\n");
+	return create_node(NULL, RETURN);
 }
