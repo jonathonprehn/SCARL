@@ -87,6 +87,8 @@ void pass_to_expression_generator_handler(FILE *output, struct scarl_symbol_tabl
 	}
 	else {
 		fprintf(output, "!! Invalid primitive type (how did that happen?): %i !!\n", primitiveType);
+	//	print_ast(expr);
+	//	printf("\n\n");
 	}
 }
 
@@ -727,71 +729,75 @@ void generate_arcl_function_invocation(
 		free_register(cur_param->register1);
 	}
 	else {
-		
-			//setup parameters and frame
+
+		//setup parameters and frame
+		if (function_entry->functionSt->frameSize > 0) {
 			fprintf(output, "FRAMEU %i\n", function_entry->functionSt->frameSize);
+		}
+		// not necessary to move frame pointer if frame size is 0
 
-			struct ast_node *parameter_list_node = ast->leftmostChild->nextSibling;
-			//now evaluate the expressions for each one and then stack the
-			//parameters in order
-			struct ast_node *cur_param = parameter_list_node->leftmostChild;
+		struct ast_node *parameter_list_node = ast->leftmostChild->nextSibling;
+		//now evaluate the expressions for each one and then stack the
+		//parameters in order
+		struct ast_node *cur_param = parameter_list_node->leftmostChild;
 
-			if (cur_param != NULL) {
-				int param_index = 0;
-				//this is the only time this global needs to be changed
-				additionalFrameOffset = 8 + function_entry->functionSt->frameSize;
-				while (cur_param != NULL) {
-					//we need to propogate a frame offset here because the variables
-					//in use in the parent stack frame are now farther away by
-					//8 + functionTableSize
-					pass_to_expression_generator_handler(
-						output, 
-						function_entry->functionSt,
-						cur_param,
-						function_entry->parameterList[param_index]
-					);
-					//store it on the function stack before calling
-					int parameterOffsetVal = 0; //how to get this if it
-					//it treated as a local variable in the symbol table
-					//what is the original identifier for this parameter?
-					//we got the identifiers of the parameters
-					char *formal_parameter_identifier = function_entry->parameterIdentifiers[param_index];
-					//lookup the formal parameter in the function scope and
-					//then use that offset
-					struct scarl_symbol_table_entry *formal_parameter_entry = lookup(function_entry->functionSt, formal_parameter_identifier, NULL, 0);
-					if (formal_parameter_entry == NULL) {
-						printf("ERROR in code generation - the formal parameter %s is not in the function scope\n", formal_parameter_identifier);
-					}
-					parameterOffsetVal = formal_parameter_entry->frameOffset;
-
-					fprintf(output, "STORF %s %i\n", register_str(cur_param->register1), parameterOffsetVal);
-					free_register(cur_param->register1);
-					param_index++;
-					cur_param = cur_param->nextSibling;
+		if (cur_param != NULL) {
+			int param_index = 0;
+			//this is the only time this global needs to be changed
+			additionalFrameOffset = 8 + function_entry->functionSt->frameSize;
+			while (cur_param != NULL) {
+				//we need to propogate a frame offset here because the variables
+				//in use in the parent stack frame are now farther away by
+				//8 + functionTableSize
+				pass_to_expression_generator_handler(
+					output, 
+					function_entry->functionSt,
+					cur_param,
+					function_entry->parameterList[param_index]
+				);
+				//store it on the function stack before calling
+				int parameterOffsetVal = 0; //how to get this if it
+				//it treated as a local variable in the symbol table
+				//what is the original identifier for this parameter?
+				//we got the identifiers of the parameters
+				char *formal_parameter_identifier = function_entry->parameterIdentifiers[param_index];
+				//lookup the formal parameter in the function scope and
+				//then use that offset
+				struct scarl_symbol_table_entry *formal_parameter_entry = lookup(function_entry->functionSt, formal_parameter_identifier, NULL, 0);
+				if (formal_parameter_entry == NULL) {
+					printf("ERROR in code generation - the formal parameter %s is not in the function scope\n", formal_parameter_identifier);
 				}
-				//make things back to normal after the parameters are stacked
-				additionalFrameOffset = 0;
-			}
+				parameterOffsetVal = formal_parameter_entry->frameOffset;
 
-			//transfer control. the parameters should be in the desired location now
-			//we need to find out how to create the procedure label from just
-			//the parameters and the function call
-			if (function_entry->is_placeholder) {
-				char *proc_label_fly = generate_procedure_name_on_the_fly(function_entry->ident, function_entry->parameterList, function_entry->parameters);
-				fprintf(output, "CALL %s\n", proc_label_fly);
-				free(proc_label_fly);
+				fprintf(output, "STORF %s %i\n", register_str(cur_param->register1), parameterOffsetVal);
+				free_register(cur_param->register1);
+				param_index++;
+				cur_param = cur_param->nextSibling;
 			}
-			else {
-				char *proc_label_to_call = get_procedure_label_entry(function_entry);
-				if (proc_label_to_call == NULL) {
-					fprintf(stderr, "No such defined function \'%s\'\n", function_entry->ident);
-				}
-				fprintf(output, "CALL %s\n", proc_label_to_call);
-			}
+			//make things back to normal after the parameters are stacked
+			additionalFrameOffset = 0;
+		}
 
-			//unstack function frame
+		//transfer control. the parameters should be in the desired location now
+		//we need to find out how to create the procedure label from just
+		//the parameters and the function call
+		if (function_entry->is_placeholder) {
+			char *proc_label_fly = generate_procedure_name_on_the_fly(function_entry->ident, function_entry->parameterList, function_entry->parameters);
+			fprintf(output, "CALL %s\n", proc_label_fly);
+			free(proc_label_fly);
+		}
+		else {
+			char *proc_label_to_call = get_procedure_label_entry(function_entry);
+			if (proc_label_to_call == NULL) {
+				fprintf(stderr, "No such defined function \'%s\'\n", function_entry->ident);
+			}
+			fprintf(output, "CALL %s\n", proc_label_to_call);
+		}
+
+		//unstack function frame
+		if (function_entry->functionSt->frameSize > 0) {
 			fprintf(output, "FRAMEO %i\n", function_entry->functionSt->frameSize);
-	
+		}
 	}
 
 	//restore
@@ -933,6 +939,7 @@ void generate_statements_in_block(FILE * output, struct scarl_symbol_table * sym
 				free(label1_str);
 				free(label2_str);
 			}
+			break;
 			case NON_TERMINAL_RETURN_STATEMENT:
 			{
 				//Copy the value in the expression register

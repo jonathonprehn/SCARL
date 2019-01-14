@@ -132,6 +132,11 @@ hex_digit [0-9a-fA-F]
 	{
 		return RETURN;
 	}
+	else if (strcmp(yytext, "platform") == 0) {
+		fprintf(stderr, "Cannot use \"platform\" as an identifier. Use something else\n");
+		exit(0);
+		return 0;
+	}
 	else
 	{ 
 		//identifiers get their own stack 
@@ -461,7 +466,7 @@ int main(int argc, char *argv[]) {
 
 	//print what we have
 	
-	int print_verbose_output = 1;
+	int print_verbose_output = 0;
 
 	if(print_verbose_output) {
 		printf("Node stack is\n\n");

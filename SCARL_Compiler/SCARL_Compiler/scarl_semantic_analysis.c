@@ -44,8 +44,9 @@ int types_are_correct(struct scarl_symbol_table *st, struct ast_node *ast) {
 				int ident_type = the_node->leftmostChild->leftmostChild->int_value;
 				struct ast_node *expr_node = the_node->leftmostChild->nextSibling;
 				int expr_infer_type = get_expression_type(st, expr_node);
+				//printf("type of expression on primitive definition: %s\n", get_terminal_mnemonic(expr_infer_type));
 				if (ident_type != expr_infer_type) {
-					fprintf(stderr, "Incorrect type near \'%s\' on line %i\n", lastTokenText, lineNumber);
+					fprintf(stderr, "Incorrect type near \'%s\' on line %i (primitive definition)\n", lastTokenText, lineNumber);
 					return 0; //the types do not match up
 				}
 			}
@@ -76,7 +77,7 @@ int types_are_correct(struct scarl_symbol_table *st, struct ast_node *ast) {
 				}
 				struct scarl_symbol_table_entry *function_entry = lookup(st, ident, derivedParamList, paramCount);
 				if (function_entry == NULL) {
-					fprintf(stderr, "Incorrect type near \'%s\' on line %i\n", lastTokenText, lineNumber);
+					fprintf(stderr, "Incorrect type near \'%s\' on line %i (function invocation)\n", lastTokenText, lineNumber);
 					return 0; //invalid
 				}
 				
@@ -88,8 +89,13 @@ int types_are_correct(struct scarl_symbol_table *st, struct ast_node *ast) {
 				struct ast_node *expr_node = the_node->leftmostChild->nextSibling;
 				struct scarl_symbol_table_entry *the_variable_entry = lookup(st, ident, NULL, 0);
 				int expr_infer_type = get_expression_type(st, expr_node);
+				// TO DO : to not allow identifiers for functions to be used as variables
+				if (the_variable_entry == NULL) {
+					printf("The variable %s is not defined in the scope its used in\n", ident);
+					exit(0);
+				}
 				if (the_variable_entry->type_flag != expr_infer_type) {
-					fprintf(stderr, "Incorrect type near \'%s\' on line %i\n", lastTokenText, lineNumber);
+					fprintf(stderr, "Incorrect type near \'%s\' on line %i (variable set statement)\n", lastTokenText, lineNumber);
 					return 0; //the types do not match up
 				}
 			}
@@ -100,7 +106,7 @@ int types_are_correct(struct scarl_symbol_table *st, struct ast_node *ast) {
 				int expr_infer_type = get_expression_type(st, expr_node);
 				if (expr_infer_type != BOOL) {
 					//it needs to be a bool type
-					fprintf(stderr, "Incorrect type near \'%s\' on line %i\n", lastTokenText, lineNumber);
+					fprintf(stderr, "Incorrect type near \'%s\' on line %i (while statement)\n", lastTokenText, lineNumber);
 					return 0;
 				}
 			}
@@ -111,7 +117,7 @@ int types_are_correct(struct scarl_symbol_table *st, struct ast_node *ast) {
 				int expr_infer_type = get_expression_type(st, expr_node);
 				if (expr_infer_type != BOOL) {
 					//it needs to be a bool type
-					fprintf(stderr, "Incorrect type near \'%s\' on line %i\n", lastTokenText, lineNumber);
+					fprintf(stderr, "Incorrect type near \'%s\' on line %i(if statement)\n", lastTokenText, lineNumber);
 					return 0;
 				}
 			}

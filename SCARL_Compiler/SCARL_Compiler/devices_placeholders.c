@@ -183,7 +183,7 @@ void add_device_functions_to_symbol_table(
 			add_function_block_with_local_vars_setup(
 				table_to_add_to,
 				sound_ident,
-				VOID, //return type
+				INT, //return type
 				0
 			)
 		);
@@ -197,7 +197,7 @@ void add_device_functions_to_symbol_table(
 			add_function_block_with_local_vars_setup(
 				table_to_add_to,
 				light_ident,
-				VOID, //return type
+				INT, //return type
 				0
 			)
 		);
@@ -211,7 +211,7 @@ void add_device_functions_to_symbol_table(
 			add_function_block_with_local_vars_setup(
 				table_to_add_to,
 				distance_ident,
-				VOID, //return type
+				INT, //return type
 				0
 			)
 		);
@@ -225,7 +225,7 @@ void add_device_functions_to_symbol_table(
 			add_function_block_with_local_vars_setup(
 				table_to_add_to,
 				temperature_ident,
-				VOID, //return type
+				INT, //return type
 				0
 			)
 		);

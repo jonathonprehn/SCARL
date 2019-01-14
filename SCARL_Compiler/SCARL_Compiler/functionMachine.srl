@@ -1,0 +1,46 @@
+//    This program causes two LED lights
+//    to swap when an object is close enough
+
+
+LightActuator closeLight;
+LightActuator farLight;
+bool state = false;
+DistanceSensor distanceSensor; //SCARL is case-sensitive
+
+void swapLights() {
+	state = !state;
+	if (state) {
+		closeLight.on(100);
+		farLight.off();
+	} 
+	else {
+		closeLight.off();
+		farLight.on(100);
+	}
+}
+
+void swapLights(int fsdjfsfsdf) { 
+	int breakme = 3;
+}
+
+
+void main() {
+	//ensure at least one light is on
+	swapLights();
+	
+	int distance = 0; //must give declared primitives an initial value		
+	int closeDistance = 10;
+	
+	while(true) {
+		distance = distanceSensor.senseDistance();
+		if (distance <= closeDistance) {
+			swapLights();
+			while(distance <= closeDistance) {
+				distance = distanceSensor.senseDistance(); //wait
+				wait(20);
+			}
+			swapLights();
+		}
+		wait(20);
+	}
+}

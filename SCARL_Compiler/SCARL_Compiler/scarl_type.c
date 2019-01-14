@@ -38,6 +38,7 @@ int get_expression_type(struct scarl_symbol_table *symbol_table, struct ast_node
 	else if (expr->type_flag == NON_TERMINAL_FUNCTION_INVOCATION) {
 		//TO DO : lookup the function and see its type
 		struct scarl_symbol_table_entry *entry = lookup_based_on_invocation_node(symbol_table, expr);
+		//printf("Function %s has return type %s\n", entry->ident, get_terminal_mnemonic(entry->type_flag));
 		return entry->type_flag;
 	}
 	else {
@@ -79,7 +80,7 @@ int get_expression_type(struct scarl_symbol_table *symbol_table, struct ast_node
 			int lhs_type = get_expression_type(symbol_table, expr->leftmostChild);
 			int rhs_type = get_expression_type(symbol_table, expr->leftmostChild->nextSibling);
 			if (lhs_type == rhs_type) {
-				return lhs_type;
+				return BOOL; // these kinds are always boolean
 			}
 			else {
 				//someone messed up
@@ -93,6 +94,16 @@ int get_expression_type(struct scarl_symbol_table *symbol_table, struct ast_node
 			int lhs_type = get_expression_type(symbol_table, expr->leftmostChild);
 			int rhs_type = get_expression_type(symbol_table, expr->leftmostChild->nextSibling);
 			if (lhs_type == BOOL && rhs_type == BOOL) {
+				return BOOL;
+			}
+			else {
+				//someone messed up
+				return -1;
+			}
+		}
+		else if (expr->type_flag == BANG) {
+			int not_ing_type = get_expression_type(symbol_table, expr->leftmostChild);
+			if (not_ing_type == BOOL) {
 				return BOOL;
 			}
 			else {
