@@ -1,0 +1,66 @@
+V "GNAT Lib v5"
+M P W=b
+P SS ZX
+
+RN
+RV NO_IO
+RV NO_DEFAULT_INITIALIZATION
+RV SPARK_05
+
+U interactive_rvm%b	interactive_rvm.adb	6d13981c NE OO SU
+W ada%s			ada.ads			ada.ali
+W ada.text_io%s		a-textio.adb		a-textio.ali
+W robotic_virtual_machine%s  robotic_virtual_machine.adb  robotic_virtual_machine.ali
+
+D ada.ads		20180506173602 3ffc8e18 ada%s
+D a-except.ads		20180506173604 5250cb69 ada.exceptions%s
+D a-finali.ads		20180506173602 69f99942 ada.finalization%s
+D a-ioexce.ads		20180506173602 e4a01f64 ada.io_exceptions%s
+D a-stream.ads		20180506173604 119b8fb3 ada.streams%s
+D a-tags.ads		20180506173604 dc4d0634 ada.tags%s
+D a-textio.ads		20180506173602 386df5d4 ada.text_io%s
+D a-unccon.ads		20180506173602 f9eb8f06 ada.unchecked_conversion%s
+D interactive_rvm.adb	20190130010200 e542827a interactive_rvm%b
+D interfac.ads		20180506173604 6033a23f interfaces%s
+D i-cstrea.ads		20180506173602 e53d8b8e interfaces.c_streams%s
+D robotic_virtual_machine.ads  20190129193316 b03cefb2 robotic_virtual_machine%s
+D system.ads		20180506173602 f4ce8c3a system%s
+D s-crtl.ads		20180506173602 0ebbdb71 system.crtl%s
+D s-exctab.ads		20180506173602 54135002 system.exception_table%s
+D s-ficobl.ads		20180506173602 078245e4 system.file_control_block%s
+D s-finmas.ads		20180506173602 814daec4 system.finalization_masters%s
+D s-finroo.ads		20180506173602 4ff27390 system.finalization_root%s
+D s-parame.ads		20180506173602 7e2a0d7f system.parameters%s
+D s-pooglo.ads		20180506173604 542f33d0 system.pool_global%s
+D s-secsta.ads		20180506173604 86a2856d system.secondary_stack%s
+D s-soflin.ads		20180506173602 aa763b52 system.soft_links%s
+D s-stache.ads		20180506173604 a37c21ec system.stack_checking%s
+D s-stalib.ads		20180506173602 fa0a3617 system.standard_library%s
+D s-stoele.ads		20180506173604 2dc34a04 system.storage_elements%s
+D s-stopoo.ads		20180506173602 b16154c2 system.storage_pools%s
+D s-stratt.ads		20180506173604 aedef97e system.stream_attributes%s
+D s-traent.ads		20180506173602 005bf670 system.traceback_entries%s
+D s-unstyp.ads		20180506173602 9d58a4c0 system.unsigned_types%s
+D s-wchcon.ads		20180506173602 1b7d22d2 system.wch_con%s
+X 1 ada.ads
+16K9*Ada 19e8 9|3r6 3r23
+X 7 a-textio.ads
+49K13*Text_IO 471e16 9|3w10 3r27
+166U14*New_Line 9|17s9
+242U14*Put 9|18s9 30s25 33s25 37s25
+249U14*Get_Line 9|22s17
+263U14*Put_Line 9|13s9 26s25 28s25 29s25
+X 9 interactive_rvm.adb
+5U11*Interactive_RVM 5b11 40l5 40t20
+6r9 Instruction{12|52R14} 35m48 35r48 36m44 36r44
+7a9 Line{string} 22m26 24r20 27r23 31r23 35r61
+8i9 Last{natural} 22m32 24r30 27r33 31r33 35r71
+9b9 Running{boolean} 11m9 21r15 25m25
+20l9 Main_Loop 39l18 39e27
+X 12 robotic_virtual_machine.ads
+2K9*Robotic_Virtual_Machine 9|2w6 2r35 12|153e28
+52R14*ARCL_Instruction 9|6r23 12|97e27
+81U19*Invoke_Instruction 9|36s25
+85U19*Print_RVM_State 9|32s25
+86U19*Parse_ARCL_Instruction 9|35s25
+

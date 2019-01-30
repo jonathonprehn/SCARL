@@ -1,0 +1,325 @@
+V "GNAT Lib v5"
+A -mtune=generic
+A -march=i586
+P SS ZX
+
+RN
+RV NO_ACCESS_SUBPROGRAMS
+RV NO_ALLOCATORS
+RV NO_IO
+RV NO_IMPLICIT_LOOPS
+RV NO_LOCAL_ALLOCATORS
+RV NO_STANDARD_STORAGE_POOLS
+RV NO_DEFAULT_INITIALIZATION
+RV NO_ELABORATION_CODE
+RV SPARK_05
+
+U robotic_virtual_machine.instruction_parsing%b  robotic_virtual_machine-instruction_parsing.adb  03174b22 OO PK
+W ada%s			ada.ads			ada.ali
+W ada.strings%s		a-string.ads		a-string.ali
+W ada.strings.fixed%s	a-strfix.adb		a-strfix.ali
+W ada.tags%s		a-tags.adb		a-tags.ali
+W ada.text_io%s		a-textio.adb		a-textio.ali
+W robotic_virtual_machine%s  robotic_virtual_machine.adb  robotic_virtual_machine.ali
+W system%s		system.ads		system.ali
+W system.storage_elements%s  s-stoele.adb	s-stoele.ali
+W system.storage_pools%s  s-stopoo.adb		s-stopoo.ali
+W system.storage_pools.subpools%s  s-stposu.adb	s-stposu.ali
+W system.val_int%s	s-valint.adb		s-valint.ali
+
+U robotic_virtual_machine.instruction_parsing%s  robotic_virtual_machine-instruction_parsing.ads  3e2159b0 EB EE OO PK
+W robotic_virtual_machine%s  robotic_virtual_machine.adb  robotic_virtual_machine.ali
+
+D ada.ads		20180506173602 3ffc8e18 ada%s
+D a-charac.ads		20180506173604 2d3ec45b ada.characters%s
+D a-chlat1.ads		20180506173602 66457d31 ada.characters.latin_1%s
+D a-except.ads		20180506173604 5250cb69 ada.exceptions%s
+D a-finali.ads		20180506173602 69f99942 ada.finalization%s
+D a-ioexce.ads		20180506173602 e4a01f64 ada.io_exceptions%s
+D a-stream.ads		20180506173604 119b8fb3 ada.streams%s
+D a-string.ads		20180506173602 90ac6797 ada.strings%s
+D a-strfix.ads		20180506173604 d07c346e ada.strings.fixed%s
+D a-strmap.ads		20180506173604 e8bb714a ada.strings.maps%s
+D a-tags.ads		20180506173604 dc4d0634 ada.tags%s
+D a-textio.ads		20180506173602 386df5d4 ada.text_io%s
+D a-unccon.ads		20180506173602 f9eb8f06 ada.unchecked_conversion%s
+D interfac.ads		20180506173604 6033a23f interfaces%s
+D i-cstrea.ads		20180506173602 e53d8b8e interfaces.c_streams%s
+D robotic_virtual_machine.ads  20190129193316 b03cefb2 robotic_virtual_machine%s
+D robotic_virtual_machine-instruction_parsing.ads  20190129195224 3e2159b0 robotic_virtual_machine.instruction_parsing%s
+D robotic_virtual_machine-instruction_parsing.adb  20190130015134 458bb4bf robotic_virtual_machine.instruction_parsing%b
+D system.ads		20180506173602 f4ce8c3a system%s
+D s-crtl.ads		20180506173602 0ebbdb71 system.crtl%s
+D s-exctab.ads		20180506173602 54135002 system.exception_table%s
+D s-ficobl.ads		20180506173602 078245e4 system.file_control_block%s
+D s-finmas.ads		20180506173602 814daec4 system.finalization_masters%s
+D s-finroo.ads		20180506173602 4ff27390 system.finalization_root%s
+D s-parame.ads		20180506173602 7e2a0d7f system.parameters%s
+D s-pooglo.ads		20180506173604 542f33d0 system.pool_global%s
+D s-secsta.ads		20180506173604 86a2856d system.secondary_stack%s
+D s-soflin.ads		20180506173602 aa763b52 system.soft_links%s
+D s-stache.ads		20180506173604 a37c21ec system.stack_checking%s
+D s-stalib.ads		20180506173602 fa0a3617 system.standard_library%s
+D s-stoele.ads		20180506173604 2dc34a04 system.storage_elements%s
+D s-stopoo.ads		20180506173602 b16154c2 system.storage_pools%s
+D s-stposu.ads		20180506173604 97a6219c system.storage_pools.subpools%s
+D s-stratt.ads		20180506173604 aedef97e system.stream_attributes%s
+D s-traent.ads		20180506173602 005bf670 system.traceback_entries%s
+D s-unstyp.ads		20180506173602 9d58a4c0 system.unsigned_types%s
+D s-valint.ads		20180506173602 48a52a3f system.val_int%s
+D s-wchcon.ads		20180506173602 1b7d22d2 system.wch_con%s
+X 1 ada.ads
+16K9*Ada 19e8 18|2r6 2r23 3r6 3r29 4r6
+X 8 a-string.ads
+16K13*Strings 35e16 18|2w10 2r27 3r10 3r33
+X 9 a-strfix.ads
+18K21*Fixed 251e22 18|3w18 3r41
+36V13*Index{natural} 18|13s30 25s30 37s30 49s30 68s30 80s30 93s30 105s30
+. 117s30 129s30 201s30 290s30 302s30
+X 12 a-textio.ads
+49K13*Text_IO 471e16 18|4w10
+X 16 robotic_virtual_machine.ads
+2K9*Robotic_Virtual_Machine 153e28 17|2w6 2r35 4r9 7r31 49r5 18|6r14 346r5
+4E14*ARCL_Instruction_Code 40e18 17|10r55
+6n25*ARCL_ADD{4E14} 18|311r17
+7n25*ARCL_SUB{4E14} 18|312r17
+8n25*ARCL_MULT{4E14} 18|313r17
+9n25*ARCL_DIV{4E14} 18|314r17
+10n25*ARCL_FLIP{4E14} 18|315r17
+11n25*ARCL_MOV{4E14} 18|316r17
+12n25*ARCL_LOADL{4E14} 18|317r17
+13n25*ARCL_LOADF{4E14} 18|318r17
+14n25*ARCL_LOADR{4E14} 18|319r17
+15n25*ARCL_STORF{4E14} 18|320r17
+16n25*ARCL_STORR{4E14} 18|321r17
+17n25*ARCL_FRAMEU{4E14} 18|322r17
+18n25*ARCL_FRAMEO{4E14} 18|323r17
+19n25*ARCL_RSAVE{4E14} 18|324r17
+20n25*ARCL_RLOAD{4E14} 18|325r17
+21n25*ARCL_LABEL{4E14} 18|326r17
+22n25*ARCL_PROC{4E14} 18|327r17
+23n25*ARCL_RET{4E14} 18|328r17
+24n25*ARCL_CALL{4E14} 18|329r17
+25n25*ARCL_JMP{4E14} 18|330r17
+26n25*ARCL_CMP{4E14} 18|331r17
+27n25*ARCL_JPE{4E14} 18|332r17
+28n25*ARCL_JPNE{4E14} 18|333r17
+29n25*ARCL_JPGR{4E14} 18|334r17
+30n25*ARCL_JPLS{4E14} 18|335r17
+31n25*ARCL_JPGE{4E14} 18|336r17
+32n25*ARCL_JPLE{4E14} 18|337r17
+33n25*ARCL_JAND{4E14} 18|338r17
+34n25*ARCL_JOR{4E14} 18|339r17
+35n25*ARCL_DELAY{4E14} 18|340r17
+36n25*ARCL_OUTPUT{4E14} 18|341r17
+37n25*ARCL_INPUT{4E14} 18|342r17
+38n25*ARCL_WRITE{4E14} 18|343r17
+39n25*ARCL_READ{4E14} 18|344r17
+41E14*ARCL_Register 41e68 18|9r30 10r30 21r30 22r30 33r30 34r30 45r30 46r30
+. 57r30 64r30 65r30 76r30 89r30 101r30 113r30 125r30 197r30 198r30 265r30
+. 272r30 279r30 286r30 287r30 298r30 299r30
+42I17*ARCL_Register_Value{integer} 18|77r29
+44I14*ARCL_Memory_Offset<integer> 18|90r28 95r29 102r28 107r29 114r28 119r29
+. 126r28 131r29 137r28 139r29 144r28 146r29
+45P14*ARCL_Label_Value(string) 18|163r27 170r27 183r27 190r27 209r27 216r27
+. 223r27 230r27 237r27 244r27 251r27 258r27
+52R14*ARCL_Instruction 97e27 17|9r86 14r64 15r64 16r65 17r64 18r65 19r64
+. 20r66 21r66 22r66 23r66 24r66 25r67 26r67 27r66 28r66 29r66 30r65 31r64
+. 32r65 33r64 34r64 35r64 36r65 37r65 38r65 39r65 40r65 41r65 42r64 43r66
+. 44r67 45r66 46r66 47r65 18|8r64 20r64 32r65 44r64 56r65 63r64 75r66 88r66
+. 100r66 112r66 124r66 136r67 143r67 150r66 156r66 162r66 169r65 176r64 182r65
+. 189r64 196r64 208r64 215r65 222r65 229r65 236r65 243r65 250r65 257r64 264r66
+. 271r67 278r66 285r66 297r65
+56P14*ARCL_Instruction_Operand_Ptr(53R14)
+60R14*ARCL_Operand_Literal<53R14> 63e27 18|85r46
+62i25*Literal{42I17} 18|85m68
+65R14*ARCL_Operand_Register<53R14> 68e27 18|16r46 17r46 28r46 29r46 40r46
+. 41r46 52r46 53r46 60r46 71r46 72r46 84r46 96r46 108r46 120r46 132r46 204r46
+. 205r46 268r46 275r46 282r46 293r46 294r46 305r46 306r46
+67e25*Register{41E14} 18|16m69 17m69 28m69 29m69 40m69 41m69 52m69 53m69
+. 60m69 71m69 72m69 84m69 96m69 108m69 120m69 132m69 204m69 205m69 268m69
+. 275m69 282m69 293m69 294m69 305m69 306m69
+70R14*ARCL_Operand_Memory_Offset<53R14> 73e27 18|97r46 109r46 121r46 133r46
+. 140r46 147r46
+72i25*Memory_Offset{44I14} 18|97m74 109m74 121m74 133m74 140m74 147m74
+75R14*ARCL_Operand_Label_Value<53R14> 78e27 18|166r46 173r46 186r46 193r46
+. 212r46 219r46 226r46 233r46 240r46 247r46 254r46 261r46
+77p25*Label_Value{45P14} 18|166m72 173m72 186m72 193m72 212m72 219m72 226m72
+. 233m72 240m72 247m72 254m72 261m72
+88V18*Parse_Register{41E14} 18|14s31 15s31 26s31 27s31 38s31 39s31 50s31
+. 51s31 59s31 69s31 70s31 81s31 94s31 106s31 118s31 130s31 202s31 203s31
+. 267s31 274s31 281s31 291s31 292s31 303s31 304s31
+95p25*Operand_1{56P14} 18|16m29 28m29 40m29 52m29 60m29 71m29 84m29 96m29
+. 108m29 120m29 132m29 140m29 147m29 166m29 173m29 186m29 193m29 204m29 212m29
+. 219m29 226m29 233m29 240m29 247m29 254m29 261m29 268m29 275m29 282m29 293m29
+. 305m29
+96p25*Operand_2{56P14} 18|17m29 29m29 41m29 53m29 72m29 85m29 97m29 109m29
+. 121m29 133m29 205m29 294m29 306m29
+X 17 robotic_virtual_machine-instruction_parsing.ads
+4K33*Instruction_Parsing 16|2k9 17|7r55 49l29 49e48 18|6b38 346l29 346t48
+9P14*ARCL_Instruction_Parsing_Proc 9=65 9>104 10r81
+9r65 Instruction{16|52R14}
+9a104 Operand_String{string}
+10A14*ARCL_Instruction_Parsing_Table(9P14)<16|4E14> 12r31
+12a9*Operand_Parse_Table{10A14} 18|310m9
+14U19*Parse_Operands_ARCL_ADD 14=43 14>82 18|8b19 18l13 18t36 311r29
+14r43 Instruction{16|52R14} 18|8b43 16m17 17m17
+14a82 Operand_String{string} 18|8b82 13r36 14r46 14r61 15r46 15r78
+15U19*Parse_Operands_ARCL_SUB 15=43 15>82 18|20b19 30l13 30t36 312r29
+15r43 Instruction{16|52R14} 18|20b43 28m17 29m17
+15a82 Operand_String{string} 18|20b82 25r36 26r46 26r61 27r46 27r78
+16U19*Parse_Operands_ARCL_MULT 16=44 16>83 18|32b19 42l13 42t37 313r30
+16r44 Instruction{16|52R14} 18|32b44 40m17 41m17
+16a83 Operand_String{string} 18|32b83 37r36 38r46 38r61 39r46 39r78
+17U19*Parse_Operands_ARCL_DIV 17=43 17>82 18|44b19 54l13 54t36 314r29
+17r43 Instruction{16|52R14} 18|44b43 52m17 53m17
+17a82 Operand_String{string} 18|44b82 49r36 50r46 50r61 51r46 51r78
+18U19*Parse_Operands_ARCL_FLIP 18=44 18>83 18|56b19 61l13 61t37 315r30
+18r44 Instruction{16|52R14} 18|56b44 60m17
+18a83 Operand_String{string} 18|56b83 59r46
+19U19*Parse_Operands_ARCL_MOV 19=43 19>82 18|63b19 73l13 73t36 316r29
+19r43 Instruction{16|52R14} 18|63b43 71m17 72m17
+19a82 Operand_String{string} 18|63b82 68r36 69r46 69r61 70r46 70r78
+20U19*Parse_Operands_ARCL_LOADL 20=45 20>84 18|75b19 86l13 86t38 317r31
+20r45 Instruction{16|52R14} 18|75b45 84m17 85m17
+20a84 Operand_String{string} 18|75b84 80r36 81r46 81r61 82r44 82r76
+21U19*Parse_Operands_ARCL_LOADF 21=45 21>84 18|88b19 98l13 98t38 318r31
+21r45 Instruction{16|52R14} 18|88b45 96m17 97m17
+21a84 Operand_String{string} 18|88b84 93r36 94r46 94r61 95r62 95r94
+22U19*Parse_Operands_ARCL_LOADR 22=45 22>84 18|100b19 110l13 110t38 319r31
+22r45 Instruction{16|52R14} 18|100b45 108m17 109m17
+22a84 Operand_String{string} 18|100b84 105r36 106r46 106r61 107r62 107r94
+23U19*Parse_Operands_ARCL_STORF 23=45 23>84 18|112b19 122l13 122t38 320r31
+23r45 Instruction{16|52R14} 18|112b45 120m17 121m17
+23a84 Operand_String{string} 18|112b84 117r36 118r46 118r61 119r62 119r94
+24U19*Parse_Operands_ARCL_STORR 24=45 24>84 18|124b19 134l13 134t38 321r31
+24r45 Instruction{16|52R14} 18|124b45 132m17 133m17
+24a84 Operand_String{string} 18|124b84 129r36 130r46 130r61 131r62 131r94
+25U19*Parse_Operands_ARCL_FRAMEU 25=46 25>85 18|136b19 141l13 141t39 322r32
+25r46 Instruction{16|52R14} 18|136b46 140m17
+25a85 Operand_String{string} 18|136b85 139r62
+26U19*Parse_Operands_ARCL_FRAMEO 26=46 26>85 18|143b19 148l13 148t39 323r32
+26r46 Instruction{16|52R14} 18|143b46 147m17
+26a85 Operand_String{string} 18|143b85 146r62
+27U19*Parse_Operands_ARCL_RSAVE 27=45 27>84 18|150b19 154l13 154t38 324r31
+27r45 Instruction{16|52R14} 18|150b45
+27a84 Operand_String{string} 18|150b84
+28U19*Parse_Operands_ARCL_RLOAD 28=45 28>84 18|156b19 160l13 160t38 325r31
+28r45 Instruction{16|52R14} 18|156b45
+28a84 Operand_String{string} 18|156b84
+29U19*Parse_Operands_ARCL_LABEL 29=45 29>84 18|162b19 167l13 167t38 326r31
+29r45 Instruction{16|52R14} 18|162b45 166m17
+29a84 Operand_String{string} 18|162b84 165r40
+30U19*Parse_Operands_ARCL_PROC 30=44 30>83 18|169b19 174l13 174t37 327r30
+30r44 Instruction{16|52R14} 18|169b44 173m17
+30a83 Operand_String{string} 18|169b83 172r40
+31U19*Parse_Operands_ARCL_RET 31=43 31>82 18|176b19 180l13 180t36 328r29
+31r43 Instruction{16|52R14} 18|176b43
+31a82 Operand_String{string} 18|176b82
+32U19*Parse_Operands_ARCL_CALL 32=44 32>83 18|182b19 187l13 187t37 329r30
+32r44 Instruction{16|52R14} 18|182b44 186m17
+32a83 Operand_String{string} 18|182b83 185r40
+33U19*Parse_Operands_ARCL_JMP 33=43 33>82 18|189b19 194l13 194t36 330r29
+33r43 Instruction{16|52R14} 18|189b43 193m17
+33a82 Operand_String{string} 18|189b82 192r40
+34U19*Parse_Operands_ARCL_CMP 34=43 34>82 18|196b19 206l13 206t36 331r29
+34r43 Instruction{16|52R14} 18|196b43 204m17 205m17
+34a82 Operand_String{string} 18|196b82 201r36 202r46 202r61 203r46 203r78
+35U19*Parse_Operands_ARCL_JPE 35=43 35>82 18|208b19 213l13 213t36 332r29
+35r43 Instruction{16|52R14} 18|208b43 212m17
+35a82 Operand_String{string} 18|208b82 211r40
+36U19*Parse_Operands_ARCL_JPNE 36=44 36>83 18|215b19 220l13 220t37 333r30
+36r44 Instruction{16|52R14} 18|215b44 219m17
+36a83 Operand_String{string} 18|215b83 218r40
+37U19*Parse_Operands_ARCL_JPGR 37=44 37>83 18|222b19 227l13 227t37 334r30
+37r44 Instruction{16|52R14} 18|222b44 226m17
+37a83 Operand_String{string} 18|222b83 225r40
+38U19*Parse_Operands_ARCL_JPLS 38=44 38>83 18|229b19 234l13 234t37 335r30
+38r44 Instruction{16|52R14} 18|229b44 233m17
+38a83 Operand_String{string} 18|229b83 232r40
+39U19*Parse_Operands_ARCL_JPGE 39=44 39>83 18|236b19 241l13 241t37 336r30
+39r44 Instruction{16|52R14} 18|236b44 240m17
+39a83 Operand_String{string} 18|236b83 239r40
+40U19*Parse_Operands_ARCL_JPLE 40=44 40>83 18|243b19 248l13 248t37 337r30
+40r44 Instruction{16|52R14} 18|243b44 247m17
+40a83 Operand_String{string} 18|243b83 246r40
+41U19*Parse_Operands_ARCL_JAND 41=44 41>83 18|250b19 255l13 255t37 338r30
+41r44 Instruction{16|52R14} 18|250b44 254m17
+41a83 Operand_String{string} 18|250b83 253r40
+42U19*Parse_Operands_ARCL_JOR 42=43 42>82 18|257b19 262l13 262t36 339r29
+42r43 Instruction{16|52R14} 18|257b43 261m17
+42a82 Operand_String{string} 18|257b82 260r40
+43U19*Parse_Operands_ARCL_DELAY 43=45 43>84 18|264b19 269l13 269t38 340r31
+43r45 Instruction{16|52R14} 18|264b45 268m17
+43a84 Operand_String{string} 18|264b84 267r46
+44U19*Parse_Operands_ARCL_OUTPUT 44=46 44>85 18|271b19 276l13 276t39 341r32
+44r46 Instruction{16|52R14} 18|271b46 275m17
+44a85 Operand_String{string} 18|271b85 274r46
+45U19*Parse_Operands_ARCL_INPUT 45=45 45>84 18|278b19 283l13 283t38 342r31
+45r45 Instruction{16|52R14} 18|278b45 282m17
+45a84 Operand_String{string} 18|278b84 281r46
+46U19*Parse_Operands_ARCL_WRITE 46=45 46>84 18|285b19 295l13 295t38 343r31
+46r45 Instruction{16|52R14} 18|285b45 293m17 294m17
+46a84 Operand_String{string} 18|285b84 290r36 291r46 291r61 292r46 292r78
+47U19*Parse_Operands_ARCL_READ 47=44 47>83 18|297b19 307l13 307t37 344r30
+47r44 Instruction{16|52R14} 18|297b44 305m17 306m17
+47a83 Operand_String{string} 18|297b83 302r36 303r46 303r61 304r46 304r78
+X 18 robotic_virtual_machine-instruction_parsing.adb
+9e17 Register_1{16|41E14} 14m17 16r81
+10e17 Register_2{16|41E14} 15m17 17r81
+11i17 Space_Loc{integer} 13m17 14r85 15r61
+21e17 Register_1{16|41E14} 26m17 28r81
+22e17 Register_2{16|41E14} 27m17 29r81
+23i17 Space_Loc{integer} 25m17 26r85 27r61
+33e17 Register_1{16|41E14} 38m17 40r81
+34e17 Register_2{16|41E14} 39m17 41r81
+35i17 Space_Loc{integer} 37m17 38r85 39r61
+45e17 Register_1{16|41E14} 50m17 52r81
+46e17 Register_2{16|41E14} 51m17 53r81
+47i17 Space_Loc{integer} 49m17 50r85 51r61
+57e17 Register_1{16|41E14} 59m17 60r81
+64e17 Register_1{16|41E14} 69m17 71r81
+65e17 Register_2{16|41E14} 70m17 72r81
+66i17 Space_Loc{integer} 68m17 69r85 70r61
+76e17 Register_1{16|41E14} 81m17 84r81
+77i17 Literal_2{16|42I17} 82m17 85r79
+78i17 Space_Loc{integer} 80m17 81r85 82r59
+89e17 Register_1{16|41E14} 94m17 96r81
+90i17 Offset_2{16|44I14} 95m17 97r91
+91i17 Space_Loc{integer} 93m17 94r85 95r77
+101e17 Register_1{16|41E14} 106m17 108r81
+102i17 Offset_2{16|44I14} 107m17 109r91
+103i17 Space_Loc{integer} 105m17 106r85 107r77
+113e17 Register_1{16|41E14} 118m17 120r81
+114i17 Offset_2{16|44I14} 119m17 121r91
+115i17 Space_Loc{integer} 117m17 118r85 119r77
+125e17 Register_1{16|41E14} 130m17 132r81
+126i17 Offset_2{16|44I14} 131m17 133r91
+127i17 Space_Loc{integer} 129m17 130r85 131r77
+137i17 Offset_1{16|44I14} 139m17 140r91
+144i17 Offset_1{16|44I14} 146m17 147r91
+163p17 Label_1{16|45P14} 165m17 166r87
+170p17 Label_1{16|45P14} 172m17 173r87
+183p17 Label_1{16|45P14} 185m17 186r87
+190p17 Label_1{16|45P14} 192m17 193r87
+197e17 Register_1{16|41E14} 202m17 204r81
+198e17 Register_2{16|41E14} 203m17 205r81
+199i17 Space_Loc{integer} 201m17 202r85 203r61
+209p17 Label_1{16|45P14} 211m17 212r87
+216p17 Label_1{16|45P14} 218m17 219r87
+223p17 Label_1{16|45P14} 225m17 226r87
+230p17 Label_1{16|45P14} 232m17 233r87
+237p17 Label_1{16|45P14} 239m17 240r87
+244p17 Label_1{16|45P14} 246m17 247r87
+251p17 Label_1{16|45P14} 253m17 254r87
+258p17 Label_1{16|45P14} 260m17 261r87
+265e17 Register_1{16|41E14} 267m17 268r81
+272e17 Register_1{16|41E14} 274m17 275r81
+279e17 Register_1{16|41E14} 281m17 282r81
+286e17 Register_1{16|41E14} 291m17 293r81
+287e17 Register_2{16|41E14} 292m17 294r81
+288i17 Space_Loc{integer} 290m17 291r85 292r61
+298e17 Register_1{16|41E14} 303m17 305r81
+299e17 Register_2{16|41E14} 304m17 306r81
+300i17 Space_Loc{integer} 302m17 303r85 304r61
+

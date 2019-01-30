@@ -1,0 +1,70 @@
+V "GNAT Lib v5"
+M P W=b
+P SS ZX
+
+RN
+RV NO_IO
+RV NO_SECONDARY_STACK
+RV NO_STANDARD_STORAGE_POOLS
+RV SPARK_05
+
+U arclvm%b		arclvm.adb		62e732c9 NE OO SU IU
+W ada%s			ada.ads			ada.ali
+W ada.command_line%s	a-comlin.adb		a-comlin.ali
+W ada.tags%s		a-tags.adb		a-tags.ali
+W ada.text_io%s		a-textio.adb		a-textio.ali
+W robotic_virtual_machine%s  robotic_virtual_machine.adb  robotic_virtual_machine.ali
+W robotic_virtual_machine.program%s  robotic_virtual_machine-program.adb  robotic_virtual_machine-program.ali
+W system.secondary_stack%s  s-secsta.adb	s-secsta.ali
+
+D ada.ads		20180506173602 3ffc8e18 ada%s
+D a-comlin.ads		20180506173602 ea62afbc ada.command_line%s
+D a-except.ads		20180506173604 5250cb69 ada.exceptions%s
+D a-finali.ads		20180506173602 69f99942 ada.finalization%s
+D a-ioexce.ads		20180506173602 e4a01f64 ada.io_exceptions%s
+D a-stream.ads		20180506173604 119b8fb3 ada.streams%s
+D a-tags.ads		20180506173604 dc4d0634 ada.tags%s
+D a-textio.ads		20180506173602 386df5d4 ada.text_io%s
+D a-unccon.ads		20180506173602 f9eb8f06 ada.unchecked_conversion%s
+D arclvm.adb		20190130182228 7f0f7daa arclvm%b
+D interfac.ads		20180506173604 6033a23f interfaces%s
+D i-cstrea.ads		20180506173602 e53d8b8e interfaces.c_streams%s
+D robotic_virtual_machine.ads  20190129193316 b03cefb2 robotic_virtual_machine%s
+D robotic_virtual_machine-program.ads  20190130174658 7fdbfab9 robotic_virtual_machine.program%s
+D system.ads		20180506173602 f4ce8c3a system%s
+D s-crtl.ads		20180506173602 0ebbdb71 system.crtl%s
+D s-exctab.ads		20180506173602 54135002 system.exception_table%s
+D s-ficobl.ads		20180506173602 078245e4 system.file_control_block%s
+D s-finmas.ads		20180506173602 814daec4 system.finalization_masters%s
+D s-finroo.ads		20180506173602 4ff27390 system.finalization_root%s
+D s-parame.ads		20180506173602 7e2a0d7f system.parameters%s
+D s-pooglo.ads		20180506173604 542f33d0 system.pool_global%s
+D s-secsta.ads		20180506173604 86a2856d system.secondary_stack%s
+D s-soflin.ads		20180506173602 aa763b52 system.soft_links%s
+D s-stache.ads		20180506173604 a37c21ec system.stack_checking%s
+D s-stalib.ads		20180506173602 fa0a3617 system.standard_library%s
+D s-stoele.ads		20180506173604 2dc34a04 system.storage_elements%s
+D s-stopoo.ads		20180506173602 b16154c2 system.storage_pools%s
+D s-stratt.ads		20180506173604 aedef97e system.stream_attributes%s
+D s-traent.ads		20180506173602 005bf670 system.traceback_entries%s
+D s-unstyp.ads		20180506173602 9d58a4c0 system.unsigned_types%s
+D s-wchcon.ads		20180506173602 1b7d22d2 system.wch_con%s
+X 1 ada.ads
+16K9*Ada 19e8 10|5r6 5r28 6r6 6r23
+X 2 a-comlin.ads
+38K13*Command_Line 139e21 10|5w10 5r32
+41V13*Argument_Count{natural} 10|13s12
+48V13*Argument{string} 10|15s57 17s46
+X 8 a-textio.ads
+49K13*Text_IO 471e16 10|6w10 6r27
+263U14*Put_Line 10|22s17
+X 10 arclvm.adb
+11U11*ARCLVM 11b11 24l5 24t11
+15a25 Program_File_Name{string} 17m25 18r38
+X 13 robotic_virtual_machine.ads
+2K9*Robotic_Virtual_Machine 10|2w6 2r35 3r6 3r43 13|153e28
+X 14 robotic_virtual_machine-program.ads
+4K33*Program 10|3w30 3r67 14|22e36
+10U19*Load_Program 10|18s25
+13U19*Execute_Program 10|19s25
+
