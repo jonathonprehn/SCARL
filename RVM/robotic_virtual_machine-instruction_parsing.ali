@@ -1,6 +1,4 @@
 V "GNAT Lib v5"
-A -mtune=generic
-A -march=i586
 P SS ZX
 
 RN
@@ -45,7 +43,7 @@ D a-textio.ads		20180506173602 386df5d4 ada.text_io%s
 D a-unccon.ads		20180506173602 f9eb8f06 ada.unchecked_conversion%s
 D interfac.ads		20180506173604 6033a23f interfaces%s
 D i-cstrea.ads		20180506173602 e53d8b8e interfaces.c_streams%s
-D robotic_virtual_machine.ads  20190129193316 b03cefb2 robotic_virtual_machine%s
+D robotic_virtual_machine.ads  20190130192410 1f2eb58b robotic_virtual_machine%s
 D robotic_virtual_machine-instruction_parsing.ads  20190129195224 3e2159b0 robotic_virtual_machine.instruction_parsing%s
 D robotic_virtual_machine-instruction_parsing.adb  20190130015134 458bb4bf robotic_virtual_machine.instruction_parsing%b
 D system.ads		20180506173602 f4ce8c3a system%s
@@ -79,7 +77,7 @@ X 9 a-strfix.ads
 X 12 a-textio.ads
 49K13*Text_IO 471e16 18|4w10
 X 16 robotic_virtual_machine.ads
-2K9*Robotic_Virtual_Machine 153e28 17|2w6 2r35 4r9 7r31 49r5 18|6r14 346r5
+2K9*Robotic_Virtual_Machine 154e28 17|2w6 2r35 4r9 7r31 49r5 18|6r14 346r5
 4E14*ARCL_Instruction_Code 40e18 17|10r55
 6n25*ARCL_ADD{4E14} 18|311r17
 7n25*ARCL_SUB{4E14} 18|312r17
@@ -123,7 +121,7 @@ X 16 robotic_virtual_machine.ads
 . 126r28 131r29 137r28 139r29 144r28 146r29
 45P14*ARCL_Label_Value(string) 18|163r27 170r27 183r27 190r27 209r27 216r27
 . 223r27 230r27 237r27 244r27 251r27 258r27
-52R14*ARCL_Instruction 97e27 17|9r86 14r64 15r64 16r65 17r64 18r65 19r64
+52R14*ARCL_Instruction 98e27 17|9r86 14r64 15r64 16r65 17r64 18r65 19r64
 . 20r66 21r66 22r66 23r66 24r66 25r67 26r67 27r66 28r66 29r66 30r65 31r64
 . 32r65 33r64 34r64 35r64 36r65 37r65 38r65 39r65 40r65 41r65 42r64 43r66
 . 44r67 45r66 46r66 47r65 18|8r64 20r64 32r65 44r64 56r65 63r64 75r66 88r66
@@ -146,14 +144,14 @@ X 16 robotic_virtual_machine.ads
 . 212r46 219r46 226r46 233r46 240r46 247r46 254r46 261r46
 77p25*Label_Value{45P14} 18|166m72 173m72 186m72 193m72 212m72 219m72 226m72
 . 233m72 240m72 247m72 254m72 261m72
-88V18*Parse_Register{41E14} 18|14s31 15s31 26s31 27s31 38s31 39s31 50s31
+89V18*Parse_Register{41E14} 18|14s31 15s31 26s31 27s31 38s31 39s31 50s31
 . 51s31 59s31 69s31 70s31 81s31 94s31 106s31 118s31 130s31 202s31 203s31
 . 267s31 274s31 281s31 291s31 292s31 303s31 304s31
-95p25*Operand_1{56P14} 18|16m29 28m29 40m29 52m29 60m29 71m29 84m29 96m29
+96p25*Operand_1{56P14} 18|16m29 28m29 40m29 52m29 60m29 71m29 84m29 96m29
 . 108m29 120m29 132m29 140m29 147m29 166m29 173m29 186m29 193m29 204m29 212m29
 . 219m29 226m29 233m29 240m29 247m29 254m29 261m29 268m29 275m29 282m29 293m29
 . 305m29
-96p25*Operand_2{56P14} 18|17m29 29m29 41m29 53m29 72m29 85m29 97m29 109m29
+97p25*Operand_2{56P14} 18|17m29 29m29 41m29 53m29 72m29 85m29 97m29 109m29
 . 121m29 133m29 205m29 294m29 306m29
 X 17 robotic_virtual_machine-instruction_parsing.ads
 4K33*Instruction_Parsing 16|2k9 17|7r55 49l29 49e48 18|6b38 346l29 346t48

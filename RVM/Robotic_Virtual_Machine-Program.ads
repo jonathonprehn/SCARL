@@ -12,11 +12,13 @@ package Robotic_Virtual_Machine.Program is
 	function Has_Program_Loaded return Boolean;
 	procedure Execute_Program;
 	
+	-- public access to the instruction pointer
+	Instruction_Pointer : Integer := 0;
+	
 private
 	
 	Loaded_Program : ARCL_Program;
 	Loaded_Program_Length : Integer;
 	Program_Is_Loaded : Boolean;
-	Instruction_Pointer : Integer;
 		
 end Robotic_Virtual_Machine.Program;

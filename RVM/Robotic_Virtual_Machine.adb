@@ -1,6 +1,9 @@
 
 with Ada.Text_IO;
 with Robotic_Virtual_Machine.Instruction_Parsing;
+with Robotic_Virtual_Machine.Procedures_Labels;
+with Robotic_Virtual_Machine.Conditional;
+with Robotic_Virtual_Machine.Sensors_Actuators;
 
 package body Robotic_Virtual_Machine is
 
@@ -39,6 +42,21 @@ package body Robotic_Virtual_Machine is
 		Put_Line("FRR:" & Integer'Image(Register_State(FRR)));
 		New_Line;
 	end Print_RVM_State;
+	
+	procedure Print_RVM_Stack is
+		use Ada.Text_IO;
+		End_At : ARCL_Memory_Offset;
+		Current : ARCL_Memory_Offset := Frame_Pointer;
+	begin
+		-- Stack grows down so start at the top (MemoryStack.all'Last) and
+		-- go down
+		End_At := Memory_Stack.all'Last;
+		-- Print top first and then go down
+		while Current <= End_At loop
+			Put_Line(Integer'Image(Integer(Memory_Stack(Current))));
+			Current := Current + 1;
+		end loop;
+	end Print_RVM_Stack;
 	
 	-- Instruction parsing procedures and functions
 	procedure Parse_ARCL_Instruction(Instruction : in out ARCL_Instruction; Str : String) is
@@ -283,6 +301,9 @@ package body Robotic_Virtual_Machine is
 		Memory_Heap(Offset.Memory_Offset) := Register_State(Reg.Register);
 	end Invoke_ARCL_STORR;
 	
+	-- Push the stack frame so that it is offset values
+	-- farther away. For setting up activation record
+	-- space
 	procedure Invoke_ARCL_FRAMEU(Instruction : in ARCL_Instruction) is
 		Offset : ARCL_Operand_Memory_Offset := ARCL_Operand_Memory_Offset(Get_Operand_1(Instruction).all);
 	begin
@@ -290,6 +311,8 @@ package body Robotic_Virtual_Machine is
 		Frame_Pointer := Frame_Pointer - Offset.Memory_Offset;
 	end Invoke_ARCL_FRAMEU;
 	
+	-- Pop the stack frame so that it is offset values
+	-- closer. For removing activation record space.
 	procedure Invoke_ARCL_FRAMEO(Instruction : in ARCL_Instruction) is
 		Offset : ARCL_Operand_Memory_Offset := ARCL_Operand_Memory_Offset(Get_Operand_1(Instruction).all);
 	begin
@@ -297,6 +320,9 @@ package body Robotic_Virtual_Machine is
 		Frame_Pointer := Frame_Pointer + Offset.Memory_Offset;
 	end Invoke_ARCL_FRAMEO;
 	
+	-- Save the current state of the machine by
+	-- stacking all registers on the stack and
+	-- incrementing the frame pointer.
 	procedure Invoke_ARCL_RSAVE(Instruction : in ARCL_Instruction) is
 	begin
 		Frame_Pointer := Frame_Pointer - 8;
@@ -310,6 +336,9 @@ package body Robotic_Virtual_Machine is
 		Memory_Stack(Frame_Pointer + 7) := Register_State(R7);
 	end Invoke_ARCL_RSAVE;
 	
+	-- Recovering a previous state by unstacking
+	-- previously saved registers and then 
+	-- decrementing the frame pointer appropriately
 	procedure Invoke_ARCL_RLOAD(Instruction : in ARCL_Instruction) is
 	begin
 		Register_State(R0) := Memory_Stack(Frame_Pointer + 0);
@@ -324,127 +353,197 @@ package body Robotic_Virtual_Machine is
 	end Invoke_ARCL_RLOAD;
 	
 	-- Program Control instructions
+	
+	-- Defines a label at this spot and calls it "label"
 	procedure Invoke_ARCL_LABEL(Instruction : in ARCL_Instruction) is
 		Label : ARCL_Operand_Label_Value := ARCL_Operand_Label_Value(Get_Operand_1(Instruction).all);
+		use Robotic_Virtual_Machine.Procedures_Labels;
 	begin
-		-- TODO: How are labels going to be kept
-		-- track of for a running program?
-		-- we need some kind of data structure
-		-- to hold the labels and their "jump to" locations
-		-- we also might need a thing to hold a program that
-		-- is currently loaded into memory (dynamic loading)
-		null;
+		-- Register_Label(Label.Label_Value);
+		null; -- should have been registered before execution
 	end Invoke_ARCL_LABEL;
 	
+	-- begins a procedure definition and calls it label
 	procedure Invoke_ARCL_PROC(Instruction : in ARCL_Instruction) is
 		Label : ARCL_Operand_Label_Value := ARCL_Operand_Label_Value(Get_Operand_1(Instruction).all);
+		use Robotic_Virtual_Machine.Procedures_Labels;
 	begin
-		null;
+		-- Register_Label(Label.Label_Value);
+		null; -- should have been registered before execution
 	end Invoke_ARCL_PROC;
 	
+	-- Returns control back to the callee from
+	-- the procedure call
 	procedure Invoke_ARCL_RET(Instruction : in ARCL_Instruction) is
+		use Robotic_Virtual_Machine.Procedures_Labels;
 	begin
-		null;
+		Recall_Return_Address;
 	end Invoke_ARCL_RET;
 	
+	-- Stacks the current instruction address as a
+	-- return point and then transfers control to label
 	procedure Invoke_ARCL_CALL(Instruction : in ARCL_Instruction) is
 		Label : ARCL_Operand_Label_Value := ARCL_Operand_Label_Value(Get_Operand_1(Instruction).all);
+		use Robotic_Virtual_Machine.Procedures_Labels;
 	begin
-		null;
+		Stack_Return_Address;
+		Go_To(Label.Label_Value);
 	end Invoke_ARCL_CALL;
 	
+	-- Jumps to the label label
 	procedure Invoke_ARCL_JMP(Instruction : in ARCL_Instruction) is
 		Label : ARCL_Operand_Label_Value := ARCL_Operand_Label_Value(Get_Operand_1(Instruction).all);
+		use Robotic_Virtual_Machine.Procedures_Labels;
 	begin
-		null;
+		Go_To(Label.Label_Value);
 	end Invoke_ARCL_JMP;
 	
+	-- Compares the two registers reg1 and reg2 and
+	-- changes the internal state of this ARCL machine
 	procedure Invoke_ARCL_CMP(Instruction : in ARCL_Instruction) is
 		Reg1 : ARCL_Operand_Register := ARCL_Operand_Register(Get_Operand_1(Instruction).all);
 		Reg2 : ARCL_Operand_Register := ARCL_Operand_Register(Get_Operand_2(Instruction).all);
+		use Robotic_Virtual_Machine.Conditional;
 	begin
-		null;
+		Compare(
+			Register_State(Reg1.Register),
+			Register_State(Reg2.Register)
+		);
 	end Invoke_ARCL_CMP;
 	
+	-- Jump to the label if the most recent CMP had reg1 == reg2
 	procedure Invoke_ARCL_JPE(Instruction : in ARCL_Instruction) is
 		Label : ARCL_Operand_Label_Value := ARCL_Operand_Label_Value(Get_Operand_1(Instruction).all);
+		use Robotic_Virtual_Machine.Procedures_Labels;
+		use Robotic_Virtual_Machine.Conditional;
 	begin
-		null;
+		if Get_Equals_Flag then
+			Go_To(Label.Label_Value);
+		end if;
 	end Invoke_ARCL_JPE;
 	
+	-- Jump to the label if the most recent CMP had reg1 != reg2
 	procedure Invoke_ARCL_JPNE(Instruction : in ARCL_Instruction) is
 		Label : ARCL_Operand_Label_Value := ARCL_Operand_Label_Value(Get_Operand_1(Instruction).all);
+		use Robotic_Virtual_Machine.Procedures_Labels;
+		use Robotic_Virtual_Machine.Conditional;
 	begin
-		null;
+		if not Get_Equals_Flag then
+			Go_To(Label.Label_Value);
+		end if;
 	end Invoke_ARCL_JPNE;
 	
+	-- Jump to the label if the most recent CMP had reg1 > reg2
 	procedure Invoke_ARCL_JPGR(Instruction : in ARCL_Instruction) is
 		Label : ARCL_Operand_Label_Value := ARCL_Operand_Label_Value(Get_Operand_1(Instruction).all);
+		use Robotic_Virtual_Machine.Procedures_Labels;
+		use Robotic_Virtual_Machine.Conditional;
 	begin
-		null;
+		if Get_Greater_Flag then
+			Go_To(Label.Label_Value);
+		end if;
 	end Invoke_ARCL_JPGR;
 	
+	-- Jump to the label if the most recent CMP had reg1 < reg2
 	procedure Invoke_ARCL_JPLS(Instruction : in ARCL_Instruction) is
 		Label : ARCL_Operand_Label_Value := ARCL_Operand_Label_Value(Get_Operand_1(Instruction).all);
+		use Robotic_Virtual_Machine.Procedures_Labels;
+		use Robotic_Virtual_Machine.Conditional;
 	begin
-		null;
+		if Get_Less_Flag then
+			Go_To(Label.Label_Value);
+		end if;
 	end Invoke_ARCL_JPLS;
 	
+	-- Jump to the label if the most recent CMP had reg1 >= reg2
 	procedure Invoke_ARCL_JPGE(Instruction : in ARCL_Instruction) is
 		Label : ARCL_Operand_Label_Value := ARCL_Operand_Label_Value(Get_Operand_1(Instruction).all);
+		use Robotic_Virtual_Machine.Procedures_Labels;
+		use Robotic_Virtual_Machine.Conditional;
 	begin
-		null;
+		if Get_Greater_Flag and Get_Equals_Flag then
+			Go_To(Label.Label_Value);
+		end if;
 	end Invoke_ARCL_JPGE;
 	
+	-- Jump to the label if the most recent CMP had reg1 <= reg2
 	procedure Invoke_ARCL_JPLE(Instruction : in ARCL_Instruction) is
 		Label : ARCL_Operand_Label_Value := ARCL_Operand_Label_Value(Get_Operand_1(Instruction).all);
+		use Robotic_Virtual_Machine.Procedures_Labels;
+		use Robotic_Virtual_Machine.Conditional;
 	begin
-		null;
+		if Get_Less_Flag and Get_Equals_Flag then
+			Go_To(Label.Label_Value);
+		end if;
 	end Invoke_ARCL_JPLE;
 	
+	-- Jump to the label if the most recent CMP had reg1 AND reg2
 	procedure Invoke_ARCL_JAND(Instruction : in ARCL_Instruction) is
 		Label : ARCL_Operand_Label_Value := ARCL_Operand_Label_Value(Get_Operand_1(Instruction).all);
+		use Robotic_Virtual_Machine.Procedures_Labels;
+		use Robotic_Virtual_Machine.Conditional;
 	begin
-		null;
+		if Get_And_Flag then
+			Go_To(Label.Label_Value);
+		end if;
 	end Invoke_ARCL_JAND;
 	
+	-- Jump to the label if the most recent CMP had reg1 OR reg2
 	procedure Invoke_ARCL_JOR(Instruction : in ARCL_Instruction) is
 		Label : ARCL_Operand_Label_Value := ARCL_Operand_Label_Value(Get_Operand_1(Instruction).all);
+		use Robotic_Virtual_Machine.Procedures_Labels;
+		use Robotic_Virtual_Machine.Conditional;
 	begin
-		null;
+		if Get_Or_Flag then
+			Go_To(Label.Label_Value);
+		end if;
 	end Invoke_ARCL_JOR;
 	
+	-- Delays the program for the number of milliseconds
+	-- as specified in reg
 	procedure Invoke_ARCL_DELAY(Instruction : in ARCL_Instruction) is
 		Reg : ARCL_Operand_Register := ARCL_Operand_Register(Get_Operand_1(Instruction).all);
+		Milliseconds_Count : Integer := Integer(Register_State(Reg.Register));
 	begin
-		null;
+		-- predefined keyword from Ada
+		delay Duration(Float(Milliseconds_Count)/1000.0);
 	end Invoke_ARCL_DELAY;
 	
 	-- Device Control instructions
 	procedure Invoke_ARCL_OUTPUT(Instruction : in ARCL_Instruction) is
 		Reg : ARCL_Operand_Register := ARCL_Operand_Register(Get_Operand_1(Instruction).all);
+		use Robotic_Virtual_Machine.Sensors_Actuators;
 	begin
-		null;
+		Configure_Pin(Natural(Register_State(Reg.Register)), Output);
 	end Invoke_ARCL_OUTPUT;
 	
 	procedure Invoke_ARCL_INPUT(Instruction : in ARCL_Instruction) is
 		Reg : ARCL_Operand_Register := ARCL_Operand_Register(Get_Operand_1(Instruction).all);
+		use Robotic_Virtual_Machine.Sensors_Actuators;
 	begin
-		null;
+		Configure_Pin(Natural(Register_State(Reg.Register)), Input);
 	end Invoke_ARCL_INPUT;
 	
 	procedure Invoke_ARCL_WRITE(Instruction : in ARCL_Instruction) is
 		RegPin : ARCL_Operand_Register := ARCL_Operand_Register(Get_Operand_1(Instruction).all);
 		RegData : ARCL_Operand_Register := ARCL_Operand_Register(Get_Operand_2(Instruction).all);
+		use Robotic_Virtual_Machine.Sensors_Actuators;
 	begin
-		null;
+		Write_Pin(
+			Natural(Register_State(RegPin.Register)),
+			Register_State(RegData.Register)
+		);
 	end Invoke_ARCL_WRITE;
 	
 	procedure Invoke_ARCL_READ(Instruction : in ARCL_Instruction) is
 		RegPin : ARCL_Operand_Register := ARCL_Operand_Register(Get_Operand_1(Instruction).all);
 		RegData : ARCL_Operand_Register := ARCL_Operand_Register(Get_Operand_2(Instruction).all);
+		use Robotic_Virtual_Machine.Sensors_Actuators;
 	begin
-		null;
+		Read_Pin(
+			Natural(Register_State(RegPin.Register)),
+			Register_State(RegData.Register)
+		);
 	end Invoke_ARCL_READ;
 
 begin

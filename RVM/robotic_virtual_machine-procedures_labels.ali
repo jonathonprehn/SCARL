@@ -1,30 +1,26 @@
 V "GNAT Lib v5"
-M P W=b
-A -mtune=generic
-A -march=i586
 P SS ZX
 
 RN
+RV NO_ALLOCATORS
 RV NO_IO
-RV NO_SECONDARY_STACK
+RV NO_LOCAL_ALLOCATORS
 RV NO_STANDARD_STORAGE_POOLS
 RV SPARK_05
 
-U arclvm%b		arclvm.adb		6c312601 NE OO SU IU
+U robotic_virtual_machine.procedures_labels%b  robotic_virtual_machine-procedures_labels.adb  8ba32475 NE OO PK
 W ada%s			ada.ads			ada.ali
-W ada.command_line%s	a-comlin.adb		a-comlin.ali
 W ada.tags%s		a-tags.adb		a-tags.ali
 W ada.text_io%s		a-textio.adb		a-textio.ali
 W robotic_virtual_machine%s  robotic_virtual_machine.adb  robotic_virtual_machine.ali
 W robotic_virtual_machine.program%s  robotic_virtual_machine-program.adb  robotic_virtual_machine-program.ali
-W robotic_virtual_machine.sensors_actuators%s  robotic_virtual_machine-sensors_actuators.adb  robotic_virtual_machine-sensors_actuators.ali
 W system.concat_3%s	s-conca3.adb		s-conca3.ali
-W system.img_int%s	s-imgint.adb		s-imgint.ali
-W system.secondary_stack%s  s-secsta.adb	s-secsta.ali
-W system.val_int%s	s-valint.adb		s-valint.ali
+
+U robotic_virtual_machine.procedures_labels%s  robotic_virtual_machine-procedures_labels.ads  438a7697 EE NE OO PK
+W robotic_virtual_machine%s  robotic_virtual_machine.adb  robotic_virtual_machine.ali
+W robotic_virtual_machine.program%s  robotic_virtual_machine-program.adb  robotic_virtual_machine-program.ali
 
 D ada.ads		20180506173602 3ffc8e18 ada%s
-D a-comlin.ads		20180506173602 ea62afbc ada.command_line%s
 D a-except.ads		20180506173604 5250cb69 ada.exceptions%s
 D a-finali.ads		20180506173602 69f99942 ada.finalization%s
 D a-ioexce.ads		20180506173602 e4a01f64 ada.io_exceptions%s
@@ -32,12 +28,12 @@ D a-stream.ads		20180506173604 119b8fb3 ada.streams%s
 D a-tags.ads		20180506173604 dc4d0634 ada.tags%s
 D a-textio.ads		20180506173602 386df5d4 ada.text_io%s
 D a-unccon.ads		20180506173602 f9eb8f06 ada.unchecked_conversion%s
-D arclvm.adb		20190131011126 0e9a86ea arclvm%b
 D interfac.ads		20180506173604 6033a23f interfaces%s
 D i-cstrea.ads		20180506173602 e53d8b8e interfaces.c_streams%s
 D robotic_virtual_machine.ads  20190130192410 1f2eb58b robotic_virtual_machine%s
+D robotic_virtual_machine-procedures_labels.ads  20190130210614 edc4aeee robotic_virtual_machine.procedures_labels%s
+D robotic_virtual_machine-procedures_labels.adb  20190131011530 ef6a12bd robotic_virtual_machine.procedures_labels%b
 D robotic_virtual_machine-program.ads  20190130193924 ae4ed879 robotic_virtual_machine.program%s
-D robotic_virtual_machine-sensors_actuators.ads  20190131010544 01c49771 robotic_virtual_machine.sensors_actuators%s
 D system.ads		20180506173602 f4ce8c3a system%s
 D s-conca3.ads		20180506173604 0b705ca5 system.concat_3%s
 D s-crtl.ads		20180506173602 0ebbdb71 system.crtl%s
@@ -45,7 +41,6 @@ D s-exctab.ads		20180506173602 54135002 system.exception_table%s
 D s-ficobl.ads		20180506173602 078245e4 system.file_control_block%s
 D s-finmas.ads		20180506173602 814daec4 system.finalization_masters%s
 D s-finroo.ads		20180506173602 4ff27390 system.finalization_root%s
-D s-imgint.ads		20180506173604 02dbe0c2 system.img_int%s
 D s-parame.ads		20180506173602 7e2a0d7f system.parameters%s
 D s-pooglo.ads		20180506173604 542f33d0 system.pool_global%s
 D s-secsta.ads		20180506173604 86a2856d system.secondary_stack%s
@@ -57,29 +52,39 @@ D s-stopoo.ads		20180506173602 b16154c2 system.storage_pools%s
 D s-stratt.ads		20180506173604 aedef97e system.stream_attributes%s
 D s-traent.ads		20180506173602 005bf670 system.traceback_entries%s
 D s-unstyp.ads		20180506173602 9d58a4c0 system.unsigned_types%s
-D s-valint.ads		20180506173602 48a52a3f system.val_int%s
 D s-wchcon.ads		20180506173602 1b7d22d2 system.wch_con%s
 X 1 ada.ads
-16K9*Ada 19e8 10|6r6 6r28 7r6 7r23
-X 2 a-comlin.ads
-38K13*Command_Line 139e21 10|6w10 6r32
-41V13*Argument_Count{natural} 10|14s12 21s28
-48V13*Argument{string} 10|16s57 18s46 27s55 29s76 29s93
-X 8 a-textio.ads
-49K13*Text_IO 471e16 10|7w10 7r27
-263U14*Put_Line 10|32s41 38s33 45s17
-X 10 arclvm.adb
-12U11*ARCLVM 12b11 47l5 47t11
-16a25 Program_File_Name{string} 18m25 41r38
-24a41 Pin_String{string} 27m41 28r44
-25i41 Pin_Count{integer} 29m49 31r61 33r65
-X 13 robotic_virtual_machine.ads
-2K9*Robotic_Virtual_Machine 10|2w6 2r35 3r6 3r43 4r6 4r53 13|154e28
+16K9*Ada 19e8 13|2r6 58r25
+X 7 a-textio.ads
+49K13*Text_IO 471e16 13|2w10 58r29
+263U14*Put_Line 13|58s37
+X 11 robotic_virtual_machine.ads
+2K9*Robotic_Virtual_Machine 154e28 12|2w6 2r35 3r6 3r43 5r9 43r5 13|3w6 3r35
+. 4r6 4r43 6r14 75r5
+45P14*ARCL_Label_Value(string) 12|12r51 20r42 31r33 13|13r51 44r42
+X 12 robotic_virtual_machine-procedures_labels.ads
+5K33*Procedures_Labels 11|2k9 12|27E14 43l29 43e46 13|6b38 75l29 75t46
+12U19*Register_Label 12>34 12>69 13|13b19 36l13 36t27
+12p34 Label_Value{11|45P14} 13|13b34 17r42 29r50
+12i69 Address{integer} 13|13b69 18r44 30r52
+20U19*Go_To 20>25 13|44b19 60l13 60t18
+20p25 Label_Value{11|45P14} 13|44b25 49r48 58r73
+22U19*Stack_Return_Address 13|62b19 66l13 66t33
+23U19*Recall_Return_Address 13|68b19 73l13 73t34
+27R14 Label_Cell 28r39 29c14 34e27 13|16r43 28r53
+28P14 Label_Cell_Ptr(27R14) 33r32 41r22 13|23r43 45r27
+31p25*Label{11|45P14} 13|17m33 29m41 49r36
+32i25*Address{integer} 13|18m33 30m41 50r64
+33p25*Next{28P14} 13|19m33 25r47 26r60 28m41 31m41 54r44
+36A14 Return_Address_Stack(integer)<integer> 38r28
+37i9 Address_Stack_Ptr{integer} 13|64m17 64r38 65r34 71r57 72m17 72r38
+38a9 Return_Addresses{36A14} 13|65m17 71r40
+41p9 Label_List{28P14} 13|15r20 16m25 23r61 45r45
+X 13 robotic_virtual_machine-procedures_labels.adb
+23p33 Current{12|28P14} 25r39 26m41 26r52 28r33
+45p17 Current{12|28P14} 48r23 49r28 50r56 54m25 54r36
+46b17 Found_Label{boolean} 51m33 57r24
 X 14 robotic_virtual_machine-program.ads
-4K33*Program 10|3w30 3r67 14|24e36
-10U19*Load_Program 10|41s25
-13U19*Execute_Program 10|42s25
-X 15 robotic_virtual_machine-sensors_actuators.ads
-10K33*Sensors_Actuators 10|4w30 4r77 15|28e46
-14U19*Configure_Pin_Count 10|31s41 37s33
+4K33*Program 12|3w30 3r67 13|4w30 4r67 14|24e36
+16i9*Instruction_Pointer{integer} 13|50m33 65r56 71m17
 

@@ -125,9 +125,28 @@ void generate_arcl_code(FILE * output, struct scarl_symbol_table * symbol_table,
 				fprintf(stderr, "FATAL ERROR: Symbol table for function %s was not correctly passed down\n", ast->leftmostChild->leftmostChild->nextSibling->str_value);
 				exit(1);
 			}
+
+			struct scarl_symbol_table_entry *function_entry = NULL;
+
 			//code gen
 			fprintf(output, "PROC %s\n", proc_label);
+
+			// Special behavior for procedure main
+			// this is the only procedure that is responsible for 
+			// setting up its own frame since it
+			// does not have a callee to do that for it
+			char *ident_name = ast->leftmostChild->leftmostChild->nextSibling->str_value;
+			if (strcmp(ident_name, "main") == 0) {
+				// get main function entry
+				function_entry = lookup(symbol_table, ident_name, NULL, 0);
+				// set up own stack frame as the main procedure
+				fprintf(output, "FRAMEU %i\n", function_entry->functionSt->frameSize);
+			}
 			generate_statements_in_block(output, func_symbol_table, block_statement);
+			if (strcmp(ident_name, "main") == 0) {
+				// unstack own frame as main procedure
+				fprintf(output, "FRAMEO %i\n", function_entry->functionSt->frameSize);
+			}
 			fprintf(output, "RET\n"); //to end the function
 		}
 		break;
@@ -332,7 +351,10 @@ void generate_arcl_bool_expression(
 		generate_arcl_bool_expression(output, symbol_table, expr);
 		int r = expr->register1;
 
-		fprintf(output, "CMP %s 0\n", register_str(r));
+		//temporary register to load a 0 into it
+		int temp_zero = allocate_register();
+		fprintf(output, "LOADL %s 0\n", register_str(temp_zero));
+		fprintf(output, "CMP %s %s\n", register_str(r), register_str(temp_zero));
 		fprintf(output, "JPE %s\n", label1_str); //if false
 		fprintf(output, "LOADL %s 0\n", register_str(r)); //it is true, so load the register with false
 		fprintf(output, "JMP %s\n", label2_str); //skip to end since we already set it
@@ -340,6 +362,7 @@ void generate_arcl_bool_expression(
 		fprintf(output, "LOADL %s 1\n", register_str(r)); //it is false so load it with true
 		fprintf(output, "LABEL %s\n", label2_str);
 
+		free_register(temp_zero);
 		ast->register1 = r; //pass the register up
 
 		free(label1_str);
@@ -876,7 +899,10 @@ void generate_statements_in_block(FILE * output, struct scarl_symbol_table * sym
 					int label1 = generate_label();
 					char *label1_str = label_str(label1);
 
-					fprintf(output, "CMP %s 0\n", register_str(expr_node->register1)); //check to see if expression is true
+					//temporary register to load a 0 into it
+					int temp_zero = allocate_register();
+					fprintf(output, "LOADL %s 0\n", register_str(temp_zero));
+					fprintf(output, "CMP %s %s\n", register_str(expr_node->register1), register_str(temp_zero)); //check to see if expression is true
 					free_register(expr_node->register1);
 
 					//if the value is false, jump, otherwise execute
@@ -885,6 +911,7 @@ void generate_statements_in_block(FILE * output, struct scarl_symbol_table * sym
 					generate_statements_in_block(output, if_block->symbol_table_value, if_block);
 					fprintf(output, "LABEL %s\n", label1_str); //place to jump to if false
 
+					free_register(temp_zero);
 					free(label1_str);
 				}
 				else {
@@ -896,7 +923,9 @@ void generate_statements_in_block(FILE * output, struct scarl_symbol_table * sym
 					char *label1_str = label_str(label1);
 					char *label2_str = label_str(label2);
 
-					fprintf(output, "CMP %s 0\n", register_str(expr_node->register1)); //check to see if expression is true
+					int temp_zero = allocate_register();
+					fprintf(output, "LOADL %s 0\n", register_str(temp_zero));
+					fprintf(output, "CMP %s %s\n", register_str(expr_node->register1), register_str(temp_zero)); //check to see if expression is true
 					free_register(expr_node->register1);
 					fprintf(output, "JPE %s\n", label1_str); //jump to false area if equal to false
 					//otherwise execute true area
@@ -907,6 +936,8 @@ void generate_statements_in_block(FILE * output, struct scarl_symbol_table * sym
 					generate_statements_in_block(output, else_block->symbol_table_value, else_block);
 					fprintf(output, "LABEL %s\n", label2_str); //where to skip to after true statements
 
+					free_register(temp_zero);
+					
 					free(label1_str);
 					free(label2_str);
 				}
@@ -925,7 +956,9 @@ void generate_statements_in_block(FILE * output, struct scarl_symbol_table * sym
 				fprintf(output, "LABEL %s\n", label1_str);
 				generate_arcl_bool_expression(output, symbol_table, expr_node);
 				//check to see if the expression is false
-				fprintf(output, "CMP %s 0\n", register_str(expr_node->register1));
+				int temp_zero = allocate_register();
+				fprintf(output, "LOADL %s 0\n", register_str(temp_zero));
+				fprintf(output, "CMP %s %s\n", register_str(expr_node->register1), register_str(temp_zero));
 				free_register(expr_node->register1);
 				//if false, skip to the end
 				fprintf(output, "JPE %s\n", label2_str);
@@ -936,6 +969,8 @@ void generate_statements_in_block(FILE * output, struct scarl_symbol_table * sym
 				//go here when the expression is true
 				fprintf(output, "LABEL %s\n", label2_str);
 				
+				free_register(temp_zero);
+
 				free(label1_str);
 				free(label2_str);
 			}

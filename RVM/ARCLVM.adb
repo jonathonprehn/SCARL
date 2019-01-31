@@ -1,6 +1,7 @@
 
 with Robotic_Virtual_Machine; use Robotic_Virtual_Machine;
 with Robotic_Virtual_Machine.Program; use Robotic_Virtual_Machine.Program; 
+with Robotic_Virtual_Machine.Sensors_Actuators; use Robotic_Virtual_Machine.Sensors_Actuators;
 
 with Ada.Command_Line; use Ada.Command_Line;
 with Ada.Text_IO; use Ada.Text_IO;
@@ -10,11 +11,33 @@ with Ada.Text_IO; use Ada.Text_IO;
 
 procedure ARCLVM is
 begin
-	if Argument_Count = 1 then
+	if Argument_Count >= 1 then
 		declare 
 			Program_File_Name : String(1 .. Argument(1)'Last);
 		begin
 			Program_File_Name := Argument(1);
+			
+			-- We want to see if we have a pins option
+			if Argument_Count = 2 then
+				-- we do
+				declare
+					Pin_String : String(1 .. 6);
+					Pin_Count : Integer := 10;
+				begin
+					Pin_String := Argument(2)(1 .. 6);
+					if Pin_String = "-pins=" then
+						Pin_Count := Integer'Value(Argument(2)(7 .. Argument(2)'Last));
+					end if;
+					Configure_Pin_Count(Pin_Count);
+					Put_Line("Device configured for"
+						& Integer'Image(Pin_Count) & " pins");
+				end;
+			else 
+				-- we don't
+				Configure_Pin_Count(10);
+				Put_Line("Device configured for 10 pins");
+			end if;
+			
 			Load_Program(Program_File_Name);
 			Execute_Program;
 		end;

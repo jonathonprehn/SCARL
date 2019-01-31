@@ -1,4 +1,5 @@
 with Robotic_Virtual_Machine; use Robotic_Virtual_Machine;
+with Robotic_Virtual_Machine.Procedures_Labels;
 with Ada.Text_IO; use Ada.Text_IO;
 
 package body Robotic_Virtual_Machine.Program is
@@ -48,6 +49,18 @@ package body Robotic_Virtual_Machine.Program is
 			if Line_Length > 0 then
 				-- Parse the lines
 				Parse_ARCL_Instruction(Loaded_Program(Line_Number), Line(1 .. Line_Length));
+				
+				-- While we are at it, we can
+				-- register labels and procedures here
+				if Loaded_Program(Line_Number).Code = ARCL_LABEL or Loaded_Program(Line_Number).Code = ARCL_PROC then
+					declare
+						Label : ARCL_Operand_Label_Value := ARCL_Operand_Label_Value(Get_Operand_1(Loaded_Program(Line_Number)).all);
+						use Robotic_Virtual_Machine.Procedures_Labels;
+					begin
+						Register_Label(Label.Label_Value, Line_Number);
+					end;
+				end if;
+				
 				Line_Number := Line_Number + 1;
 			end if;
 		end loop;
@@ -69,19 +82,32 @@ package body Robotic_Virtual_Machine.Program is
 	end Has_Program_Loaded;
 	
 	procedure Execute_Program is
+		Main_Procedure_Label : ARCL_Label_Value := new String'("main_");
 	begin
 		-- Use program counter, execute with main package
-		Instruction_Pointer := 1;
-		Put_Line("Executing" & Integer'Image(Loaded_Program.all'Last) & " instructions");
-		while Instruction_Pointer <= Loaded_Program.all'Last loop
+		-- Set Instruction_Pointer to location of main procedure
+		-- That is, invoke 'CALL main_' manually here
+		Instruction_Pointer := 0;
+		-- Go to main
+		Procedures_Labels.Stack_Return_Address;
+		Procedures_Labels.Go_To(Main_Procedure_Label);
+		
+		Put_Line("Executing program");
+		-- Instruction_Pointer being 0 means the machine is done executing
+		while Instruction_Pointer <= Loaded_Program.all'Last and Instruction_Pointer /= 0 loop
+			-- Put_Line("Executing instruction" & Integer'Image(Instruction_Pointer));
 			Invoke_Instruction(Loaded_Program(Instruction_Pointer));
-			Instruction_Pointer := Instruction_Pointer + 1;
+			-- Need to ensure the program is not done executing
+			if Instruction_Pointer /= 0 then
+				Instruction_Pointer := Instruction_Pointer + 1;
+			end if;
 		end loop;
 		
 		-- Print machine status at the end of executing
 		New_Line;
 		Put_Line("Machine Status:");
 		Print_RVM_State;
+		
 	end Execute_Program;
 
 begin

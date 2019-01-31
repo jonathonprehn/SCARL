@@ -27,9 +27,13 @@ begin
 		elsif Line(1 .. Last) = "help" then
 			Put_Line("quit -- quit the interactive RVM");
 			Put_Line("registers -- see the status of the registers");
+			Put_Line("stack -- see the stack");
 			Put(">");
 		elsif Line(1 .. Last) = "registers" then
 			Print_RVM_State;
+			Put(">");
+		elsif Line(1 .. Last) = "stack" then
+			Print_RVM_Stack;
 			Put(">");
 		else
 			Parse_ARCL_Instruction(Instruction, Line(1 .. Last));

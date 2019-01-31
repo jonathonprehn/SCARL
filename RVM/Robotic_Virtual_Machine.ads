@@ -83,6 +83,7 @@ package Robotic_Virtual_Machine is
 	function Get_Operand_1(Instruction : in ARCL_Instruction) return ARCL_Instruction_Operand_Ptr;
 	function Get_Operand_2(Instruction : in ARCL_Instruction) return ARCL_Instruction_Operand_Ptr;
 	procedure Print_RVM_State;
+	procedure Print_RVM_Stack;
 	procedure Parse_ARCL_Instruction(Instruction : in out ARCL_Instruction; Str : String);
 	function Parse_Code_From_String(Str : in String) return ARCL_Instruction_Code;
 	function Parse_Register(Str : in String) return ARCL_Register;
