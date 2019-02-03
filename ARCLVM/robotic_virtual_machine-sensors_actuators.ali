@@ -1,0 +1,70 @@
+V "GNAT Lib v5"
+P SS ZX
+
+RN
+RV NO_ALLOCATORS
+RV NO_LOCAL_ALLOCATORS
+RV NO_STANDARD_STORAGE_POOLS
+RV SPARK_05
+
+U robotic_virtual_machine.sensors_actuators%b  robotic_virtual_machine-sensors_actuators.adb  5400865b NE OO PK
+W ada.tags%s		a-tags.adb		a-tags.ali
+W interfaces%s		interfac.ads		interfac.ali
+W robotic_virtual_machine%s  robotic_virtual_machine.adb  robotic_virtual_machine.ali
+
+U robotic_virtual_machine.sensors_actuators%s  robotic_virtual_machine-sensors_actuators.ads  01c49771 EE NE OO PK
+W ada.tags%s		a-tags.adb		a-tags.ali
+W robotic_virtual_machine%s  robotic_virtual_machine.adb  robotic_virtual_machine.ali
+
+D ada.ads		20180506173602 3ffc8e18 ada%s
+D a-except.ads		20180506173604 5250cb69 ada.exceptions%s
+D a-finali.ads		20180506173602 69f99942 ada.finalization%s
+D a-stream.ads		20180506173604 119b8fb3 ada.streams%s
+D a-tags.ads		20180506173604 dc4d0634 ada.tags%s
+D a-unccon.ads		20180506173602 f9eb8f06 ada.unchecked_conversion%s
+D interfac.ads		20180506173604 6033a23f interfaces%s
+D robotic_virtual_machine.ads  20190201151350 741b31cb robotic_virtual_machine%s
+D robotic_virtual_machine-sensors_actuators.ads  20190131010544 01c49771 robotic_virtual_machine.sensors_actuators%s
+D robotic_virtual_machine-sensors_actuators.adb  20190131010606 21df20e1 robotic_virtual_machine.sensors_actuators%b
+D system.ads		20180506173602 f4ce8c3a system%s
+D s-exctab.ads		20180506173602 54135002 system.exception_table%s
+D s-finmas.ads		20180506173602 814daec4 system.finalization_masters%s
+D s-finroo.ads		20180506173602 4ff27390 system.finalization_root%s
+D s-parame.ads		20180506173602 7e2a0d7f system.parameters%s
+D s-pooglo.ads		20180506173604 542f33d0 system.pool_global%s
+D s-secsta.ads		20180506173604 86a2856d system.secondary_stack%s
+D s-soflin.ads		20180506173602 aa763b52 system.soft_links%s
+D s-stache.ads		20180506173604 a37c21ec system.stack_checking%s
+D s-stalib.ads		20180506173602 fa0a3617 system.standard_library%s
+D s-stoele.ads		20180506173604 2dc34a04 system.storage_elements%s
+D s-stopoo.ads		20180506173602 b16154c2 system.storage_pools%s
+D s-stratt.ads		20180506173604 aedef97e system.stream_attributes%s
+D s-traent.ads		20180506173602 005bf670 system.traceback_entries%s
+D s-unstyp.ads		20180506173602 9d58a4c0 system.unsigned_types%s
+X 8 robotic_virtual_machine.ads
+2K9*Robotic_Virtual_Machine 157e28 9|2w6 2r35 10r9 28r5 10|2w6 2r35 10r14
+. 41r5
+42I17*ARCL_Register_Value{integer} 9|16r58 17r58 21r60 10|23r58 32r58
+X 9 robotic_virtual_machine-sensors_actuators.ads
+10K33*Sensors_Actuators 8|2k9 9|21E14 28l29 28e46 10|10b38 41l29 41t46
+12E14*Pin_Mode 12e41 15r58 22r70 10|18r58
+12n27*Input{12E14} 10|25r37
+12n34*Output{12E14} 10|34r37
+14U19*Configure_Pin_Count 14>39 10|12b19 16l13 16t32
+14i39 Pin_Count{natural} 10|12b39 14r49 15r64
+15U19*Configure_Pin 15>33 15>51 10|18b19 21l13 21t26
+15i33 Pin{natural} 10|18b33 20r27
+15e51 Mode{12E14} 10|18b51 20r35
+16U19*Read_Pin 16>28 16<46 10|23b19 30l13 30t21
+16i28 Pin{natural} 10|23b28 25r30 26r39
+16i46 Value{8|42I17} 10|23b46 26m25 28m25
+17U19*Write_Pin 17>29 17>47 10|32b19 39l13 39t22
+17i29 Pin{natural} 10|32b29 34r30 35r30
+17i47 Value{8|42I17} 10|32b47 35r38
+21A14 Pins_Set_Array(8|42I17)<integer> 23r33 10|14r29
+22A14 Pins_Configuration_Array(12E14)<integer> 24r43 10|15r34
+23P14 Pins_Set(21A14) 25r16
+24P14 Pins_Configuration(22A14) 26r21
+25p9 Pins{23P14} 10|14m17 26r34 35r25
+26p9 Pins_Mode{24P14} 10|15m17 20r17 25r20 34r20
+

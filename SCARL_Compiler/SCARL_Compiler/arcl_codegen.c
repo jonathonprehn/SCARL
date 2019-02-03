@@ -1,4 +1,22 @@
-
+/*
+ *  This file is part of the SCARL toolkit.
+ *  
+ *  SCARL is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
+ *  
+ *  SCARL is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *  
+ *  You should have received a copy of the GNU General Public License
+ *  along with SCARL.  If not, see <https://www.gnu.org/licenses/>.
+ */
+ 
+ 
+ 
 #include <stdio.h>
 #include <string.h>
 
@@ -16,7 +34,10 @@ char *arcl_registers_symbols[ARCL_REGISTER_COUNT] = {
 };
 char *frr = "FRR";
 
-// TODO: Return statements must be implemented!
+// This temporary file is for the initialization procedure that is
+// going to be created and called in main before any user code
+// is called
+FILE *init_file_temp = NULL;
 
 //allocate a 1 byte register
 int allocate_register()
@@ -105,11 +126,31 @@ void generate_arcl_code(FILE * output, struct scarl_symbol_table * symbol_table,
 			//level:
 			//device declarator, primitive definition, function definition
 			struct ast_node *cur_node = ast->leftmostChild;
-			//goo goo
+			
+			tmpfile_s(&init_file_temp); // temporary file for the
+			// initialization procedure to be called by main
+
 			while (cur_node != NULL) {
 				generate_arcl_code(output, symbol_table, cur_node);
 				cur_node = cur_node->nextSibling;
 			}
+
+			//printf("Printing temp file\n");
+
+			// this is after everything has been generated
+			// we want to write the initialization procedure now
+			fprintf(output, "PROC arcl_initialize_globals\n");
+			fseek(init_file_temp, 0, SEEK_SET);
+			int c = 0;
+			c = fgetc(init_file_temp);
+			while (!feof(init_file_temp)) {
+				fprintf(output, "%c", ((char)c));
+				//printf("%c", ((char)c));
+				c = fgetc(init_file_temp);
+			}
+			fprintf(output, "RET\n");
+			fclose(init_file_temp);
+			return;
 		}
 		break;
 		case NON_TERMINAL_FUNCTION_DEFINITION_STATEMENT:
@@ -137,6 +178,9 @@ void generate_arcl_code(FILE * output, struct scarl_symbol_table * symbol_table,
 			// does not have a callee to do that for it
 			char *ident_name = ast->leftmostChild->leftmostChild->nextSibling->str_value;
 			if (strcmp(ident_name, "main") == 0) {
+				// first we want to call the static initializer function
+				fprintf(output, "CALL arcl_initialize_globals\n");
+				
 				// get main function entry
 				function_entry = lookup(symbol_table, ident_name, NULL, 0);
 				// set up own stack frame as the main procedure
@@ -158,14 +202,36 @@ void generate_arcl_code(FILE * output, struct scarl_symbol_table * symbol_table,
 			int type = prim_decl->leftmostChild->int_value;
 			struct scarl_symbol_table_entry *prim_entry = lookup(symbol_table, prim_decl->leftmostChild->nextSibling->str_value, NULL, 0);
 
-			pass_to_expression_generator_handler(output, symbol_table, expr, type);
+			// to be written to the temporary file, read again later 
+			pass_to_expression_generator_handler(init_file_temp, symbol_table, expr, type);
 
 			//we know this was in global scope
 
 			//the result of the expression is in the expression's register 1
 			//store result into static storage. frameOffset is its location in static memory in this context
-			fprintf(output, "STORR %s %i\n", register_str(expr->register1), prim_entry->frameOffset);
+			fprintf_s(init_file_temp, "STORR %s %i\n", register_str(expr->register1), prim_entry->frameOffset);
 			free_register(expr->register1); //no longer need this register
+
+
+			// PROBLEM - this is the only kind of code
+			// that appears in the global scope that
+			// must be "executed" by the machine before
+			// the main procedure. Perhaps we can create
+			// a "static initializer" segment of the program
+			// so that this can occur? OR is there a way for
+			// these STORR variables to be seen as "static initializers"
+			// by the machine? If this is so, then we will not
+			// see the LOADL instructions used in the loading of
+			// the registers to create this. The best way to
+			// solve this seems to be to have a pseudo-init procedure
+			// that is called before main is called 
+			// (CALL init_arcl_global_vars), and this procedure
+			// is placed somewhere. The problem now is how to create
+			// this procedure. Maybe "store" the lines in a separate
+			// string or file or list until the file is generated, then
+			// write the procedure as the last thing in the file?
+
+			//doing the procedure method
 		}
 		break;
 		case NON_TERMINAL_DEVICE_DECLARATOR_STATEMENT:
@@ -173,6 +239,12 @@ void generate_arcl_code(FILE * output, struct scarl_symbol_table * symbol_table,
 			struct ast_node *device_type = ast->leftmostChild;
 			struct ast_node *ident = device_type->nextSibling;
 			fprintf(output, "@@@%i?%s@@@\n", device_type->int_value, ident->str_value);
+			
+			// we need to call an initialization procedure
+			// for the devices as well
+			// note this for the linker - it must generate this
+			// procedure
+			fprintf(init_file_temp, "CALL initialize_%s\n", ident->str_value);
 		}
 		break;
 	}

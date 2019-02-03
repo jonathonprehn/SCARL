@@ -96,8 +96,10 @@ void write_arcl_procedures_for_device(FILE *arcl_file, int device_type, char *de
 
 		//configure the pin as output (it is an actuator)
 		//using an arbitrary register since ths is an isolated statement
+		fprintf(arcl_file, "PROC initialize_%s\n", device_identifier);
 		fprintf(arcl_file, "LOADL R0 %i\n", pin_number);
 		fprintf(arcl_file, "OUTPUT R0\n");
+		fprintf(arcl_file, "RET\n");
 	}
 		break;
 	case SERVO_ACTUATOR:
@@ -126,8 +128,10 @@ void write_arcl_procedures_for_device(FILE *arcl_file, int device_type, char *de
 
 		//configure the pin as output (it is an actuator)
 		//using an arbitrary register since ths is an isolated statement
+		fprintf(arcl_file, "PROC initialize_%s\n", device_identifier);
 		fprintf(arcl_file, "LOADL R0 %i\n", pin_number);
 		fprintf(arcl_file, "OUTPUT R0\n");
+		fprintf(arcl_file, "RET\n");
 	}
 		break;
 	case SOUND_SENSOR:
@@ -141,8 +145,10 @@ void write_arcl_procedures_for_device(FILE *arcl_file, int device_type, char *de
 
 		//configure the pin as output (it is an actuator)
 		//using an arbitrary register since ths is an isolated statement
+		fprintf(arcl_file, "PROC initialize_%s\n", device_identifier);
 		fprintf(arcl_file, "LOADL R0 %i\n", pin_number);
 		fprintf(arcl_file, "INPUT R0\n");
+		fprintf(arcl_file, "RET\n");
 	}
 		break;
 	case LIGHT_SENSOR:
@@ -157,8 +163,10 @@ void write_arcl_procedures_for_device(FILE *arcl_file, int device_type, char *de
 
 		//configure the pin as output (it is an actuator)
 		//using an arbitrary register since ths is an isolated statement
+		fprintf(arcl_file, "PROC initialize_%s\n", device_identifier);
 		fprintf(arcl_file, "LOADL R0 %i\n", pin_number);
 		fprintf(arcl_file, "INPUT R0\n");
+		fprintf(arcl_file, "RET\n");
 	}
 		break;
 	case DISTANCE_SENSOR:
@@ -172,8 +180,10 @@ void write_arcl_procedures_for_device(FILE *arcl_file, int device_type, char *de
 
 		//configure the pin as output (it is an actuator)
 		//using an arbitrary register since ths is an isolated statement
+		fprintf(arcl_file, "PROC initialize_%s\n", device_identifier);
 		fprintf(arcl_file, "LOADL R0 %i\n", pin_number);
 		fprintf(arcl_file, "INPUT R0\n");
+		fprintf(arcl_file, "RET\n");
 	}
 		break;
 	case TEMPERATURE_SENSOR:
@@ -187,8 +197,10 @@ void write_arcl_procedures_for_device(FILE *arcl_file, int device_type, char *de
 
 		//configure the pin as output (it is an actuator)
 		//using an arbitrary register since ths is an isolated statement
+		fprintf(arcl_file, "PROC initialize_%s\n", device_identifier);
 		fprintf(arcl_file, "LOADL R0 %i\n", pin_number);
 		fprintf(arcl_file, "INPUT R0\n");
+		fprintf(arcl_file, "RET\n");
 	}
 		break;
 	}

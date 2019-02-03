@@ -27,6 +27,9 @@
     <ClCompile Include="linker_util.c">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="avr_processor.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="device_type_map.h">
@@ -39,6 +42,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="linker_util.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="avr_processor.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

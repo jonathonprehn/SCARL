@@ -1,0 +1,105 @@
+if (strcmp("ADD", instruction_code) == 0) {
+	
+}
+else if (strcmp("SUB", instruction_code) == 0) {
+	
+}
+else if (strcmp("MULT", instruction_code) == 0) {
+	
+}
+else if (strcmp("DIV", instruction_code) == 0) {
+	
+}
+else if (strcmp("FLIP", instruction_code) == 0) {
+	
+}
+else if (strcmp("MOV", instruction_code) == 0) {
+	
+}
+else if (strcmp("LOADL", instruction_code) == 0) {
+	
+}
+else if (strcmp("LOADF", instruction_code) == 0) {
+	
+}
+else if (strcmp("LOADR", instruction_code) == 0) {
+	
+}
+else if (strcmp("STORF", instruction_code) == 0) {
+	
+}
+else if (strcmp("STORR", instruction_code) == 0) {
+	
+}
+else if (strcmp("FRAMEU", instruction_code) == 0) {
+	
+}
+else if (strcmp("FRAMEO", instruction_code) == 0) {
+	
+}
+else if (strcmp("RSAVE", instruction_code) == 0) {
+	
+}
+else if (strcmp("RLOAD", instruction_code) == 0) {
+	
+}
+else if (strcmp("LABEL", instruction_code) == 0) {
+	
+}
+else if (strcmp("PROC", instruction_code) == 0) {
+	
+}
+else if (strcmp("RET", instruction_code) == 0) {
+	
+}
+else if (strcmp("CALL", instruction_code) == 0) {
+	
+}
+else if (strcmp("JMP", instruction_code) == 0) {
+	
+}
+else if (strcmp("CMP", instruction_code) == 0) {
+	
+}
+else if (strcmp("JPE", instruction_code) == 0) {
+	
+}
+else if (strcmp("JPNE", instruction_code) == 0) {
+	
+}
+else if (strcmp("JPGR", instruction_code) == 0) {
+	
+}
+else if (strcmp("JPLS", instruction_code) == 0) {
+	
+}
+else if (strcmp("JPGE", instruction_code) == 0) {
+	
+}
+else if (strcmp("JPLE", instruction_code) == 0) {
+	
+}
+else if (strcmp("JAND", instruction_code) == 0) {
+	
+}
+else if (strcmp("JOR", instruction_code) == 0) {
+	
+}
+else if (strcmp("DELAY", instruction_code) == 0) {
+	
+}
+else if (strcmp("OUTPUT", instruction_code) == 0) {
+	
+}
+else if (strcmp("INPUT", instruction_code) == 0) {
+	
+}
+else if (strcmp("WRITE", instruction_code) == 0) {
+	
+}
+else if (strcmp("READ", instruction_code) == 0) {
+	
+}
+else {
+	
+}

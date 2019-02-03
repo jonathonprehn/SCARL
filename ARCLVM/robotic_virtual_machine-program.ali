@@ -1,0 +1,128 @@
+V "GNAT Lib v5"
+P SS ZX
+
+RN
+RV NO_ALLOCATORS
+RV NO_DIRECT_BOOLEAN_OPERATORS
+RV NO_IO
+RV NO_IMPLICIT_LOOPS
+RV NO_LOCAL_ALLOCATORS
+RV NO_STANDARD_STORAGE_POOLS
+RV NO_DEFAULT_INITIALIZATION
+RV NO_ELABORATION_CODE
+RV SPARK_05
+
+U robotic_virtual_machine.program%b  robotic_virtual_machine-program.adb  52ad048f OO PK
+W ada%s			ada.ads			ada.ali
+W ada.tags%s		a-tags.adb		a-tags.ali
+W ada.text_io%s		a-textio.adb		a-textio.ali
+W robotic_virtual_machine%s  robotic_virtual_machine.adb  robotic_virtual_machine.ali
+W robotic_virtual_machine.procedures_labels%s  robotic_virtual_machine-procedures_labels.adb  robotic_virtual_machine-procedures_labels.ali
+W system%s		system.ads		system.ali
+W system.concat_2%s	s-conca2.adb		s-conca2.ali
+W system.concat_3%s	s-conca3.adb		s-conca3.ali
+W system.img_int%s	s-imgint.adb		s-imgint.ali
+
+U robotic_virtual_machine.program%s  robotic_virtual_machine-program.ads  ae4ed879 EE NE OO PK
+W robotic_virtual_machine%s  robotic_virtual_machine.adb  robotic_virtual_machine.ali
+
+D ada.ads		20180506173602 3ffc8e18 ada%s
+D a-except.ads		20180506173604 5250cb69 ada.exceptions%s
+D a-finali.ads		20180506173602 69f99942 ada.finalization%s
+D a-ioexce.ads		20180506173602 e4a01f64 ada.io_exceptions%s
+D a-stream.ads		20180506173604 119b8fb3 ada.streams%s
+D a-tags.ads		20180506173604 dc4d0634 ada.tags%s
+D a-textio.ads		20180506173602 386df5d4 ada.text_io%s
+D a-unccon.ads		20180506173602 f9eb8f06 ada.unchecked_conversion%s
+D interfac.ads		20180506173604 6033a23f interfaces%s
+D i-cstrea.ads		20180506173602 e53d8b8e interfaces.c_streams%s
+D robotic_virtual_machine.ads  20190201151350 741b31cb robotic_virtual_machine%s
+D robotic_virtual_machine-procedures_labels.ads  20190130210614 edc4aeee robotic_virtual_machine.procedures_labels%s
+D robotic_virtual_machine-program.ads  20190130193924 ae4ed879 robotic_virtual_machine.program%s
+D robotic_virtual_machine-program.adb  20190201145612 5d51b607 robotic_virtual_machine.program%b
+D system.ads		20180506173602 f4ce8c3a system%s
+D s-conca2.ads		20180506173602 02a0d7d0 system.concat_2%s
+D s-conca3.ads		20180506173604 0b705ca5 system.concat_3%s
+D s-crtl.ads		20180506173602 0ebbdb71 system.crtl%s
+D s-exctab.ads		20180506173602 54135002 system.exception_table%s
+D s-ficobl.ads		20180506173602 078245e4 system.file_control_block%s
+D s-finmas.ads		20180506173602 814daec4 system.finalization_masters%s
+D s-finroo.ads		20180506173602 4ff27390 system.finalization_root%s
+D s-imgint.ads		20180506173604 02dbe0c2 system.img_int%s
+D s-parame.ads		20180506173602 7e2a0d7f system.parameters%s
+D s-pooglo.ads		20180506173604 542f33d0 system.pool_global%s
+D s-secsta.ads		20180506173604 86a2856d system.secondary_stack%s
+D s-soflin.ads		20180506173602 aa763b52 system.soft_links%s
+D s-stache.ads		20180506173604 a37c21ec system.stack_checking%s
+D s-stalib.ads		20180506173602 fa0a3617 system.standard_library%s
+D s-stoele.ads		20180506173604 2dc34a04 system.storage_elements%s
+D s-stoele.adb		20180506173604 ed88f8fb system.storage_elements%b
+D s-stopoo.ads		20180506173602 b16154c2 system.storage_pools%s
+D s-stratt.ads		20180506173604 aedef97e system.stream_attributes%s
+D s-traent.ads		20180506173602 005bf670 system.traceback_entries%s
+D s-unstyp.ads		20180506173602 9d58a4c0 system.unsigned_types%s
+D s-wchcon.ads		20180506173602 1b7d22d2 system.wch_con%s
+X 1 ada.ads
+16K9*Ada 19e8 14|3r6 3r23
+X 7 a-textio.ads
+49K13*Text_IO 471e16 14|3w10 3r27
+52P9*File_Type 14|12r28 32r32
+53n23*In_File{53E9} 14|14r32 44r36
+92U14*Open 14|14s17 44s17
+98U14*Close 14|23s17 68s17
+113U14*Set_Input 14|15s17 22s17 45s17 67s17
+117V13*Standard_Input{52P9} 14|22s27 67s27
+166U14*New_Line 14|107s17
+183V13*End_Of_File{boolean} 14|16s27 46s27
+249U14*Get_Line 14|17s25 47s25
+263U14*Put_Line 14|70s17 95s17 98s25 108s17
+X 11 robotic_virtual_machine.ads
+2K9*Robotic_Virtual_Machine 157e28 13|2w6 2r35 4r9 24r5 14|1w6 1r35 2r6 5r14
+. 58r53 116r5
+6n25*ARCL_ADD{4E14} 14|41r51
+21n25*ARCL_LABEL{4E14} 14|55r71
+22n25*ARCL_PROC{4E14} 14|55r120
+45P14*ARCL_Label_Value(string) 14|85r40
+52R14*ARCL_Instruction 98e27 13|7r64
+56P14*ARCL_Instruction_Operand_Ptr(53R14)
+75R14*ARCL_Operand_Label_Value<53R14> 78e27 14|57r57 57r85
+77p25*Label_Value{45P14} 14|60r70
+81U19*Invoke_Instruction 14|99s25
+83V18*Get_Operand_1{56P14} 14|57s110
+85U19*Print_RVM_State 14|109s17
+87U19*Parse_ARCL_Instruction 14|51s33
+95e25*Code{4E14} 14|55r64 55r113
+X 12 robotic_virtual_machine-procedures_labels.ads
+5K33*Procedures_Labels 43e46 14|2w30 58r77 92r17 93r17
+12U19*Register_Label 14|60s49
+20U19*Go_To 14|93s35
+22U19*Stack_Return_Address 14|92s35
+X 13 robotic_virtual_machine-program.ads
+4K33*Program 11|2k9 13|20E9 24l29 24e36 14|5b38 116l29 116t36
+7A14*ARCL_Program_Array(11|52R14)<integer> 8r37 14|40r39
+8P14*ARCL_Program(7A14) 20r26
+10U19*Load_Program 10>32 14|27b19 72l13 72t25
+10a32 File_Name{string} 14|27b32 38r56 44r45
+11V18*Program_Instruction_Count{integer} 14|74b18 77l13 77t38
+12V18*Has_Program_Loaded{boolean} 14|79b18 82l13 82t31
+13U19*Execute_Program 14|84b19 111l13 111t28
+16i9*Instruction_Pointer{integer} 14|90m17 97r23 97r74 98r74 99r59 101r28
+. 102m33 102r56
+20p9 Loaded_Program{8P14} 14|40m17 41r17 51r56 55r36 55r85 57r124 97r46 99r44
+21i9 Loaded_Program_Length{integer} 14|76r24 115m9
+22b9 Program_Is_Loaded{boolean} 14|81r24 114m9
+X 14 robotic_virtual_machine-program.adb
+8V18 Get_Line_Count_From_File{integer} 8b18 8>43 25l13 25t37 38s31
+8a43 File_Name{string} 14r41
+9i17 Line_Count{integer} 19m33 19r47 24r24
+10i17 Line_Length{integer} 17m40 18r28
+11a17 Line{string} 17m34
+12p17 The_File{7|52P9} 14m22 14r22 15r27 16r39 23m23 23r23
+28i17 Line_Count{integer} 38m17 40r63 70r69
+29i17 Line_Length{integer} 47m40 49r28 51r95
+30i17 Line_Number{integer} 51r71 55r51 55r100 57r139 60r83 64m33 64r48
+31a17 Line{string} 47m34 51r85
+32p17 Program_File{7|52P9} 44m22 44r22 45r27 46r39 68m23 68r23
+57r49 Label{11|75R14} 60r64
+85p17 Main_Procedure_Label{11|45P14} 93r41
+

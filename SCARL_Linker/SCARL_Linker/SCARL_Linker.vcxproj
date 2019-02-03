@@ -114,12 +114,14 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="arcl_processor.c" />
+    <ClCompile Include="avr_processor.c" />
     <ClCompile Include="dmap_info.c" />
     <ClCompile Include="linker_util.c" />
     <ClCompile Include="main.c" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="arcl_processor.h" />
+    <ClInclude Include="avr_processor.h" />
     <ClInclude Include="device_type_map.h" />
     <ClInclude Include="dmap_info.h" />
     <ClInclude Include="linker_util.h" />

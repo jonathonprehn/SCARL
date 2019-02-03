@@ -6,27 +6,8 @@
 #include "device_type_map.h"
 #include "dmap_info.h"
 #include "arcl_processor.h"
-
-char *get_extension(char *file_name) {
-	// just find the last period and
-	// make a string to copy it into
-	int last_dot = 0;
-	int i = 0;
-	while (file_name[i] != '\0') {
-		if (file_name[i] == '.') {
-			last_dot = i;
-		}
-		i++;
-	}
-	char *extension = (char*)malloc(sizeof(char) * (i-last_dot));
-	i = last_dot + 1;
-	while (file_name[i] != '\0') {
-		extension[i-(last_dot+1)] = file_name[i];
-		i++;
-	}
-	extension[i - (last_dot + 1)] = '\0';
-	return extension;
-}
+#include "avr_processor.h"
+#include "linker_util.h"
 
 // Compared to the compiler, the linker is very simple
 // we take in a DMAP and RCL file and then insert
@@ -67,7 +48,7 @@ int main(int argc, char *argv[]) {
 
 	struct dmap_info *dmap = read_dmap_file(dmap_file);
 
-	char *extension = get_extension(output_file);
+	char *extension = get_file_extension(output_file);
 	printf("Extension is %s\n", extension);
 
 	if (strcmp("rcl", extension) == 0) {
@@ -76,6 +57,7 @@ int main(int argc, char *argv[]) {
 	}
 	else if (strcmp("asm", extension) == 0) {
 		printf("Linking as an AVR assembler code file\n");
+		link_processing_avr_assembler(output_file, arcl_file, dmap);
 	}
 	return 0;
 }

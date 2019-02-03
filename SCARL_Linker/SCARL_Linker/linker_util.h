@@ -6,6 +6,7 @@
 void read_line(FILE *file, char **buf);
 void write_line(FILE *file, char **buf);
 int is_a_device_declaration(char **ln);
-char *get_file_extension(char *fileName);
+char *get_file_extension(char *file_name);
+char** arcl_tokenize(char *src_line, int *arr_length);
 
 #endif
